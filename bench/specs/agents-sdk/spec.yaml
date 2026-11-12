@@ -1,10 +1,10 @@
 spec_id: agents-sdk
-name: "OpenAI Agents SDK / LangGraph 官方文档"
+name: "OpenAI Agents SDK 官方文档"
 source_url: "https://openai.github.io/openai-agents-python/"
-snapshot_date: null
+snapshot_date: 2026-11-13  # 见 snapshot/manifest.yaml（pin v0.24.0, 2026-10-15）
 license: "MIT"
-version: ""
+version: "0.24.0"
 language: "python"
-freshness_probe: null
-status: "skeleton"
-notes: "AI 工程，迭代极快；入库前锁定具体版本号与抓取日期。"
+freshness_probe: "freshness_probe.yaml"
+status: "snapshot"
+notes: "AI 工程，迭代极快；已锁 v0.24.0。范围由 LangGraph 改定为 OpenAI Agents SDK（单一规范利于 pin 版本）。"

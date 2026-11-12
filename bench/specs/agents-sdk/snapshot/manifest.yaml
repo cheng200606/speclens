@@ -1,0 +1,20 @@
+# OpenAI Agents SDK 规范快照清单
+snapshot_date: 2026-11-13
+fetched_via: "cdn.jsdelivr.net/gh/openai/openai-agents-python@v0.24.0/docs/*.md"
+source_repo: "https://github.com/openai/openai-agents-python"
+source_ref: "v0.24.0 (2026-10-15 发布)"
+license: "MIT"
+license_evidence: "snapshot/LICENSE（仓库根 LICENSE，MIT License）"
+coverage: "核心文档 9 页（agents/running/results/tools/handoffs/guardrails/streaming/context/mcp）；M1 按需增补"
+files:
+  - {file: agents.md, canonical_url: "https://openai.github.io/openai-agents-python/agents/"}
+  - {file: running_agents.md, canonical_url: "https://openai.github.io/openai-agents-python/running_agents/"}
+  - {file: results.md, canonical_url: "https://openai.github.io/openai-agents-python/results/"}
+  - {file: tools.md, canonical_url: "https://openai.github.io/openai-agents-python/tools/"}
+  - {file: handoffs.md, canonical_url: "https://openai.github.io/openai-agents-python/handoffs/"}
+  - {file: guardrails.md, canonical_url: "https://openai.github.io/openai-agents-python/guardrails/"}
+  - {file: streaming.md, canonical_url: "https://openai.github.io/openai-agents-python/streaming/"}
+  - {file: context.md, canonical_url: "https://openai.github.io/openai-agents-python/context/"}
+  - {file: mcp.md, canonical_url: "https://openai.github.io/openai-agents-python/mcp/"}
+  - {file: models.md, canonical_url: "https://openai.github.io/openai-agents-python/models/", note: "仓库内为 80B 存根（指向官网），快照保留以记录该事实"}
+  - {file: LICENSE, canonical_url: "https://github.com/openai/openai-agents-python/blob/main/LICENSE"}

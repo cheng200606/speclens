@@ -1,0 +1,15 @@
+# React 19 规范快照清单
+snapshot_date: 2026-11-13
+fetched_via: "react.dev 官方 markdown 端点（页面 URL + '.md'）"
+source_repo: "https://github.com/reactjs/react.dev"
+source_commit: "46a54e059272" # main @ 2026-11-11T16:44:29Z，内容与站点一致
+license: "CC-BY-4.0"
+license_evidence: "reactjs/react.dev LICENSE-DOCS.md：'Content submitted to react.dev is CC-BY-4.0 licensed'"
+coverage: "种子规则 R-001..R-005 相关的 6 个 reference 页；M1 随样本扩充继续增补页面"
+files:
+  - {file: reference-react-use.md, canonical_url: "https://react.dev/reference/react/use", rule_refs: [R-001]}
+  - {file: reference-react-useActionState.md, canonical_url: "https://react.dev/reference/react/useActionState", rule_refs: [R-002]}
+  - {file: reference-react-useEffect.md, canonical_url: "https://react.dev/reference/react/useEffect", rule_refs: [R-003]}
+  - {file: reference-rules-rules-of-hooks.md, canonical_url: "https://react.dev/reference/rules/rules-of-hooks", rule_refs: [R-004]}
+  - {file: reference-react-useOptimistic.md, canonical_url: "https://react.dev/reference/react/useOptimistic", rule_refs: [R-005]}
+  - {file: reference-react-useTransition.md, canonical_url: "https://react.dev/reference/react/useTransition", rule_refs: []}

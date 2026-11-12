@@ -15,7 +15,9 @@ def test_load_spec_react19():
     spec = load_spec(REPO / "bench" / "specs" / "react19")
     assert spec.spec_id == "react19"
     assert spec.license == "CC-BY-4.0"
-    assert spec.status == "skeleton"
+    assert spec.status == "snapshot"
+    assert spec.snapshot_date is not None
+    assert spec.freshness_probe == "freshness_probe.yaml"
 
 
 def test_load_five_seed_cases():

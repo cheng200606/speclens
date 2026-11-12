@@ -1,0 +1,205 @@
+# Airbnb JavaScript Style Guide 新鲜度探测题库（对照组：预期正确率显著偏高）
+# 所有答案均以 snapshot/airbnb-javascript-readme.md（master pin 8ed19247bef1）为准。出题日期 2026-11-13。
+spec_id: airbnb
+created: 2026-11-13
+grounding: "每题答案均可在 snapshot/airbnb-javascript-readme.md 中找到"
+questions:
+  - id: airbnb-P01
+    question: "Airbnb 指南 19.1 条对缩进的规定是？"
+    options:
+      - "软制表符（空格），宽度 2"
+      - "软制表符（空格），宽度 4"
+      - "硬制表符（Tab）"
+      - "宽度 2 的 Tab"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P02
+    question: "关于变量声明，指南（no-var）的态度是？"
+    options:
+      - "使用 let/const，禁止 var"
+      - "优先 var"
+      - "自由选择"
+      - "仅允许 var"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P03
+    question: "对不再重新赋值的变量，指南（prefer-const）要求？"
+    options:
+      - "使用 const"
+      - "使用 let"
+      - "使用 var"
+      - "无要求"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P04
+    question: "字符串引号的规定是？"
+    options:
+      - "使用单引号"
+      - "使用双引号"
+      - "使用反引号"
+      - "无要求"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P05
+    question: "指南 20.2 条（comma-dangle）对多余尾随逗号的态度是？"
+    options:
+      - "Yup（要求加尾随逗号）"
+      - "Nope（禁止）"
+      - "仅对象允许"
+      - "仅数组允许"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P06
+    question: "相等比较（eqeqeq）要求使用？"
+    options:
+      - "=== 与 !=="
+      - "== 与 !="
+      - "Object.is"
+      - "无要求"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P07
+    question: "关于语句末尾分号，指南的态度是？"
+    options:
+      - "要求使用（有专门章节）"
+      - "禁止使用"
+      - "仅函数内要求"
+      - "无要求"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P08
+    question: "导出函数时的命名约定是？"
+    options:
+      - "camelCase"
+      - "PascalCase"
+      - "snake_case"
+      - "kebab-case"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P09
+    question: "命名类/构造函数时用？"
+    options:
+      - "PascalCase"
+      - "camelCase"
+      - "snake_case"
+      - "全大写"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P10
+    question: "对未使用的变量（no-unused-vars），指南的态度是？"
+    options:
+      - "报错（不允许存在）"
+      - "仅警告"
+      - "允许"
+      - "仅函数参数允许"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P11
+    question: "多行代码块的 if/else 是否要求花括号？"
+    options:
+      - "要求"
+      - "禁止"
+      - "仅 else 要求"
+      - "无要求"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P12
+    question: "指南 7.15 条：多行签名的函数应如何缩进与收尾？"
+    options:
+      - "像其他多行列表一样每项一行，最后一项带尾随逗号"
+      - "全部放一行"
+      - "缩进 4 空格且不加尾逗号"
+      - "首参数与括号同行，其余任意"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P13
+    question: "no-param-reassign：对重新给参数赋值的态度？"
+    options:
+      - "不允许"
+      - "鼓励"
+      - "仅对象参数允许"
+      - "无要求"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P14
+    question: "字符串拼接 vs 模板字面量：指南推荐？"
+    options:
+      - "程序化构建字符串时使用模板字面量"
+      - "总是用 + 拼接"
+      - "禁止模板字面量"
+      - "仅 JSX 中用模板字面量"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P15
+    question: "复制数组时，指南推荐使用？"
+    options:
+      - "展开运算符 [...arr]"
+      - "arr.slice() 是唯一方式"
+      - "for 循环逐项 push"
+      - "Array.from 且仅此一种"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P16
+    question: "给函数参数默认值时，指南推荐？"
+    options:
+      - "使用默认参数语法（default parameter syntax）"
+      - "在函数体内用 || 判断"
+      - "禁止默认值"
+      - "用 arguments 对象"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P17
+    question: "no-plusplus：对 ++ / -- 的态度是？"
+    options:
+      - "用 += 1 代替（禁止一元 ++/--）"
+      - "推荐使用 ++"
+      - "仅循环内允许"
+      - "无要求"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P18
+    question: "指数运算（exponentiation）指南推荐？"
+    options:
+      - "使用 ** 运算符"
+      - "使用 Math.pow"
+      - "使用循环乘"
+      - "禁止指数运算"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P19
+    question: "对象属性名需要以什么风格命名？"
+    options:
+      - "camelCase"
+      - "snake_case"
+      - "PascalCase"
+      - "SCREAMING_SNAKE"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"
+
+  - id: airbnb-P20
+    question: "该指南的 ESLint 配置以什么形式提供？"
+    options:
+      - "eslint-config-airbnb（可安装的共享配置）"
+      - "仅文档，无配置"
+      - "需要手动复制规则"
+      - "内置于 ESLint 核心"
+    answer_index: 0
+    source: "snapshot/airbnb-javascript-readme.md"

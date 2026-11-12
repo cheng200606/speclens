@@ -1,10 +1,10 @@
 spec_id: asvs
 name: "OWASP ASVS 5.0（选章）"
 source_url: "https://owasp.org/www-project-application-security-verification-standard/"
-snapshot_date: null
+snapshot_date: 2026-11-13  # 见 snapshot/manifest.yaml（tag v5.0.0_release，5.0.0 @ 2025-05）
 license: "CC-BY-SA-4.0"
-version: "5.0"
+version: "5.0.0"
 language: "python"
-freshness_probe: null
-status: "skeleton"
-notes: "篇幅大，M0 只选 1-2 章（建议 V5 验证与业务逻辑）；规则类型 T4 安全。"
+freshness_probe: "freshness_probe.yaml"
+status: "snapshot"
+notes: "快照为全量 346 条要求 CSV；规则提取范围取 V2（验证与业务逻辑，13 条）+ V8（授权，13 条）。注意 5.0 章节编号与 4.x 不同（V5 是 File Handling）。"

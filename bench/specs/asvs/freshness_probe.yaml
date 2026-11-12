@@ -1,0 +1,205 @@
+# OWASP ASVS 5.0 新鲜度探测题库
+# 所有答案均以 snapshot/asvs-5.0.0-en.csv（346 条要求）与 README-upstream.md 为准。出题日期 2026-11-13。
+spec_id: asvs
+created: 2026-11-13
+grounding: "每题答案均可在 snapshot/ 内 CSV 行或 README 中逐字找到"
+questions:
+  - id: asvs-P01
+    question: "ASVS 5.0 中第 V5 章的主题是？"
+    options:
+      - "Validation and Business Logic"
+      - "File Handling"
+      - "Authentication"
+      - "Web Frontend Security"
+    answer_index: 1
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P02
+    question: "ASVS 5.0 中第 V2 章的主题是？"
+    options:
+      - "Validation and Business Logic"
+      - "Configuration"
+      - "Data Protection"
+      - "Session Management"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P03
+    question: "ASVS 5.0 中第 V8 章的主题是？"
+    options:
+      - "Self-contained Tokens"
+      - "Cryptography"
+      - "Authorization"
+      - "API and Web Service"
+    answer_index: 2
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P04
+    question: "ASVS 5.0 中第 V1 章的主题是？"
+    options:
+      - "Security Logging and Error Handling"
+      - "Encoding and Sanitization"
+      - "Secure Communication"
+      - "OAuth and OIDC"
+    answer_index: 1
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P05
+    question: "ASVS 5.0 中包含章节数量与要求总数约为？"
+    options:
+      - "14 章 / 285 条"
+      - "17 章 / 346 条"
+      - "21 章 / 410 条"
+      - "17 章 / 250 条"
+    answer_index: 1
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P06
+    question: "哪个章节拥有最多的要求条目？"
+    options:
+      - "V6 Authentication（47 条）"
+      - "V3 Web Frontend Security（31 条）"
+      - "V10 OAuth and OIDC（36 条）"
+      - "V1 Encoding and Sanitization（30 条）"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P07
+    question: "哪个章节的要求条目最少？"
+    options:
+      - "V9 Self-contained Tokens（7 条）"
+      - "V12 Secure Communication（12 条）"
+      - "V17 WebRTC（12 条）"
+      - "V14 Data Protection（13 条）"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P08
+    question: "ASVS 要求的安全等级（L）取值集合是？"
+    options:
+      - "{1, 2, 3}"
+      - "{A, B, C}"
+      - "{0, 1, 2, 3}"
+      - "{basic, standard, advanced}"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P09
+    question: "要求 5.0 中每条要求的标识符格式是？"
+    options:
+      - "chapter.section.requirement（如 1.11.3）"
+      - "UUID"
+      - "仅章节号（如 V5）"
+      - "哈希前缀"
+    answer_index: 0
+    source: "snapshot/README-upstream.md"
+
+  - id: asvs-P10
+    question: "要求 V2.2.2 的核心内容是？"
+    options:
+      - "在受信服务层执行输入校验（L1）"
+      - "日志脱敏（L2）"
+      - "加密密钥轮换（L3）"
+      - "CORS 配置（L1）"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P11
+    question: "要求 V2.2.1 的核心内容是？"
+    options:
+      - "校验输入以符合业务/功能预期（L1）"
+      - "输出编码（L2）"
+      - "多因素认证（L1）"
+      - "会话固定防护（L2）"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P12
+    question: "要求 V2.3.1 关注的是？"
+    options:
+      - "同一用户的业务逻辑流只能按文档预期顺序处理（L1）"
+      - "密码哈希算法选择"
+      - "文件上传类型白名单"
+      - "TLS 版本"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P13
+    question: "要求 V2.1.1 属于哪个等级？"
+    options:
+      - "L1"
+      - "L2"
+      - "L3"
+      - "无等级"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P14
+    question: "要求 V2.1.2 属于哪个等级？"
+    options:
+      - "L1"
+      - "L2"
+      - "L3"
+      - "无等级"
+    answer_index: 1
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P15
+    question: "要求 V2.1.3 的主题是？"
+    options:
+      - "记录业务逻辑限制与校验的预期（含边界）（L2）"
+      - "会话超时策略"
+      - "反 CSRF token"
+      - "错误页定制"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P16
+    question: "ASVS 5.0.0 正式发布的场合与时间是？"
+    options:
+      - "Global AppSec EU Barcelona 2025，2025-05"
+      - "OWASP Global AppSec US 2024，2024-11"
+      - "AppSec California 2026，2026-01"
+      - "仅在线发布，2026-03"
+    answer_index: 0
+    source: "snapshot/README-upstream.md"
+
+  - id: asvs-P17
+    question: "ASVS 5.0 项目的 license 是？"
+    options:
+      - "CC BY-SA 4.0"
+      - "MIT"
+      - "Apache-2.0"
+      - "专有（需购买）"
+    answer_index: 0
+    source: "snapshot/README-upstream.md"
+
+  - id: asvs-P18
+    question: "ASVS 5.0 中第 V10 章的主题是？"
+    options:
+      - "OAuth and OIDC"
+      - "Secure Communication"
+      - "Session Management"
+      - "Injection Prevention"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P19
+    question: "ASVS 5.0 中第 V15 章的主题是？"
+    options:
+      - "Secure Coding and Architecture"
+      - "Web Frontend Security"
+      - "File Handling"
+      - "Authorization"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"
+
+  - id: asvs-P20
+    question: "要求 V2.2.3 关注的是？"
+    options:
+      - "相关数据项组合的合理性校验（L2）"
+      - "密码长度下限"
+      - "JWT 签名算法"
+      - "静态资源完整性（SRI）"
+    answer_index: 0
+    source: "snapshot/asvs-5.0.0-en.csv"

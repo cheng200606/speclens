@@ -1,0 +1,11 @@
+# Airbnb JavaScript Style Guide 规范快照清单
+snapshot_date: 2026-11-13
+fetched_via: "cdn.jsdelivr.net/gh/airbnb/javascript@8ed19247bef1/README.md（master pin）"
+source_repo: "https://github.com/airbnb/javascript"
+source_commit: "8ed19247bef1"
+license: "MIT"
+license_evidence: "snapshot/LICENSE（仓库 LICENSE.md，MIT License）"
+coverage: "单文件 README（129KB，全部章节）；对照组（模型大概率已熟悉）"
+files:
+  - {file: airbnb-javascript-readme.md, canonical_url: "https://github.com/airbnb/javascript/blob/master/README.md"}
+  - {file: LICENSE, canonical_url: "https://github.com/airbnb/javascript/blob/master/LICENSE.md"}

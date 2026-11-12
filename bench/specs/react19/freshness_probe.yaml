@@ -1,0 +1,206 @@
+# React 19 新鲜度探测题库（plan.md §2.3.1）
+# 用途：让被测模型作答，正确率接近随机 ⇒ 视为「未见规范」。
+# 所有答案均以 snapshot/ 内文件为准（source 字段给出出处），出题日期 2026-11-13。
+spec_id: react19
+created: 2026-11-13
+grounding: "每题答案均可在 snapshot/ 对应文件中逐字找到"
+questions:
+  - id: react19-P01
+    question: "React 文档对 use API 的定义是：它让你在什么阶段读取什么资源？"
+    options:
+      - "在渲染期间读取 Promise 或 context 等资源"
+      - "在事件处理函数中读取 state"
+      - "在 Effect 中读取 DOM"
+      - "在组件卸载时读取 props"
+    answer_index: 0
+    source: "snapshot/reference-react-use.md"
+
+  - id: react19-P02
+    question: "与 useContext 相比，use(context) 的独特之处是什么？"
+    options:
+      - "它只能在顶层调用"
+      - "它可以在循环与条件语句（如 if）中调用"
+      - "它不触发重渲染"
+      - "它只能在事件处理函数中调用"
+    answer_index: 1
+    source: "snapshot/reference-react-use.md"
+
+  - id: react19-P03
+    question: "React 文档『Fetching data with useEffect』一节对在 Effect 中取数的总体措辞是？"
+    options:
+      - "推荐（recommended）"
+      - "强制（required）"
+      - "不鼓励（discouraged）"
+      - "完全禁止（forbidden）"
+    answer_index: 2
+    source: "snapshot/reference-react-use.md"
+
+  - id: react19-P04
+    question: "文档认为：与 use 相比，在 Effect 中取数的额外代价是？"
+    options:
+      - "需要手动管理 loading 与 error 状态"
+      - "无法取消请求"
+      - "必须使用 Redux"
+      - "不能配合 TypeScript"
+    answer_index: 0
+    source: "snapshot/reference-react-use.md"
+
+  - id: react19-P05
+    question: "按 rules-of-hooks，下列哪种 Hook 调用位置是允许的？"
+    options:
+      - "if 分支内"
+      - "循环体内"
+      - "组件函数体顶层（early return 之前）"
+      - "嵌套的工具函数内"
+    answer_index: 2
+    source: "snapshot/reference-rules-rules-of-hooks.md"
+
+  - id: react19-P06
+    question: "rules-of-hooks 明确禁止在下列哪种代码块中调用 Hook？"
+    options:
+      - "模块顶层"
+      - "try/catch/finally 块"
+      - "自定义 Hook 顶层"
+      - "组件函数体顶层"
+    answer_index: 1
+    source: "snapshot/reference-rules-rules-of-hooks.md"
+
+  - id: react19-P07
+    question: "rules-of-hooks 规定：Hook 只能在什么时候调用？"
+    options:
+      - "任意 JS 函数中"
+      - "事件处理函数中"
+      - "React 渲染函数组件的过程中（或自定义 Hook 中）"
+      - "setTimeout 回调中"
+    answer_index: 2
+    source: "snapshot/reference-rules-rules-of-hooks.md"
+
+  - id: react19-P08
+    question: "useEffect 的 setup 函数的返回值规定是？"
+    options:
+      - "必须返回一个 Promise"
+      - "可以选择性地返回一个 cleanup 函数"
+      - "必须返回 JSX"
+      - "禁止返回任何值"
+    answer_index: 1
+    source: "snapshot/reference-react-useEffect.md"
+
+  - id: react19-P09
+    question: "依赖变化触发重跑时，cleanup 与 setup 的执行顺序是？"
+    options:
+      - "先用新值运行 setup，再运行 cleanup"
+      - "先用旧值运行 cleanup，再用新值运行 setup"
+      - "两者并发执行"
+      - "只运行 setup"
+    answer_index: 1
+    source: "snapshot/reference-react-useEffect.md"
+
+  - id: react19-P10
+    question: "组件从页面移除时，其 Effect 的 cleanup 函数会怎样？"
+    options:
+      - "不会运行"
+      - "最后再运行一次"
+      - "运行两次"
+      - "只在开发模式运行"
+    answer_index: 1
+    source: "snapshot/reference-react-useEffect.md"
+
+  - id: react19-P11
+    question: "Strict Mode 开发模式下，Effect 的 setup+cleanup 会额外运行几次？"
+    options:
+      - "0 次（不额外运行）"
+      - "1 次额外的 setup+cleanup 循环"
+      - "3 次"
+      - "生产模式同样会额外运行"
+    answer_index: 1
+    source: "snapshot/reference-react-useEffect.md"
+
+  - id: react19-P12
+    question: "useActionState 的文档定义是？"
+    options:
+      - "让你基于 Actions 用副作用更新 state"
+      - "让你订阅外部数据源"
+      - "让你在服务端渲染组件"
+      - "让你缓存计算结果"
+    answer_index: 0
+    source: "snapshot/reference-react-useActionState.md"
+
+  - id: react19-P13
+    question: "useActionState 的返回值形态是？"
+    options:
+      - "[state, setState]"
+      - "[state, formAction, isPending]"
+      - "[value, setValue, error]"
+      - "单个 Promise"
+    answer_index: 1
+    source: "snapshot/reference-react-useActionState.md"
+
+  - id: react19-P14
+    question: "useOptimistic 的文档定义是？"
+    options:
+      - "让你乐观地更新 UI"
+      - "让你暂停渲染直到数据到达"
+      - "让你取消未完成的请求"
+      - "让你在服务端缓存状态"
+    answer_index: 0
+    source: "snapshot/reference-react-useOptimistic.md"
+
+  - id: react19-P15
+    question: "用 use(promise) 读取未完成的 Promise 时，文档要求配合什么使用？"
+    options:
+      - "Suspense 边界"
+      - "try/catch"
+      - "useEffect"
+      - "Web Worker"
+    answer_index: 0
+    source: "snapshot/reference-react-use.md"
+
+  - id: react19-P16
+    question: "startTransition 执行期间，isPending 的取值是？"
+    options:
+      - "恒为 false"
+      - "为 true"
+      - "随机"
+      - "未定义"
+    answer_index: 1
+    source: "snapshot/reference-react-useTransition.md"
+
+  - id: react19-P17
+    question: "文档中，名字以什么开头的函数被称为 Hook？"
+    options:
+      - "on"
+      - "with"
+      - "use"
+      - "hook"
+    answer_index: 2
+    source: "snapshot/reference-rules-rules-of-hooks.md"
+
+  - id: react19-P18
+    question: "rules-of-hooks 的 ✅ 示例中，下列哪种写法被标记为 Good？"
+    options:
+      - "在 try 块中调用 useState"
+      - "在自定义 Hook 顶层调用 Hook"
+      - "在 for 循环中调用 useEffect"
+      - "在嵌套函数中调用 Hook"
+    answer_index: 1
+    source: "snapshot/reference-rules-rules-of-hooks.md"
+
+  - id: react19-P19
+    question: "use(context) 的返回值是？"
+    options:
+      - "context 的当前值"
+      - "一个新的 Promise"
+      - "context 的历史值数组"
+      - "一个 ref"
+    answer_index: 0
+    source: "snapshot/reference-react-use.md"
+
+  - id: react19-P20
+    question: "在 Effect 中手动取数相比 use，官方推荐的非框架改进方向是？"
+    options:
+      - "把取数逻辑移入自定义 Hook"
+      - "改用 Redux Saga"
+      - "改用 WebSocket"
+      - "禁用 Strict Mode"
+    answer_index: 0
+    source: "snapshot/reference-react-use.md"

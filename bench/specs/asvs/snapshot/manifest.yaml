@@ -1,0 +1,13 @@
+# OWASP ASVS 5.0 规范快照清单
+snapshot_date: 2026-11-13
+fetched_via: "cdn.jsdelivr.net/gh/OWASP/ASVS@v5.0.0_release/5.0/docs_en/*.csv"
+source_repo: "https://github.com/OWASP/ASVS"
+source_ref: "v5.0.0_release（5.0.0，2025-05 发布于 Global AppSec EU Barcelona）"
+license: "CC-BY-SA-4.0"
+license_evidence: "README-upstream.md：'This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License'"
+coverage: "全量 346 条要求（17 章，CSV 结构化：chapter/section/req_id/description/L1-3）；规则提取范围先取 V2（验证与业务逻辑）+ V8（授权）"
+files:
+  - file: asvs-5.0.0-en.csv
+    canonical_url: "https://github.com/OWASP/ASVS/raw/v5.0.0/5.0/docs_en/OWASP_Application_Security_Verification_Standard_5.0.0_en.csv"
+    columns: [chapter_id, chapter_name, section_id, section_name, req_id, req_description, L]
+  - {file: README-upstream.md, canonical_url: "https://github.com/OWASP/ASVS/blob/v5.0.0_release/README.md", note: "含版本、license 与引用格式说明"}
