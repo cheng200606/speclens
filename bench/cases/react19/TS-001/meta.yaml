@@ -1,0 +1,14 @@
+case_id: TS-001
+verdict: violation
+difficulty: medium
+rule_ids: [R-001]
+origin: handcrafted
+files: ["code/DataFetcher.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-001]
+    notes: "useEffect+setState 手动取数；React 19 文档建议 use() 配合框架缓存/Suspense。"
+resolved:
+  verdict: violation
+  rule_ids: [R-001]

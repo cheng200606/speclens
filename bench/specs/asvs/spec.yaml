@@ -1,0 +1,10 @@
+spec_id: asvs
+name: "OWASP ASVS 5.0（选章）"
+source_url: "https://owasp.org/www-project-application-security-verification-standard/"
+snapshot_date: null
+license: "CC-BY-SA-4.0"
+version: "5.0"
+language: "python"
+freshness_probe: null
+status: "skeleton"
+notes: "篇幅大，M0 只选 1-2 章（建议 V5 验证与业务逻辑）；规则类型 T4 安全。"

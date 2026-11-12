@@ -1,0 +1,14 @@
+case_id: TS-005
+verdict: borderline
+difficulty: hard
+rule_ids: [R-005]
+origin: handcrafted
+files: ["code/PendingList.tsx"]
+annotations:
+  - annotator: A
+    verdict: borderline
+    rule_ids: [R-005]
+    notes: "手动乐观更新 vs useOptimistic：SHOULD 级规则，此处是否适用存在争议（非严格乐观场景）。"
+resolved:
+  verdict: borderline
+  rule_ids: [R-005]

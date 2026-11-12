@@ -1,0 +1,14 @@
+case_id: TS-002
+verdict: compliant
+difficulty: easy
+rule_ids: [R-002]
+origin: handcrafted
+files: ["code/NameForm.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-002]
+    notes: "useActionState 处理表单动作，符合 React 19 Actions 用法。"
+resolved:
+  verdict: compliant
+  rule_ids: [R-002]

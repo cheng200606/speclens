@@ -1,0 +1,10 @@
+spec_id: agents-sdk
+name: "OpenAI Agents SDK / LangGraph 官方文档"
+source_url: "https://openai.github.io/openai-agents-python/"
+snapshot_date: null
+license: "MIT"
+version: ""
+language: "python"
+freshness_probe: null
+status: "skeleton"
+notes: "AI 工程，迭代极快；入库前锁定具体版本号与抓取日期。"

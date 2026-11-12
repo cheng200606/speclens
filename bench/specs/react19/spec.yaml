@@ -1,0 +1,10 @@
+spec_id: react19
+name: "React 官方文档（19.x）"
+source_url: "https://react.dev/reference/react"
+snapshot_date: null        # M0 待办：抓取快照后回填
+license: "CC-BY-4.0"
+version: "19.x"
+language: "typescript"
+freshness_probe: null      # M0 待办：20 道知识探测题（plan.md §2.3.1）
+status: "skeleton"
+notes: "规则类型以 T2 API 用法为主；快照版本须晚于被测模型训练截止 3 个月以上。"

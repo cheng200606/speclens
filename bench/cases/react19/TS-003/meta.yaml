@@ -1,0 +1,14 @@
+case_id: TS-003
+verdict: violation
+difficulty: easy
+rule_ids: [R-003]
+origin: handcrafted
+files: ["code/Heartbeat.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "setInterval 未返回清理函数，定时器泄漏。"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]

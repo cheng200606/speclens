@@ -1,0 +1,7 @@
+# 冒烟实验：B0 zero-shot × mock-perfect 适配器（不调用 LLM API）
+# 目的：端到端验证 加载 case -> 基线预测 -> 指标计算 -> 归档（plan.md §3.3 第 1 步）
+run_name: smoke-b0
+baseline: b0_zero_shot
+cases_dir: bench/cases/react19
+model: mock-perfect
+temperature: 0.0

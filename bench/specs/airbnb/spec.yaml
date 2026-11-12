@@ -1,0 +1,10 @@
+spec_id: airbnb
+name: "Airbnb JavaScript Style Guide"
+source_url: "https://github.com/airbnb/javascript"
+snapshot_date: null
+license: "MIT"
+version: ""
+language: "javascript"
+freshness_probe: null
+status: "skeleton"
+notes: "对照组：模型大概率已熟（T1 样式为主），用于校准「已知规范」的表现差异。"

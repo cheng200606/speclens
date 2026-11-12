@@ -1,0 +1,14 @@
+case_id: TS-004
+verdict: violation
+difficulty: easy
+rule_ids: [R-004]
+origin: handcrafted
+files: ["code/ConditionalHook.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-004]
+    notes: "useState 被条件调用，违反 Hooks 顶层调用规则。"
+resolved:
+  verdict: violation
+  rule_ids: [R-004]
