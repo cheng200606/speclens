@@ -79,8 +79,10 @@ def extract_rules(
         kept = 0
         for raw in _SENTENCE.split(sec["text"]):
             sentence = _clean_sentence(raw)
-            if len(sentence) < 40 or len(sentence) > 400 or "`{" in sentence:
+            if len(sentence) < 40 or len(sentence) > 400:
                 continue
+            if "```" in sentence or "`{" in sentence or "```" in raw:
+                continue  # 代码块/锚点残片不是规范句
             level = _normative_level(sentence)
             if level is None or not _SENTENCE_was_normative(sentence):
                 continue

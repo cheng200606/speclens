@@ -29,6 +29,34 @@ def _rule_prompt(rule: RuleRecord, code: str) -> str:
     )
 
 
+def check_code_against_rule(
+    rule: RuleRecord, code: str, adapter: ModelAdapter, case_id: str | None = None
+) -> list[Finding]:
+    """单规则 × 单段代码的对照检查（verify 第二关自洽测试复用同一入口）。"""
+    out: FindingsOutput = adapter.complete_json(
+        system=(
+            "You are a code reviewer checking code against ONE explicit rule. "
+            'Respond ONLY with JSON: {"findings": [...]} (same finding schema '
+            "as before); empty findings when the rule is not violated."
+        ),
+        user=_rule_prompt(rule, code),
+        schema=FindingsOutput,
+        meta={
+            "case_id": case_id,
+            "rule_id": rule.id,
+            "level": rule.level,
+            "phase": "review",
+            "code_head": code[:200],  # 供测试/自适应 adapter 判别输入
+        },
+    )
+    for f in out.findings:
+        if case_id:
+            f.case_id = case_id
+        if rule.id not in f.rule_ids:
+            f.rule_ids = [rule.id, *f.rule_ids]
+    return out.findings
+
+
 def review_code(
     case: Case, rules: list[RuleRecord], adapter: ModelAdapter
 ) -> list[Finding]:
@@ -37,23 +65,7 @@ def review_code(
         code = case.read_file(name)
         applicable = route_rules(rules, code)[:MAX_RULES_PER_FILE]
         for rule in applicable:
-            out: FindingsOutput = adapter.complete_json(
-                system=(
-                    "You are a code reviewer checking code against ONE explicit rule. "
-                    'Respond ONLY with JSON: {"findings": [...]} (same finding schema '
-                    "as before); empty findings when the rule is not violated."
-                ),
-                user=_rule_prompt(rule, code),
-                schema=FindingsOutput,
-                meta={
-                    "case_id": case.meta.case_id,
-                    "rule_id": rule.id,
-                    "level": rule.level,
-                },
+            findings.extend(
+                check_code_against_rule(rule, code, adapter, case_id=case.meta.case_id)
             )
-            for f in out.findings:
-                f.case_id = case.meta.case_id
-                if rule.id not in f.rule_ids:
-                    f.rule_ids = [rule.id, *f.rule_ids]
-                findings.append(f)
     return findings
