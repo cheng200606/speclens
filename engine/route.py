@@ -1,7 +1,7 @@
-"""规则路由：每条规则声明适用特征（trigger.scenario + ast_cues），
+"""规则路由（M-lite 确定性版）：规则找代码，而非代码检索规则。
 
-对代码库批量扫描「哪些文件/符号适用该规则」——规则找代码，而非代码检索规则。
-这是与 RAG 式方案的本质差异（漏检由规则覆盖决定，不由检索命中决定）。
+每条规则的 trigger.ast_cues 与代码文本做命中判断；无 cues 的规则视为全局适用。
+M2 将升级为 AST 特征（tree-sitter）+ 章节级路由。
 """
 
 from __future__ import annotations
@@ -9,6 +9,21 @@ from __future__ import annotations
 from bench.harness.schemas import RuleRecord
 
 
-def route_rules(rules: list[RuleRecord], repo_dir: str) -> dict[str, list[str]]:
-    """返回 {rule_id: [适用文件路径]}。M2 实现。"""
-    raise NotImplementedError("engine.route 将在 M2 实现（plan.md §4）")
+def route_rules(rules: list[RuleRecord], code_text: str) -> list[RuleRecord]:
+    """返回对该代码文本适用的规则子集。"""
+    applicable: list[RuleRecord] = []
+    for rule in rules:
+        cues = rule.trigger.ast_cues
+        if not cues or any(
+            _cue_hit(cue, code_text) for cue in cues
+        ):
+            applicable.append(rule)
+    return applicable
+
+
+def _cue_hit(cue: str, code_text: str) -> bool:
+    import re
+
+    if cue == "use":
+        return re.search(r"\buse\(", code_text) is not None
+    return re.search(rf"\b{re.escape(cue)}\b", code_text, re.I) is not None

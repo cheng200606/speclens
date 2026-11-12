@@ -1,0 +1,14 @@
+case_id: TS-017
+verdict: borderline
+difficulty: hard
+rule_ids: [R-001]
+origin: handcrafted
+files: ["code/SearchResults.tsx"]
+annotations:
+  - annotator: A
+    verdict: borderline
+    rule_ids: [R-001]
+    notes: "文档 discouraged 在 Effect 中取数，但本例带 AbortController 清理与取消，工程上常见且健壮——R-001（SHOULD）是否适用存在真实争议。"
+resolved:
+  verdict: borderline
+  rule_ids: [R-001]

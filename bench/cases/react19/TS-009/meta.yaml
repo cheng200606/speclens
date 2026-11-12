@@ -1,0 +1,14 @@
+case_id: TS-009
+verdict: violation
+difficulty: easy
+rule_ids: [R-009]
+origin: handcrafted
+files: ["code/ReadValue.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-009]
+    notes: "直接读 promise.value 绕过 use，文档明确 Never。"
+resolved:
+  verdict: violation
+  rule_ids: [R-009]

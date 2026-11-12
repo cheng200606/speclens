@@ -1,0 +1,7 @@
+# 生死实验 · B1 full-spec in-context（最关键对手）
+# 注意：真实运行时 spec 全文约 24 万字符（≈60K tokens），需长上下文模型
+run_name: litmus-b1
+baseline: b1_full_spec
+cases_dir: bench/cases/react19
+model: mock-perfect
+temperature: 0.0

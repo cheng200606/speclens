@@ -33,6 +33,13 @@
 | R-003 | MUST | T5 | `useEffect` 中建立订阅/连接/定时器的，必须返回清理函数（cleanup） | "It **should return a *cleanup function*** with cleanup code that disconnects from that system."；"When your component is removed from the page, your Effect will disconnect one last time." |
 | R-004 | MUST | T2 | Hook 只能在组件函数体顶层（early return 之前）或自定义 Hook 顶层调用 | "**Don't call Hooks inside loops, conditions, nested functions, or `try`/`catch`/`finally` blocks.** Instead, always use Hooks at the top level of your React function, before any early returns." |
 | R-005 | SHOULD | T2 | 异步操作的乐观更新使用 `useOptimistic` 实现 | "`useOptimistic` is a React Hook that lets you optimistically update the UI." |
+| R-006 | MUST | T2 | `use` 只能在组件或 Hook 内调用 | "`use` must be called inside a Component or a Hook." |
+| R-007 | MUST | T2 | 传给 `use` 的 Promise 必须缓存，跨重渲染复用同一实例 | "Promises passed to `use` must be cached so the same Promise instance is reused across re-renders." |
+| R-008 | MUST | T5 | 服务端渲染中调用 `use(browser())` 的组件必须处于 `<Suspense>` 边界内 | "The component calling `use(browser())` must be inside a `<Suspense>` boundary during server rendering. Without one, server rendering fails." |
+| R-009 | MUST | T2 | 不得读取 `promise.status`/`promise.value` 绕过 `use` | "Never read `promise.status` or `promise.value` directly to bypass `use`; always pass the Promise to `use` and let React handle it." |
+| R-010 | MUST | T5 | `useOptimistic` 的 setter 必须在 Action/`startTransition` 内调用 | "The `set` function must be called inside an Action."；"The optimistic setter function must be called inside `startTransition`" |
+| R-011 | MUST | T2 | `useActionState` 的 `dispatchAction` 必须在 Action 中调用 | "`dispatchAction` must be called from an Action." |
+| R-012 | MUST | T5 | `useOptimistic` 的 updater/reducer 必须是纯函数 | "It must be pure, should take the pending state as its only argument, and should return the next optimistic state." |
 
 **Grounding 预警（写给验证模块/标注人）**：R-001/R-002/R-005 的原文是"描述性/不鼓励"措辞而非强制句——
 预期 grounding 分低，属于 engine.verify（验证关 1）的好案例；TS-005（borderline）正是 R-005 的边界样例，保留。
@@ -65,3 +72,4 @@ R-003/R-004 原文为明确规范句，grounding 应接近满分。
 |---|---|---|
 | v0 (DRAFT) | 2026-11-12 | 骨架：三分类、难度、R-001…R-005 占位 |
 | v1 | 2026-11-13 | 冻结 react19 R-001…R-005；逐条快照引句；跨规范编号政策；grounding 预警 |
+| v1.1 | 2026-11-13 | 追加 R-006…R-012（全部来自快照逐字规范句，M1 扩样）；TS-017（R-001 边界样本）入集 |

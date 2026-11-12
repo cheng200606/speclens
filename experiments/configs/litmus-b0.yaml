@@ -1,0 +1,7 @@
+# 生死实验 · B0 zero-shot（plan.md §2.4）
+# mock-perfect 仅验证机械流程；真实运行把 model 换成 litellm 模型串（如 openai/gpt-5）
+run_name: litmus-b0
+baseline: b0_zero_shot
+cases_dir: bench/cases/react19
+model: mock-perfect
+temperature: 0.0

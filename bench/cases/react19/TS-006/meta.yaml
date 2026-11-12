@@ -1,0 +1,14 @@
+case_id: TS-006
+verdict: violation
+difficulty: easy
+rule_ids: [R-006]
+origin: handcrafted
+files: ["code/theme.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-006]
+    notes: "use() 在普通工具函数中调用，既非组件也非 Hook。"
+resolved:
+  verdict: violation
+  rule_ids: [R-006]

@@ -1,0 +1,14 @@
+case_id: TS-010
+verdict: violation
+difficulty: medium
+rule_ids: [R-008]
+origin: handcrafted
+files: ["code/BrowserStatus.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-008]
+    notes: "SSR 场景调用 use(browser promise)，父级渲染无 Suspense 边界，服务端渲染会失败。"
+resolved:
+  verdict: violation
+  rule_ids: [R-008]

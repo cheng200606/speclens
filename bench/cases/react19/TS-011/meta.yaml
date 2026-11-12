@@ -1,0 +1,14 @@
+case_id: TS-011
+verdict: compliant
+difficulty: easy
+rule_ids: [R-008]
+origin: handcrafted
+files: ["code/SuspenseStatus.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-008]
+    notes: "use(browser promise) 被正确包裹在 Suspense 边界内。"
+resolved:
+  verdict: compliant
+  rule_ids: [R-008]

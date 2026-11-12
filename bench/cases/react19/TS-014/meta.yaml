@@ -1,0 +1,14 @@
+case_id: TS-014
+verdict: violation
+difficulty: medium
+rule_ids: [R-011]
+origin: handcrafted
+files: ["code/NameEditor.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-011]
+    notes: "dispatchAction 在 useEffect 中直接调用，未处于 Action 内。"
+resolved:
+  verdict: violation
+  rule_ids: [R-011]

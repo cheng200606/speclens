@@ -1,0 +1,14 @@
+case_id: TS-007
+verdict: violation
+difficulty: medium
+rule_ids: [R-007]
+origin: handcrafted
+files: ["code/Status.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-007]
+    notes: "每次渲染都 fetch 创建新 Promise 实例，未缓存，会导致 Suspense 反复 fallback。"
+resolved:
+  verdict: violation
+  rule_ids: [R-007]

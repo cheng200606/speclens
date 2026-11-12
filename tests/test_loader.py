@@ -23,13 +23,17 @@ def test_load_spec_react19():
 def test_load_five_seed_cases():
     cases = load_cases(CASES_DIR)
     by_id = {c.meta.case_id: c.meta.resolved.verdict.value for c in cases}
-    assert by_id == {
-        "TS-001": "violation",
-        "TS-002": "compliant",
-        "TS-003": "violation",
-        "TS-004": "violation",
-        "TS-005": "borderline",
-    }
+    assert len(by_id) == 17  # TS-001..TS-017
+    assert by_id["TS-001"] == "violation"
+    assert by_id["TS-002"] == "compliant"
+    assert by_id["TS-005"] == "borderline"
+    assert by_id["TS-012"] == "violation"
+    assert by_id["TS-013"] == "compliant"
+    assert by_id["TS-017"] == "borderline"
+    # verdict 分布（M1 扩样中期状态）
+    assert sum(v == "violation" for v in by_id.values()) == 11
+    assert sum(v == "compliant" for v in by_id.values()) == 4
+    assert sum(v == "borderline" for v in by_id.values()) == 2
 
 
 def test_case_files_readable():

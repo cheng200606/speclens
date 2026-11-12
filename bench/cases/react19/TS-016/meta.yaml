@@ -1,0 +1,14 @@
+case_id: TS-016
+verdict: violation
+difficulty: easy
+rule_ids: [R-004]
+origin: handcrafted
+files: ["code/TryHook.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-004]
+    notes: "useState 位于 try/catch 块内，rules-of-hooks 明确禁止。"
+resolved:
+  verdict: violation
+  rule_ids: [R-004]

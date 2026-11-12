@@ -1,0 +1,14 @@
+case_id: TS-008
+verdict: compliant
+difficulty: medium
+rule_ids: [R-007]
+origin: handcrafted
+files: ["code/CachedStatus.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-007]
+    notes: "模块级缓存保证同一 URL 复用同一 Promise 实例，符合 R-007。"
+resolved:
+  verdict: compliant
+  rule_ids: [R-007]

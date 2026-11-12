@@ -1,0 +1,14 @@
+case_id: TS-013
+verdict: compliant
+difficulty: medium
+rule_ids: [R-010]
+origin: handcrafted
+files: ["code/OptimisticFollow.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-010]
+    notes: "乐观更新在 startTransition 内执行，符合 R-010。"
+resolved:
+  verdict: compliant
+  rule_ids: [R-010]

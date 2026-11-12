@@ -1,0 +1,6 @@
+# 生死实验 · M-lite（确定性规则提取 + 规则路由 + 逐规则审查，无验证关）
+run_name: litmus-mlite
+baseline: m_lite
+cases_dir: bench/cases/react19
+model: mock-perfect
+temperature: 0.0

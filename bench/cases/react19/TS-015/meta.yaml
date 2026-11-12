@@ -1,0 +1,14 @@
+case_id: TS-015
+verdict: violation
+difficulty: easy
+rule_ids: [R-012]
+origin: handcrafted
+files: ["code/ImpureOptimistic.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-012]
+    notes: "updater 函数非纯：读取并修改外部数组 log，且依赖 Date.now()。"
+resolved:
+  verdict: violation
+  rule_ids: [R-012]

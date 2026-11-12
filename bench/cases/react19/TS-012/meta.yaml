@@ -1,0 +1,14 @@
+case_id: TS-012
+verdict: violation
+difficulty: easy
+rule_ids: [R-010]
+origin: handcrafted
+files: ["code/FollowButton.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-010]
+    notes: "useOptimistic 的 setter 在 onClick 回调中直接调用，未包在 Action/startTransition 内。"
+resolved:
+  verdict: violation
+  rule_ids: [R-010]
