@@ -1,0 +1,7 @@
+# 生死实验 · M-verified（完整方法 M：verify 过滤 + trace 证据链 + 聚合去重）
+# 与 M-lite 构成消融对照（plan.md §2.2）
+run_name: litmus-mverified
+baseline: m_verified
+cases_dir: bench/cases/react19
+model: mock-perfect
+temperature: 0.0

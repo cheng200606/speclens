@@ -116,13 +116,23 @@ def _synth_prompt(rule: RuleRecord) -> str:
     )
 
 
+class GateUnavailable(Exception):
+    """门 2 无法执行（如 adapter 不支持正反例合成）——门结果记 pending，非 fail。"""
+
+
 def _synthesize_examples(rule: RuleRecord, adapter) -> tuple[str, str]:
-    out = adapter.complete_json(
-        system=_SYNTH_SYSTEM,
-        user=_synth_prompt(rule),
-        schema=RuleExamples,
-        meta={"rule_id": rule.id, "phase": "synthesize"},
-    )
+    from pydantic import ValidationError
+
+    try:
+        out = adapter.complete_json(
+            system=_SYNTH_SYSTEM,
+            user=_synth_prompt(rule),
+            schema=RuleExamples,
+            meta={"rule_id": rule.id, "phase": "synthesize"},
+        )
+    except ValidationError as exc:
+        # adapter 不产出 RuleExamples 形状 => 门不可用，而非规则自洽失败
+        raise GateUnavailable(f"synthesis schema mismatch: {exc}") from exc
     return out.pos_example, out.neg_example
 
 
@@ -185,12 +195,17 @@ def detect_conflicts(
                 continue
             if not (set(a.trigger.ast_cues) & set(b.trigger.ast_cues)):
                 continue
-            verdict: ContradictionVerdict = adapter.complete_json(
-                system=_CONTRA_SYSTEM,
-                user=_contra_prompt(a, b),
-                schema=ContradictionVerdict,
-                meta={"rule_id": a.id, "other": b.id, "phase": "contradiction"},
-            )
+            from pydantic import ValidationError
+
+            try:
+                verdict: ContradictionVerdict = adapter.complete_json(
+                    system=_CONTRA_SYSTEM,
+                    user=_contra_prompt(a, b),
+                    schema=ContradictionVerdict,
+                    meta={"rule_id": a.id, "other": b.id, "phase": "contradiction"},
+                )
+            except ValidationError:
+                continue  # adapter 不支持该判定形态 => 此对跳过，不伪造冲突
             if verdict.contradict:
                 conflicts.setdefault(a.id, []).append(f"{b.id}:llm-contradict")
                 conflicts.setdefault(b.id, []).append(f"{a.id}:llm-contradict")
@@ -227,7 +242,10 @@ def verify_rules(
         if adapter is not None:
             try:
                 rule.verification.exec_test = executability_test(rule, adapter)
-            except Exception as exc:  # 合成/自审失败不阻断批量验证
+            except GateUnavailable as exc:
+                # 门不可用（如 mock adapter 不支持合成）：保持 pending，不判死
+                detail["exec_unavailable"] = str(exc)[:200]
+            except Exception as exc:  # 自审判定失败等真实错误
                 rule.verification.exec_test = "fail"
                 detail["exec_error"] = str(exc)[:200]
         rule.verification.conflicts = conflicts.get(rule.id, [])

@@ -18,7 +18,12 @@ import yaml
 
 from bench.harness.stats import mcnemar_between_runs
 
-_ENTRIES = [("B0", "b0_zero_shot"), ("B1", "b1_full_spec"), ("M-lite", "m_lite")]
+_ENTRIES = [
+    ("B0", "b0_zero_shot"),
+    ("B1", "b1_full_spec"),
+    ("M-lite", "m_lite"),
+    ("M-verified", "m_verified"),
+]
 
 
 def _latest_run(runs_dir: Path, baseline_id: str, prefix: str) -> Path | None:
