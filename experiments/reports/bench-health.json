@@ -1,7 +1,7 @@
 {
   "n_specs_total": 4,
   "n_specs_with_cases": 1,
-  "n_cases_total": 17,
+  "n_cases_total": 40,
   "kappa_verdict_overall": null,
   "kappa_available": false,
   "rule_set_jaccard_overall": null,
@@ -13,21 +13,22 @@
   },
   "per_spec": {
     "react19": {
-      "n_cases": 17,
+      "n_cases": 40,
       "verdict": {
-        "violation": 11,
-        "compliant": 4,
-        "borderline": 2
+        "violation": 23,
+        "compliant": 13,
+        "borderline": 4
       },
       "difficulty": {
-        "medium": 6,
-        "easy": 9,
-        "hard": 2
+        "medium": 16,
+        "easy": 14,
+        "hard": 10
       },
       "origin": {
-        "handcrafted": 17
+        "handcrafted": 17,
+        "synthetic": 23
       },
-      "hard_ratio": 0.1176,
+      "hard_ratio": 0.25,
       "n_dual_annotated": 0,
       "dual_coverage": 0.0,
       "kappa_verdict": null,
@@ -57,10 +58,8 @@
     }
   },
   "warnings": [
-    "react19: hard 样本占比 11.8% < 20%",
     "Cohen's κ 无法计算：全量集双标样本为 0（plan.md §2.3.3 降级预案尚未执行）",
-    "样本总数 17 < 生死实验最低线 40",
-    "样本总数 17 < 全量集最低线 240",
+    "样本总数 40 < 全量集最低线 240",
     "仅 1/4 份规范有标注样本，RQ1/RQ3 跨规范分解不可行"
   ],
   "schema_errors": []

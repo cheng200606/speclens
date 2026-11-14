@@ -1,0 +1,14 @@
+case_id: TS-023
+verdict: compliant
+difficulty: easy
+rule_ids: [R-006]
+origin: synthetic
+files: ["code/useTheme.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-006]
+    notes: "use() 在自定义 Hook（useTheme）内调用，符合 use 的调用上下文要求。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-006]

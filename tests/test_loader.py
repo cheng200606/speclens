@@ -20,20 +20,44 @@ def test_load_spec_react19():
     assert spec.freshness_probe == "freshness_probe.yaml"
 
 
-def test_load_five_seed_cases():
+def test_load_all_cases():
     cases = load_cases(CASES_DIR)
     by_id = {c.meta.case_id: c.meta.resolved.verdict.value for c in cases}
-    assert len(by_id) == 17  # TS-001..TS-017
+    assert len(by_id) == 40  # TS-001..TS-040（I2 扩样后）
     assert by_id["TS-001"] == "violation"
     assert by_id["TS-002"] == "compliant"
     assert by_id["TS-005"] == "borderline"
     assert by_id["TS-012"] == "violation"
     assert by_id["TS-013"] == "compliant"
     assert by_id["TS-017"] == "borderline"
-    # verdict 分布（M1 扩样中期状态）
-    assert sum(v == "violation" for v in by_id.values()) == 11
-    assert sum(v == "compliant" for v in by_id.values()) == 4
-    assert sum(v == "borderline" for v in by_id.values()) == 2
+    # I2 扩样（TS-018..TS-040）判定抽查
+    assert by_id["TS-018"] == "compliant"
+    assert by_id["TS-026"] == "compliant"
+    assert by_id["TS-034"] == "violation"
+    assert by_id["TS-035"] == "borderline"
+    assert by_id["TS-036"] == "borderline"
+    assert by_id["TS-040"] == "violation"
+    # verdict 分布（I2 扩样后：合规占比 ≥30%）
+    assert sum(v == "violation" for v in by_id.values()) == 23
+    assert sum(v == "compliant" for v in by_id.values()) == 13
+    assert sum(v == "borderline" for v in by_id.values()) == 4
+
+
+def test_frozen_rules_have_violation_and_compliant():
+    """每条冻结规则都至少有 1 个违规样本和 1 个合规样本（I2 扩样目标）。"""
+    rules = yaml.safe_load(
+        (REPO / "bench" / "specs" / "react19" / "rules.yaml").read_text(encoding="utf-8")
+    )
+    frozen = {r["id"] for r in rules["rules"]}
+    seen: dict[str, set[str]] = {}
+    for case in load_cases(CASES_DIR):
+        verdict = case.meta.resolved.verdict.value
+        for rid in case.meta.resolved.rule_ids:
+            seen.setdefault(rid, set()).add(verdict)
+    assert set(seen) == frozen, "有冻结规则无任何样本覆盖"
+    for rid in sorted(frozen):
+        assert "violation" in seen[rid], f"{rid} 缺违规样本"
+        assert "compliant" in seen[rid], f"{rid} 缺合规样本"
 
 
 def test_case_files_readable():

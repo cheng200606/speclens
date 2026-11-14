@@ -1,0 +1,14 @@
+case_id: TS-029
+verdict: violation
+difficulty: medium
+rule_ids: [R-005]
+origin: synthetic
+files: ["code/FollowCount.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-005]
+    notes: "手动 setState 提前 +1 模拟乐观更新并手写回滚，未使用 useOptimistic（SHOULD）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-005]

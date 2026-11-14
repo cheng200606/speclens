@@ -1,7 +1,10 @@
-# SpecLens-Bench 标注指南 v1（2026-11-13 冻结）
+# SpecLens-Bench 标注指南 v1.2（2026-11-14）
 
 > **v1 变更**：react19 规则编号 **R-001…R-005 冻结**；每条规则附快照原文引句（溯源）；
 > 确立跨规范编号政策与其他规范命名空间。本指南对应快照：见各 `bench/specs/<id>/snapshot/manifest.yaml`。
+>
+> **单一真值源**：逐字引句以 `bench/specs/react19/rules.yaml` 为准（12/12 经引擎逐字校验）；
+> 本表引句仅作人读参考，historical 转述与快照冲突时以快照原文为准。
 
 ## 1. 判定三分类（verdict）
 
@@ -30,16 +33,16 @@
 |---|---|---|---|---|
 | R-001 | SHOULD | T2 | 组件内取数优先 `use()`（配合框架缓存/Suspense），而非 `useEffect`+`setState` 手动取数 | "Before `use`, a common approach was to fetch data in an Effect and update state when the data arrives. Compared to `use`, this approach requires managing loading and error states manually."；"…why fetching in an Effect is **discouraged**" |
 | R-002 | SHOULD | T2 | 表单提交/表单动作使用 Actions（`useActionState`、`action` 属性）处理，而非手动 `onSubmit`+setState | "`useActionState` is a React Hook that lets you update state with side effects using Actions." |
-| R-003 | MUST | T5 | `useEffect` 中建立订阅/连接/定时器的，必须返回清理函数（cleanup） | "It **should return a *cleanup function*** with cleanup code that disconnects from that system."；"When your component is removed from the page, your Effect will disconnect one last time." |
-| R-004 | MUST | T2 | Hook 只能在组件函数体顶层（early return 之前）或自定义 Hook 顶层调用 | "**Don't call Hooks inside loops, conditions, nested functions, or `try`/`catch`/`finally` blocks.** Instead, always use Hooks at the top level of your React function, before any early returns." |
+| R-003 | MUST | T5 | `useEffect` 中建立订阅/连接/定时器的，必须返回清理函数（cleanup） | "It should return a *cleanup function* with <CodeStep step={2}>cleanup code</CodeStep> that disconnects from that system."；"When your component is removed from the page, your Effect will disconnect one last time." |
+| R-004 | MUST | T2 | Hook 只能在组件函数体顶层（early return 之前）或自定义 Hook 顶层调用 | "**Don’t call Hooks inside loops, conditions, nested functions, or `try`/`catch`/`finally` blocks.** Instead, always use Hooks at the top level of your React function, before any early returns." |
 | R-005 | SHOULD | T2 | 异步操作的乐观更新使用 `useOptimistic` 实现 | "`useOptimistic` is a React Hook that lets you optimistically update the UI." |
 | R-006 | MUST | T2 | `use` 只能在组件或 Hook 内调用 | "`use` must be called inside a Component or a Hook." |
-| R-007 | MUST | T2 | 传给 `use` 的 Promise 必须缓存，跨重渲染复用同一实例 | "Promises passed to `use` must be cached so the same Promise instance is reused across re-renders." |
+| R-007 | MUST | T2 | 传给 `use` 的 Promise 必须缓存，跨重渲染复用同一实例 | "Promises passed to `use` in Client Components must be cached so the same Promise instance is reused across re-renders." |
 | R-008 | MUST | T5 | 服务端渲染中调用 `use(browser())` 的组件必须处于 `<Suspense>` 边界内 | "The component calling `use(browser())` must be inside a `<Suspense>` boundary during server rendering. Without one, server rendering fails." |
 | R-009 | MUST | T2 | 不得读取 `promise.status`/`promise.value` 绕过 `use` | "Never read `promise.status` or `promise.value` directly to bypass `use`; always pass the Promise to `use` and let React handle it." |
 | R-010 | MUST | T5 | `useOptimistic` 的 setter 必须在 Action/`startTransition` 内调用 | "The `set` function must be called inside an Action."；"The optimistic setter function must be called inside `startTransition`" |
 | R-011 | MUST | T2 | `useActionState` 的 `dispatchAction` 必须在 Action 中调用 | "`dispatchAction` must be called from an Action." |
-| R-012 | MUST | T5 | `useOptimistic` 的 updater/reducer 必须是纯函数 | "It must be pure, should take the pending state as its only argument, and should return the next optimistic state." |
+| R-012 | MUST | T5 | `useOptimistic` 的 updater/reducer 必须是纯函数 | "It must be pure, should take the current state and reducer action arguments, and should return the next optimistic state." |
 
 **Grounding 预警（写给验证模块/标注人）**：R-001/R-002/R-005 的原文是"描述性/不鼓励"措辞而非强制句——
 预期 grounding 分低，属于 engine.verify（验证关 1）的好案例；TS-005（borderline）正是 R-005 的边界样例，保留。
@@ -73,3 +76,4 @@ R-003/R-004 原文为明确规范句，grounding 应接近满分。
 | v0 (DRAFT) | 2026-11-12 | 骨架：三分类、难度、R-001…R-005 占位 |
 | v1 | 2026-11-13 | 冻结 react19 R-001…R-005；逐条快照引句；跨规范编号政策；grounding 预警 |
 | v1.1 | 2026-11-13 | 追加 R-006…R-012（全部来自快照逐字规范句，M1 扩样）；TS-017（R-001 边界样本）入集 |
+| v1.2 | 2026-11-14 | 引句逐字化纠偏（R-003/R-004/R-007/R-012 对齐快照原文，rules.yaml 为单一真值源）；I2 扩样 TS-018…TS-040 入集（origin=synthetic，待人工复核） |

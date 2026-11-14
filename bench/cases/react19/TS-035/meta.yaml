@@ -1,0 +1,14 @@
+case_id: TS-035
+verdict: borderline
+difficulty: medium
+rule_ids: [R-007]
+origin: synthetic
+files: ["code/UserBadge.tsx"]
+annotations:
+  - annotator: A
+    verdict: borderline
+    rule_ids: [R-007]
+    notes: "模块级单槽缓存：同一 userId 复用同一实例满足字面要求，但多 userId 交替渲染互相踢缓存，判定边界。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: borderline
+  rule_ids: [R-007]

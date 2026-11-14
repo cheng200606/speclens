@@ -1,0 +1,14 @@
+case_id: TS-040
+verdict: violation
+difficulty: hard
+rule_ids: [R-002, R-011]
+origin: synthetic
+files: ["code/InviteForm.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-002, R-011]
+    notes: "手动 onSubmit 处理提交（R-002），且 dispatchAction 在普通事件回调中调用（R-011）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-002, R-011]

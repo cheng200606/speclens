@@ -35,8 +35,13 @@ def test_litmus_end_to_end(tmp_path: Path):
     # 四配置两两配对 = 6 组，mock-perfect 下结果完全一致 → p=1.0
     assert text.count("vs") >= 6
     assert "p_mcnemar" not in text  # 表格里用 p 表头
-    assert "| B0 vs B1 | 15 | 0 | 0 | 1.0 |" in text  # 17 cases - 2 borderline = 15
-    assert "| B0 vs M-verified | 15 | 0 | 0 | 1.0 |" in text
+    from bench.harness.loader import load_cases
+    from bench.harness.schemas import Verdict
+
+    cases = load_cases(REPO / "bench" / "cases" / "react19")
+    n_pairs = sum(1 for c in cases if c.meta.resolved.verdict != Verdict.BORDERLINE)
+    assert f"| B0 vs B1 | {n_pairs} | 0 | 0 | 1.0 |" in text
+    assert f"| B0 vs M-verified | {n_pairs} | 0 | 0 | 1.0 |" in text
     assert "No-Go" in text  # 判读标准存在
 
     # summary 数值一致性（mock-perfect 完美预测；m_verified 经 gate1 过滤后仍全检出）

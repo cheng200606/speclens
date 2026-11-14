@@ -1,0 +1,14 @@
+case_id: TS-018
+verdict: compliant
+difficulty: medium
+rule_ids: [R-001]
+origin: synthetic
+files: ["code/StatusPanel.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-001]
+    notes: "use() 读取 Map 缓存的 Promise，Suspense 兜底加载态；无 useEffect 手动取数。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-001]

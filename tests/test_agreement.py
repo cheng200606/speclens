@@ -27,15 +27,19 @@ def test_mean_jaccard():
 
 def test_bench_health_reports_real_gaps_honestly():
     report = validate_bench(REPO)
-    assert report["n_cases_total"] == 17
+    assert report["n_cases_total"] == 40
     assert report["n_specs_total"] == 4
     assert report["n_specs_with_cases"] == 1
     assert report["kappa_available"] is False
     assert report["kappa_verdict_overall"] is None
     r19 = report["per_spec"]["react19"]
-    assert r19["hard_ratio"] == 0.1176
+    assert r19["hard_ratio"] == 0.25
     assert r19["n_dual_annotated"] == 0
     assert r19["quote_check"]["all_verbatim"] is True
     assert r19["unknown_referenced_rule_ids"] == []
     joined = " ".join(report["warnings"])
-    assert "κ" in joined and "11.8%" in joined and "17 < 生死实验最低线 40" in joined
+    # 40 已达生死实验最低线，故不再报该警告；仍如实报告 κ 缺失 / 全量集缺口 / 单规范
+    assert "κ" in joined
+    assert "40 < 全量集最低线 240" in joined
+    assert "仅 1/4" in joined
+    assert "生死实验最低线" not in joined

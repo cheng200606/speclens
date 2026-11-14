@@ -1,0 +1,14 @@
+case_id: TS-028
+verdict: violation
+difficulty: hard
+rule_ids: [R-003]
+origin: synthetic
+files: ["code/Poller.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "setInterval 未返回清理函数；endpoint 变化时旧 interval 泄漏继续轮询。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]

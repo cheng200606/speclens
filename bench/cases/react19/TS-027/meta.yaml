@@ -1,0 +1,14 @@
+case_id: TS-027
+verdict: violation
+difficulty: medium
+rule_ids: [R-002]
+origin: synthetic
+files: ["code/SignupForm.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-002]
+    notes: "手动 onSubmit+setState 处理提交，未用 Actions（useActionState/action 属性）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-002]

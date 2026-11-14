@@ -1,0 +1,14 @@
+case_id: TS-036
+verdict: borderline
+difficulty: hard
+rule_ids: [R-010]
+origin: synthetic
+files: ["code/VoteBar.tsx"]
+annotations:
+  - annotator: A
+    verdict: borderline
+    rule_ids: [R-010]
+    notes: "setter 在 startTransition 内但位于 await 之后：Transition 可能已结束，乐观状态可能不呈现，判定边界。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: borderline
+  rule_ids: [R-010]

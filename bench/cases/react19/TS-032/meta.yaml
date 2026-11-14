@@ -1,0 +1,14 @@
+case_id: TS-032
+verdict: violation
+difficulty: medium
+rule_ids: [R-012]
+origin: synthetic
+files: ["code/ChatFeed.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-012]
+    notes: "updater 修改模块级数组且依赖 Date.now，非纯函数。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-012]

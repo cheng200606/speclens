@@ -1,0 +1,14 @@
+case_id: TS-033
+verdict: violation
+difficulty: hard
+rule_ids: [R-007]
+origin: synthetic
+files: ["code/UserCard.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-007]
+    notes: "fetchUser 为未缓存 async 函数，每次渲染新建 Promise 传给 use（快照 🔴 示例模式）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-007]

@@ -1,0 +1,14 @@
+case_id: TS-024
+verdict: compliant
+difficulty: medium
+rule_ids: [R-009]
+origin: synthetic
+files: ["code/ProfilePage.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-009]
+    notes: "Promise 直接交给 use，不读 promise.status/value；Suspense 边界在父级。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-009]

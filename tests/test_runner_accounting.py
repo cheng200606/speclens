@@ -46,10 +46,13 @@ def test_explicit_budget_is_recorded(tmp_path: Path):
 
 
 def test_usage_reproducibility_and_no_overwrite(tmp_path: Path):
+    from bench.harness.loader import load_cases
+
     cfg = _config(tmp_path)
     run_dir = run(cfg, REPO)
     usage = json.loads((run_dir / "usage.json").read_text(encoding="utf-8"))
-    assert usage["n_calls"] == 17
+    n_cases = len(load_cases(REPO / "bench" / "cases" / "react19"))
+    assert usage["n_calls"] == n_cases
     assert usage["total_tokens"] > 0
     assert usage["by_phase"]
     summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))

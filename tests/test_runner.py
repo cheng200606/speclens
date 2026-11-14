@@ -26,26 +26,27 @@ def _expected_counts() -> tuple[int, float]:
     cases = load_cases(REPO / "bench" / "cases" / "react19")
     violations = [c for c in cases if c.meta.resolved.verdict == Verdict.VIOLATION]
     easy = [c for c in violations if c.meta.difficulty == Difficulty.EASY]
-    return len(cases), round(len(easy) / len(violations), 4)
+    borderline = [c for c in cases if c.meta.resolved.verdict == Verdict.BORDERLINE]
+    return len(cases), round(len(easy) / len(violations), 4), len(borderline)
 
 
 def test_mock_perfect_run(tmp_path: Path):
     run_dir = run(_config(tmp_path, "mock-perfect"), REPO)
     summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
-    n_cases, _ = _expected_counts()
+    n_cases, _, n_borderline = _expected_counts()
     assert summary["baseline"] == "b0_zero_shot"
     assert summary["n_cases"] == n_cases
     assert summary["detection_rate"] == 1.0
     assert summary["false_positive_rate"] == 0.0
     assert summary["rule_match_rate"] == 1.0
-    assert summary["n_borderline"] == 2
+    assert summary["n_borderline"] == n_borderline
 
 
 def test_mock_imperfect_run_metric_math(tmp_path: Path):
     # imperfect 只报 easy 违规样本，期望检出率按当前 bench 动态计算
     run_dir = run(_config(tmp_path, "mock-imperfect"), REPO)
     summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
-    _, expected_detection = _expected_counts()
+    _, expected_detection, _ = _expected_counts()
     assert summary["detection_rate"] == expected_detection
     assert summary["false_positive_rate"] == 0.0
 
@@ -56,7 +57,7 @@ def test_run_artifacts_layout(tmp_path: Path):
     assert (run_dir / "config.resolved.yaml").exists()
     assert (run_dir / "raw" / "TS-001.json").exists()
     lines = (run_dir / "results.jsonl").read_text(encoding="utf-8").strip().splitlines()
-    n_cases, _ = _expected_counts()
+    n_cases, _, _ = _expected_counts()
     assert len(lines) == n_cases
     first = json.loads(lines[0])
     assert first["case_id"] == "TS-001"

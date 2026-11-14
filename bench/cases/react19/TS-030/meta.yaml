@@ -1,0 +1,14 @@
+case_id: TS-030
+verdict: violation
+difficulty: hard
+rule_ids: [R-009]
+origin: synthetic
+files: ["code/Profile.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-009]
+    notes: "读 promise.status 手工分流绕过 use；use 因此位于条件分支内（与 R-004 交互）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-009]

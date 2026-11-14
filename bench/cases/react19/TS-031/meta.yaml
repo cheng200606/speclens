@@ -1,0 +1,14 @@
+case_id: TS-031
+verdict: violation
+difficulty: hard
+rule_ids: [R-011]
+origin: synthetic
+files: ["code/ReportBug.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-011]
+    notes: "dispatchAction 延迟到 setTimeout 回调执行，脱离任何 Action/Transition 作用域。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-011]
