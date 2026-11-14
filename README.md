@@ -6,7 +6,7 @@
 
 1. **`bench/` — SpecLens-Bench**：规范遵循（spec-adherence）代码审查基准。4 份真实开放许可规范
    （React 19、OpenAI Agents SDK/LangGraph、OWASP ASVS 5.0、Airbnb JS Style Guide）
-   已存快照；**目前仅 react19 有 17 条标注样本**。规范快照附带来源、许可与「新鲜度探测」题库。
+   已存快照；**目前仅 react19 有 40 条标注样本**。规范快照附带来源、许可与「新鲜度探测」题库。
    `bench/specs/react19/rules.yaml` 是 12 条冻结规则（逐字原文溯源），也是标注与引擎共享的 ID 命名空间。
 2. **`baselines/` — 基线与变体**：已实现 B0 zero-shot、B1 规范全文 in-context、M-lite、M-verified。
    B2 (RAG) / B3 (静态检查) / B4 (消融) **尚未实现**，见 `docs/STATUS-I1.md`。
@@ -14,21 +14,22 @@
    （verify：grounding / 正反例可执行性 / 冲突）→ 规则路由（route）→ 分层审查（review）
    → 证据链与聚合（trace）。
 
-## 当前状态（2026-11-13，I1 迭代后）
+## 当前状态（2026-11-14，I2 迭代后）
 
-> **工程骨架已完成到 M2，生死实验尚未正式执行。** 四份 litmus 配置已切换到真实模型
-> `deepseek/deepseek-flash` 并完成最小连通性验证，但全量实验仍未跑；
-> plan.md §2.4 的 Go/No-Go 判读**尚无结论**。任何 mock 结果均被标记为 `NON-SCIENTIFIC`。
+> **基准 40 条（react19），首次真实生死实验已完成（SCIENTIFIC）。**
+> 判读：**Go（RQ4 规模/成本场景）**——M 与 B1 效果统计不可分，但 B1 token 成本为 M 的 6.4×；
+> 最干净的测量发现是规范上下文显著压制误报（B0 0.539 → B1 0.077，p=0.031）。
+> 方法贡献（RQ2）未获本 pilot 支持，M-verified 退化待诊断。详见 `docs/STATUS-I2.md`。
 
-- ✅ M0 / M1 / M2 代码落地：schema、harness、4 份规范快照与探测题库、标注指南 v1.1、
+- ✅ M0 / M1 / M2 代码落地：schema、harness、4 份规范快照与探测题库、标注指南 v1.2、
   B0/B1 基线、verify 三关、trace 证据链、M-lite / M-verified 消融。
-- ✅ I1「评测有效性加固」：修复规则 ID 命名空间断裂、B1 规范全文静默截断、
-  M-verified 验证关未接入、无成本记账、无 κ 体检、报告口径误读等问题。详见 `docs/STATUS-I1.md`。
-- ✅ 真实模型接入：`litellm 1.109.1` + `DEEPSEEK_API_KEY`（`.env`）+
-  四份配置统一 `deepseek/deepseek-flash`，已验证 JSON 模式与长上下文。详见 `docs/reproduce.md` §3。
-- ⏳ I2 顺延：全量真实实验与 Go/No-Go 判读、17 → 40 → 240 扩样、其余 3 规范建样本、
-  双标注 κ、B2/B3/B4、LLM 规则合成与 tree-sitter 路由、RQ1–RQ4 全量实验、论文。
-- 测试：`uv run pytest` 全绿。
+- ✅ I1「评测有效性加固」：规则 ID 命名空间、B1 截断、验证关接线、记账、κ 体检、防误读。
+  详见 `docs/STATUS-I1.md`。
+- ✅ I2：基准扩样 17→40（12/12 规则均有正反例，hard 25%）、新鲜度探测（4 规范均「已熟悉」，
+  0.90–1.00）、真实生死实验四配置 × 40 cases × 1 run。详见 `docs/STATUS-I2.md`。
+- ⏳ I3：验证关可诊断性与 M-verified 修复、synthetic 案例人工复核、RQ4 成本–规模实验、
+  B2/B3/B4、其余 3 规范建样本、双标注 κ、LLM 规则合成、RQ 全量、论文。
+- 测试：`uv run pytest` 全绿（83 passed）。
 
 ## 快速开始
 
