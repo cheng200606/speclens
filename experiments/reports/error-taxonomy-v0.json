@@ -49,7 +49,7 @@
     "fn-static-indistinguishable 是 B3 的结构性边界，已文档化"
   ],
   "benchmark_actions": [
-    "TS-011：candidates——(a) resolved.rule_ids 补 [R-008, R-007] 并改 verdict 为 violation(multi-rule)，或 (b) 改代码移除内联 promise。扩样前由人工定夺",
+    "TS-011：已定夺（2026-11-15，用户）——选项 (b) 改代码移除内联 promise（模块级缓存），verdict/rule_ids 不变；原 fp-off-scope-true-pattern 实例就此消除，历史 run 归档保留（code_digest 不同，可追溯）",
     "240 扩样时每个案例标注『范围内规则』并在指南中明确范围外真实模式不计 FP 的处理口径"
   ]
 }

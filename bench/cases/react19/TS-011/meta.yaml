@@ -8,7 +8,7 @@ annotations:
   - annotator: A
     verdict: compliant
     rule_ids: [R-008]
-    notes: "use(browser promise) 被正确包裹在 Suspense 边界内。"
+    notes: "use() 读取缓存 Promise 且组件在 Suspense 边界内（R-008 合规）。2026-11-15 修订：原代码含内联未缓存 promise（顺带违反 R-007），致全部方法一致误报（error-taxonomy-v0.json）；经人工定夺改为模块级缓存实现，消除范围外模式，verdict/rule_ids 不变。"
 resolved:
   verdict: compliant
   rule_ids: [R-008]

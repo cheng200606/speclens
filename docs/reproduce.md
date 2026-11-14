@@ -171,3 +171,34 @@ uv run python -m bench.harness.probe --probe bench/specs/react19/freshness_probe
    不依赖其价格表；需要实时价格时设 `LITELLM_LOCAL_MODEL_COST_MAP=False`。
 8. 修改 `bench/harness/*.py`、`baselines/*.py`、`engine/*.py`、`bench/specs/*/rules.yaml`
    都会改变 `code_digest`，归档目录必然变化——刻意设计，勿手动删旧 run。
+
+## 7. 第二模型对照：MiniMax-M2.1（I4 接入，待用户填 key）
+
+```bash
+# 1) 在 .env 增加一行（勿提交、勿贴入对话）：MINIMAX_API_KEY=...
+# 2) 连通性冒烟（单 case，四配置哈希互异检查内建于 runner）：
+uv run python -m bench.harness.runner --config experiments/configs/litmus-minimax-b0.yaml
+# 3) 全量四配置（同 model/temperature/api_base，rules_source 仅 M 路径 aligned）：
+for c in litmus-minimax-b0 litmus-minimax-b1 litmus-minimax-mlite litmus-minimax-mverified; do
+  uv run python -m bench.harness.runner --config experiments/configs/$c.yaml
+done
+uv run python -m experiments.make_report --runs experiments/runs --prefix litmus-minimax \
+    --model minimax/MiniMax-M2.1 --output experiments/reports/litmus-minimax.md
+# 4) 新鲜度探测（堵「模型见过」质疑，按模型名隔离不覆盖）：
+uv run python -m bench.harness.probe --probe bench/specs/react19/freshness_probe.yaml \
+    --model minimax/MiniMax-M2.1 --output-dir experiments/runs
+```
+
+要点与坑（来源：锁定版 litellm 1.109.1 的 minimax provider 源码）：
+
+- 路由：`minimax/` 前缀走 OpenAI 兼容端点（中国 `https://api.minimaxi.com/v1`，
+  国际 `https://api.minimax.io/v1`）；该版支持的模型为 MiniMax-M2.1 / M2.1-lightning / M2
+  （M2.5 需升级 litellm 后可用，暂不采用）。
+- **thinking 无法关闭**：M2 系列默认 interleaved thinking，reasoning 在独立字段
+  （`reasoning_content`），不污染 JSON content，但 completion tokens 显著高于 deepseek-flash
+  （成本对比时用 usage.json 实测值，勿套用 deepseek 单价）。
+- **Coding Plan 订阅 key 不兼容**标准 API（litellm#24483）：需用按量付费 key。
+- `response_format=json_object` 在 OpenAI 兼容路由上理论支持，首个 run 前先用
+  litmus-minimax-b0 冒烟确认；若 400，在 litellm_kwargs 里去掉 response_format 的方案
+  需先改 adapter（勿直接改配置绕过 schema 校验）。
+- MiniMax 未知错误码若触发 429/超时，现有退避（num_retries=3 / timeout 180s）同样生效。

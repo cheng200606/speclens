@@ -41,6 +41,10 @@ _DIGEST_GLOBS = (
     "bench/specs/*/spec.yaml",
     "bench/specs/*/rules.yaml",
     "bench/specs/*/snapshot/manifest.yaml",
+    # 基准内容也是实验结果的一部分（I4 修复：TS-011 案例修订后同配置哈希不变，
+    # 被防覆盖护栏误拦——案例元数据与代码必须进入摘要）
+    "bench/cases/*/*/meta.yaml",
+    "bench/cases/*/*/code/*",
 )
 
 

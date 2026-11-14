@@ -33,6 +33,7 @@ _KEY_BY_PREFIX = {
     "gemini": "GEMINI_API_KEY",
     "vertex_ai": None,  # 走服务账号 JSON，非简单 key
     "deepseek": "DEEPSEEK_API_KEY",
+    "minimax": "MINIMAX_API_KEY",
     "openrouter": "OPENROUTER_API_KEY",
     "dashscope": "DASHSCOPE_API_KEY",
     "qwen": "DASHSCOPE_API_KEY",

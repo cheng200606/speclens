@@ -1,0 +1,15 @@
+# 第二模型对照（I4 接入）：MiniMax-M2.1，litellm 前缀 minimax/（OpenAI 兼容路由）。
+# 密钥：.env 的 MINIMAX_API_KEY（勿写入本文件）。中国端点 api.minimaxi.com，
+# 国际用户改 https://api.minimax.io/v1。M2 系列默认开启 interleaved thinking
+# （reasoning 走独立字段，不计入 content），无关闭开关，四份配置保持一致即可。
+# 控制变量：minimax 组四份必须同 model/temperature/api_base/litellm_kwargs。
+run_name: litmus-minimax-b0
+baseline: b0_zero_shot
+cases_dir: bench/cases/react19
+model: minimax/MiniMax-M2.1
+temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 180
+litellm_kwargs:
+  api_base: "https://api.minimaxi.com/v1"

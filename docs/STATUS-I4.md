@@ -93,3 +93,21 @@ top-6 段落 + 单次审查：**检出 0.478 / 误报 0.077 / 31.9K tokens（B1 
 | D3 | make_report 对 b3_static 不打 NON-SCIENTIFIC | B3 无随机成分，mock adapter 仅占位 |
 | D4 | RQ4 用字符预算阶梯而非真实多仓库 | 现有 harness 以 case 为单位；预算阶梯是"多规范/小上下文"失效模式的等价量化，真实仓库嵌入留 I5 |
 | D5 | TS-011 标注问题只记录不擅改 | 基准真值变更须人工定夺 |
+
+---
+
+## 7. 追记（2026-11-15：用户两项决议落地）
+
+1. **TS-011 口径定夺**：选项 (b)——代码改为模块级缓存 promise（`SuspenseStatus.tsx`），
+   消除范围外 R-007 模式；verdict/rule_ids 不变（R-008 合规）。meta 注明修订史。
+   连带修复：`code_digest` 原不含 `bench/cases/**`，基准内容修订不产生新归档目录
+   （被防覆盖护栏误拦）——已把 case 元数据与代码纳入摘要。B3 复跑（新 digest）：
+   **检出 0.870 / 误报 0.000 / 规则命中 0.95 / 零 token**——静态基线误报清零。
+   历史 run 归档保留（旧 digest 可追溯修订前状态）。
+2. **第二模型 = MiniMax**：锁定版 litellm 1.109.1 原生支持 `minimax/` 前缀
+   （OpenAI 兼容路由，模型 MiniMax-M2.1/M2.1-lightning/M2；M2.5 需升级 litellm，暂不采用）。
+   已建 `litmus-minimax-{b0,b1,mlite,mverified}.yaml`（中国端点 api.minimaxi.com/v1、
+   temperature 0、M 路径 rules_source=aligned；thinking 无关闭开关，组内一致），
+   `env.py`/`.env.example` 已加 MINIMAX_API_KEY 映射。**待用户把 key 填入 .env 后**
+   按 `docs/reproduce.md` §7 冒烟 + 全量四配置 + 新鲜度探测。
+3. RQ3 遗留项收口：`fp-off-scope-true-pattern` 类随 TS-011 修订消除（taxonomy JSON 已记决议）。
