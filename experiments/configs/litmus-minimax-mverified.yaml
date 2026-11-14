@@ -1,4 +1,5 @@
-# 第二模型对照（I4 接入）：MiniMax-M2.1，litellm 前缀 minimax/（OpenAI 兼容路由）。
+# 第二模型对照（I4 接入）：MiniMax-M3.1-Flash（该 key 下 M2.1 已弃用报 2069，
+# /v1/models 实测可用：M3.1-Flash/M3/M2.7/M2.5/M2.1*；与 deepseek-flash 对位选 Flash 档）。
 # 密钥：.env 的 MINIMAX_API_KEY（勿写入本文件）。中国端点 api.minimaxi.com，
 # 国际用户改 https://api.minimax.io/v1。M2 系列默认开启 interleaved thinking
 # （reasoning 走独立字段，不计入 content），无关闭开关，四份配置保持一致即可。
@@ -6,7 +7,7 @@
 run_name: litmus-minimax-mverified
 baseline: m_verified
 cases_dir: bench/cases/react19
-model: minimax/MiniMax-M2.1
+model: minimax/MiniMax-M3.1-Flash
 temperature: 0.0
 run_index: 0
 litellm_num_retries: 3

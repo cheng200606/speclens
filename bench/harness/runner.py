@@ -191,10 +191,44 @@ def run(config: dict, repo_root: Path) -> Path:
         diagnostic = {}
 
     # 3) 逐 case 预测
+    # I4：千次调用级 run 中单 case 的不可恢复异常（如 provider 偶发缺字段）不应
+    # 击穿整个 run——记为 case error 并继续；errors 落盘且 summary 报告 n_case_errors，
+    # 错误率必须如实进入论文口径。
     outcomes: list[CaseOutcome] = []
+    case_errors: list[dict] = []
     with (run_dir / "results.jsonl").open("w", encoding="utf-8") as results_file:
         for case in cases:
-            findings: list[Finding] = baseline.predict_case(case, adapter)
+            try:
+                findings: list[Finding] = baseline.predict_case(case, adapter)
+            except Exception as exc:  # noqa: BLE001 - 记录后继续，不让单点故障弃掉整个 run
+                case_errors.append(
+                    {"case_id": case.meta.case_id, "error": f"{type(exc).__name__}: {exc}"[:400]}
+                )
+                (run_dir / "raw" / f"{case.meta.case_id}.json").write_text(
+                    json.dumps({"case_error": case_errors[-1]["error"]}, ensure_ascii=False),
+                    encoding="utf-8",
+                )
+                results_file.write(
+                    json.dumps(
+                        {
+                            "case_id": case.meta.case_id,
+                            "resolved_verdict": case.meta.resolved.verdict.value,
+                            "predicted": False,
+                            "case_error": case_errors[-1]["error"],
+                        },
+                        ensure_ascii=False,
+                    )
+                    + "\n"
+                )
+                outcomes.append(
+                    CaseOutcome(
+                        case_id=case.meta.case_id,
+                        resolved_verdict=case.meta.resolved.verdict,
+                        annotated_rule_ids=case.meta.resolved.rule_ids,
+                        findings=[],
+                    )
+                )
+                continue
             for f in findings:
                 f.case_id = case.meta.case_id
             (run_dir / "raw" / f"{case.meta.case_id}.json").write_text(
@@ -241,6 +275,9 @@ def run(config: dict, repo_root: Path) -> Path:
     (run_dir / "usage.json").write_text(
         json.dumps(usage_dict, ensure_ascii=False, indent=2), encoding="utf-8"
     )
+    (run_dir / "errors.json").write_text(
+        json.dumps(case_errors, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     price = resolved.get("price_per_1k_tokens")
     est_cost = (
         round(usage_dict.get("total_tokens", 0) / 1000 * float(price), 6)
@@ -261,6 +298,7 @@ def run(config: dict, repo_root: Path) -> Path:
             "spec_files_used": selection["files_used"],
             "spec_files_omitted": selection["files_omitted"],
             "n_llm_calls": usage_dict.get("n_calls", 0),
+            "n_case_errors": len(case_errors),
             "total_tokens": usage_dict.get("total_tokens", 0),
             "latency_s": usage_dict.get("latency_s", 0.0),
             "estimated_cost_usd": est_cost,

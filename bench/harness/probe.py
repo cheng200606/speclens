@@ -76,12 +76,15 @@ class MockCorrectProbeAdapter:
         return ProbeAnswer(choice=(meta or {})["answer_index"])
 
 
-def make_probe_adapter(model_spec: str) -> ModelAdapter:
+def make_probe_adapter(model_spec: str, api_base: str | None = None) -> ModelAdapter:
     if model_spec == "mock-correct":
         return MockCorrectProbeAdapter()
     from bench.harness.model_adapter import LiteLLMAdapter
 
-    return LiteLLMAdapter(model_spec)
+    # MiniMax 等分区域端点的 key 绑定区域：中国区 key 在 litellm 默认的国际
+    # base（api.minimax.io）上 401，须显式传 api_base（I4 实测）。
+    cfg = {"litellm_kwargs": {"api_base": api_base}} if api_base else {}
+    return LiteLLMAdapter(model_spec, run_config=cfg)
 
 
 def run_probe(
@@ -149,13 +152,14 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="SpecLens 新鲜度探测")
     parser.add_argument("--probe", required=True, help="freshness_probe.yaml 路径")
     parser.add_argument("--model", default="mock-correct")
+    parser.add_argument("--api-base", default=None, help="覆盖 provider 默认端点（如 MiniMax 中国区）")
     parser.add_argument("--output-dir", default="experiments/runs")
     parser.add_argument("--force", action="store_true", help="允许覆盖同名 probe run")
     args = parser.parse_args(argv)
 
     run_dir, summary = run_probe(
         Path(args.probe),
-        make_probe_adapter(args.model),
+        make_probe_adapter(args.model, api_base=args.api_base),
         Path(args.output_dir),
         force=args.force,
     )
