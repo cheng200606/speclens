@@ -20,6 +20,7 @@ def test_runner_archives_verify_report(tmp_path: Path):
     vr = json.loads((run_dir / "verify_report.json").read_text(encoding="utf-8"))
 
     # 结构完整性：44 条合成规则逐条有 gate 结果与排除判定
+    assert vr["policy"] == "fail-open"  # I3：仅确定性门 1 排除，门 2/3 只标记
     assert vr["n_rules"] == 44
     assert vr["n_kept"] + vr["n_excluded"] == 44
     assert vr["n_kept"] == 40  # 离线 gate1 过滤 4 条低 grounding（与既有测试一致）

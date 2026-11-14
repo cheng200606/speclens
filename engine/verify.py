@@ -136,10 +136,10 @@ def _synthesize_examples(rule: RuleRecord, adapter) -> tuple[str, str]:
     return out.pos_example, out.neg_example
 
 
-def executability_test(rule: RuleRecord, adapter) -> str:
-    """自洽测试：反例须被检出且引用本规则，正例须零 finding。
+def executability_test_detail(rule: RuleRecord, adapter) -> tuple[str, dict]:
+    """门 2 带明细：哪条腿失败（neg_ok / pos_ok）与自合成例的命中情况。
 
-    无 adapter（离线）时返回 "pending"，不伪造结果。
+    I3 可诊断性（docs/STATUS-I2.md §3-1）：此前 R-011 被门 2 误杀却无从归因。
     """
     from engine.review import check_code_against_rule  # 局部导入避免环
 
@@ -148,7 +148,23 @@ def executability_test(rule: RuleRecord, adapter) -> str:
     pos_findings = check_code_against_rule(rule, pos, adapter)
     neg_ok = any(rule.id in f.rule_ids for f in neg_findings)
     pos_ok = len(pos_findings) == 0
-    return "pass" if (neg_ok and pos_ok) else "fail"
+    state = "pass" if (neg_ok and pos_ok) else "fail"
+    detail = {
+        "neg_ok": neg_ok,
+        "pos_ok": pos_ok,
+        "neg_findings": [f.model_dump() for f in neg_findings],
+        "pos_findings": [f.model_dump() for f in pos_findings],
+    }
+    return state, detail
+
+
+def executability_test(rule: RuleRecord, adapter) -> str:
+    """自洽测试：反例须被检出且引用本规则，正例须零 finding。
+
+    无 adapter（离线）时返回 "pending"，不伪造结果。
+    """
+    state, _detail = executability_test_detail(rule, adapter)
+    return state
 
 
 # ---------- 门 3：conflict ----------
@@ -255,13 +271,16 @@ def verify_rules(
 
     conflict_stats: dict = {}
     conflicts = detect_conflicts(rules, adapter=adapter, stats=conflict_stats)
+    exec_details: dict[str, dict] = {}
     flagged: list[dict] = []
     for rule in rules:
         score, detail = grounding_score(rule, spec_text_norm)
         rule.verification.grounding = score
         if adapter is not None:
             try:
-                rule.verification.exec_test = executability_test(rule, adapter)
+                state, exec_detail = executability_test_detail(rule, adapter)
+                rule.verification.exec_test = state
+                exec_details[rule.id] = exec_detail
             except GateUnavailable as exc:
                 # 门不可用（如 mock adapter 不支持合成）：保持 pending，不判死
                 detail["exec_unavailable"] = str(exc)[:200]
@@ -293,6 +312,7 @@ def verify_rules(
             for state in ("pass", "fail", "pending")
         },
         "gate3_stats": conflict_stats,
+        "exec_details": exec_details,
         "grounding_mean": round(
             sum(r.verification.grounding or 0.0 for r in rules) / max(1, len(rules)), 3
         ),

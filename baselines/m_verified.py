@@ -5,10 +5,12 @@ extract / rule_bank → verify（三道关，真正带 adapter 执行）→ 过�
 
 与 M-lite 的差异即消融对象：verify 三道关 + 证据链 + 聚合。
 
-排除策略（excluded）：
-- grounding < 0.6（确定性，离线即可执行）
-- exec_test == "fail"（自洽失败；pending = 门不可用，保留待人工）
-- 存在冲突记录
+排除策略（I3 起 fail-open，对齐 plan.md §2.2「低分规则进入人工复核队列」）：
+- **excluded（移出规则库）**：仅 grounding < 0.6（确定性门 1，可离线复现）。
+- **review_flags（保留但标记待复核）**：exec_test == "fail"（LLM 自审，
+  实测 8/44 误杀率——R-011 被 fail 后 TS-031/040 漏检，docs/STATUS-I2.md §3-1）
+  与 conflicts（语义矛盾判定同为 LLM 产物）。二者是诊断信号，不是删除依据；
+  逐规则结果归档于 run 目录 verify_report.json。
 
 I1 修订（docs/STATUS-I1.md P0-1 / P0-3）：
 - 规则来源由 `rules_source` 显式配置（默认 synthesized 以兼容既有离线测试；
@@ -73,32 +75,46 @@ def _verify_snapshot(verified: list[RuleRecord], report: dict) -> dict:
                 "conflicts": list(v.conflicts or []),
                 "excluded": _excluded(r),
                 "exclusion_reasons": _exclusion_reasons(r),
+                "review_flags": _review_flags(r),
             }
         )
     reason_counts: dict[str, int] = {}
+    flag_counts: dict[str, int] = {}
     for x in per_rule:
         for reason in x["exclusion_reasons"]:
             reason_counts[reason] = reason_counts.get(reason, 0) + 1
+        for flag in x["review_flags"]:
+            flag_counts[flag] = flag_counts.get(flag, 0) + 1
     return {
+        "policy": "fail-open",
         "n_rules": len(per_rule),
         "n_kept": sum(1 for x in per_rule if not x["excluded"]),
         "n_excluded": len(per_rule) - sum(1 for x in per_rule if not x["excluded"]),
         "exclusion_reason_counts": reason_counts,
+        "review_flag_counts": flag_counts,
         "rules": per_rule,
         "verify_summary": report,
     }
 
 
 def _exclusion_reasons(rule: RuleRecord) -> list[str]:
+    """确定性排除：仅门 1（grounding）。门 2/3 是 LLM 产物，误杀不排除，只标记。"""
     v = rule.verification
     reasons: list[str] = []
     if v.grounding is not None and v.grounding < GROUNDING_REVIEW_THRESHOLD:
         reasons.append(f"grounding<{GROUNDING_REVIEW_THRESHOLD}")
-    if v.exec_test == "fail":
-        reasons.append("exec-fail")
-    if v.conflicts:
-        reasons.append("conflicts")
     return reasons
+
+
+def _review_flags(rule: RuleRecord) -> list[str]:
+    """保留但标记待人工复核的信号（plan.md §2.2 人工复核队列）。"""
+    v = rule.verification
+    flags: list[str] = []
+    if v.exec_test == "fail":
+        flags.append("exec-fail")
+    if v.conflicts:
+        flags.append("conflicts")
+    return flags
 
 
 def _excluded(rule: RuleRecord) -> bool:
