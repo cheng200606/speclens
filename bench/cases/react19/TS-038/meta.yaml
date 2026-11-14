@@ -2,13 +2,13 @@ case_id: TS-038
 verdict: violation
 difficulty: hard
 rule_ids: [R-008]
-origin: synthetic
+origin: handcrafted
 files: ["code/Header.tsx"]
 annotations:
   - annotator: A
     verdict: violation
     rule_ids: [R-008]
-    notes: "SSR 期间 use(browserTime()) 的组件不在任何 Suspense 边界内（边界只包住兄弟子树）。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "SSR 期间 use(browserTime()) 的组件不在任何 Suspense 边界内（边界只包住兄弟子树）。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：CurrentTime 在 Suspense 边界外，SSR 失败论证成立。）"
 resolved:
   verdict: violation
   rule_ids: [R-008]

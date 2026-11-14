@@ -2,13 +2,13 @@ case_id: TS-019
 verdict: compliant
 difficulty: easy
 rule_ids: [R-002]
-origin: synthetic
+origin: handcrafted
 files: ["code/NameForm.tsx"]
 annotations:
   - annotator: A
     verdict: compliant
     rule_ids: [R-002]
-    notes: "提交交给 form 的 action prop（useActionState），React 自动包 Transition。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "提交交给 form 的 action prop（useActionState），React 自动包 Transition。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：action prop 用法正确，reducerAction 收 (prevState, FormData)。）"
 resolved:
   verdict: compliant
   rule_ids: [R-002]

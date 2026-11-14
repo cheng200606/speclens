@@ -2,13 +2,13 @@ case_id: TS-024
 verdict: compliant
 difficulty: medium
 rule_ids: [R-009]
-origin: synthetic
+origin: handcrafted
 files: ["code/ProfilePage.tsx"]
 annotations:
   - annotator: A
     verdict: compliant
     rule_ids: [R-009]
-    notes: "Promise 直接交给 use，不读 promise.status/value；Suspense 边界在父级。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "Promise 直接交给 use，不读 promise.status/value；Suspense 边界在父级。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：Promise 直交 use，Suspense 边界在会 suspend 的 Profile 父级。）"
 resolved:
   verdict: compliant
   rule_ids: [R-009]

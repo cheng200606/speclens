@@ -2,13 +2,13 @@ case_id: TS-026
 verdict: compliant
 difficulty: easy
 rule_ids: [R-012]
-origin: synthetic
+origin: handcrafted
 files: ["code/TodoList.tsx"]
 annotations:
   - annotator: A
     verdict: compliant
     rule_ids: [R-012]
-    notes: "useOptimistic 的 reducer 为纯函数：只依据入参计算新状态。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "useOptimistic 的 reducer 为纯函数：只依据入参计算新状态。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：reducer 纯；Date.now 在按钮调用侧而非 reducer 内。）"
 resolved:
   verdict: compliant
   rule_ids: [R-012]

@@ -2,13 +2,13 @@ case_id: TS-037
 verdict: violation
 difficulty: medium
 rule_ids: [R-004]
-origin: synthetic
+origin: handcrafted
 files: ["code/Collapsible.tsx"]
 annotations:
   - annotator: A
     verdict: violation
     rule_ids: [R-004]
-    notes: "Hook 在 early return 之后调用，违反“before any early returns”。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "Hook 在 early return 之后调用，违反“before any early returns”。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：useState 在 early return 后，违反 before any early returns。）"
 resolved:
   verdict: violation
   rule_ids: [R-004]

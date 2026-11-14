@@ -2,13 +2,13 @@ case_id: TS-020
 verdict: compliant
 difficulty: easy
 rule_ids: [R-003]
-origin: synthetic
+origin: handcrafted
 files: ["code/Heartbeat.tsx"]
 annotations:
   - annotator: A
     verdict: compliant
     rule_ids: [R-003]
-    notes: "定时器与事件订阅均在 useEffect 中建立并返回清理函数。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "定时器与事件订阅均在 useEffect 中建立并返回清理函数。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：定时器与订阅均返回清理，[onPing] 变化时清理生效。）"
 resolved:
   verdict: compliant
   rule_ids: [R-003]

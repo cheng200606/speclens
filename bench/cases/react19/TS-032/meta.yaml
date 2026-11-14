@@ -2,13 +2,13 @@ case_id: TS-032
 verdict: violation
 difficulty: medium
 rule_ids: [R-012]
-origin: synthetic
+origin: handcrafted
 files: ["code/ChatFeed.tsx"]
 annotations:
   - annotator: A
     verdict: violation
     rule_ids: [R-012]
-    notes: "updater 修改模块级数组且依赖 Date.now，非纯函数。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "updater 修改模块级数组且依赖 Date.now，非纯函数。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：updater 改模块级数组+Date.now，明确不纯。）"
 resolved:
   verdict: violation
   rule_ids: [R-012]

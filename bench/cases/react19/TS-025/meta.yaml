@@ -2,13 +2,13 @@ case_id: TS-025
 verdict: compliant
 difficulty: medium
 rule_ids: [R-011]
-origin: synthetic
+origin: handcrafted
 files: ["code/DraftBox.tsx"]
 annotations:
   - annotator: A
     verdict: compliant
     rule_ids: [R-011]
-    notes: "dispatchAction 包在 startTransition（Action）内调用。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "dispatchAction 包在 startTransition（Action）内调用。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：dispatchAction 包在 startTransition 内。）"
 resolved:
   verdict: compliant
   rule_ids: [R-011]

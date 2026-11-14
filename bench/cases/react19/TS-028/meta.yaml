@@ -1,14 +1,14 @@
 case_id: TS-028
 verdict: violation
-difficulty: hard
+difficulty: medium
 rule_ids: [R-003]
-origin: synthetic
+origin: handcrafted
 files: ["code/Poller.tsx"]
 annotations:
   - annotator: A
     verdict: violation
     rule_ids: [R-003]
-    notes: "setInterval 未返回清理函数；endpoint 变化时旧 interval 泄漏继续轮询。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "setInterval 未返回清理函数；endpoint 变化时旧 interval 泄漏继续轮询。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核修正：difficulty hard→medium——单规则、缺清理局部可判，泄漏论证属生命周期理解（medium），未达 hard 的边界/多规则门槛；verdict/rule_ids 维持。）"
 resolved:
   verdict: violation
   rule_ids: [R-003]

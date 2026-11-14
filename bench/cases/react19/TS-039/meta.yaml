@@ -2,13 +2,13 @@ case_id: TS-039
 verdict: violation
 difficulty: medium
 rule_ids: [R-010]
-origin: synthetic
+origin: handcrafted
 files: ["code/CartCount.tsx"]
 annotations:
   - annotator: A
     verdict: violation
     rule_ids: [R-010]
-    notes: "乐观 setter 直接在普通事件回调中调用，未包 startTransition/Action。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "乐观 setter 直接在普通事件回调中调用，未包 startTransition/Action。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：对照 Troubleshooting 段，事件回调直调 setter 明确违反 R-010。）"
 resolved:
   verdict: violation
   rule_ids: [R-010]

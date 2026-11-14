@@ -2,13 +2,13 @@ case_id: TS-036
 verdict: borderline
 difficulty: hard
 rule_ids: [R-010]
-origin: synthetic
+origin: handcrafted
 files: ["code/VoteBar.tsx"]
 annotations:
   - annotator: A
     verdict: borderline
     rule_ids: [R-010]
-    notes: "setter 在 startTransition 内但位于 await 之后：Transition 可能已结束，乐观状态可能不呈现，判定边界。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "setter 在 startTransition 内但位于 await 之后：Transition 可能已结束，乐观状态可能不呈现，判定边界。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：维持 borderline——useTransition 快照明示 await 后更新不算 Transition，但 useOptimistic 页未明说 setter 情形，两读法并存。）"
 resolved:
   verdict: borderline
   rule_ids: [R-010]

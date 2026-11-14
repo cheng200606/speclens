@@ -2,13 +2,13 @@ case_id: TS-021
 verdict: compliant
 difficulty: medium
 rule_ids: [R-004]
-origin: synthetic
+origin: handcrafted
 files: ["code/Toolbar.tsx"]
 annotations:
   - annotator: A
     verdict: compliant
     rule_ids: [R-004]
-    notes: "全部 Hook 位于 early return 之前的组件顶层；条件逻辑只影响渲染不影响 Hook 调用。（AI 起草，待人工复核后可升 handcrafted。）"
+    notes: "全部 Hook 位于 early return 之前的组件顶层；条件逻辑只影响渲染不影响 Hook 调用。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：两 Hook 均在 early return 前，条件只影响渲染。）"
 resolved:
   verdict: compliant
   rule_ids: [R-004]
