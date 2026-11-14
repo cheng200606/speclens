@@ -14,22 +14,23 @@
    （verify：grounding / 正反例可执行性 / 冲突）→ 规则路由（route）→ 分层审查（review）
    → 证据链与聚合（trace）。
 
-## 当前状态（2026-11-14，I2 迭代后）
+## 当前状态（2026-11-14，I3 迭代后）
 
-> **基准 40 条（react19），首次真实生死实验已完成（SCIENTIFIC）。**
-> 判读：**Go（RQ4 规模/成本场景）**——M 与 B1 效果统计不可分，但 B1 token 成本为 M 的 6.4×；
-> 最干净的测量发现是规范上下文显著压制误报（B0 0.539 → B1 0.077，p=0.031）。
-> 方法贡献（RQ2）未获本 pilot 支持，M-verified 退化待诊断。详见 `docs/STATUS-I2.md`。
+> **基准 40 条（react19）已 100% 人工复核；M-verified 退化已归因并修复（门 2 自审假阴性
+> 误杀 R-011，fail-open 后检出 0.783 → 0.870）。** I2 判读维持：**Go（RQ4 规模/成本场景）**；
+> 最干净的测量发现仍是规范上下文显著压制误报（B0 0.539 → B1 0.077，p=0.031）。
+> 详见 `docs/STATUS-I2.md` 与 `docs/STATUS-I3.md`。
 
 - ✅ M0 / M1 / M2 代码落地：schema、harness、4 份规范快照与探测题库、标注指南 v1.2、
   B0/B1 基线、verify 三关、trace 证据链、M-lite / M-verified 消融。
 - ✅ I1「评测有效性加固」：规则 ID 命名空间、B1 截断、验证关接线、记账、κ 体检、防误读。
-  详见 `docs/STATUS-I1.md`。
-- ✅ I2：基准扩样 17→40（12/12 规则均有正反例，hard 25%）、新鲜度探测（4 规范均「已熟悉」，
-  0.90–1.00）、真实生死实验四配置 × 40 cases × 1 run。详见 `docs/STATUS-I2.md`。
-- ⏳ I3：验证关可诊断性与 M-verified 修复、synthetic 案例人工复核、RQ4 成本–规模实验、
-  B2/B3/B4、其余 3 规范建样本、双标注 κ、LLM 规则合成、RQ 全量、论文。
-- 测试：`uv run pytest` 全绿（83 passed）。
+- ✅ I2：基准扩样 17→40、新鲜度探测（4 规范均「已熟悉」）、真实生死实验四配置（SCIENTIFIC）。
+- ✅ I3：synthetic 案例 23/23 人工复核通过（origin 全部 handcrafted）；验证关逐规则归档
+  （verify_report.json）；门 2 假阴性归因（R-011 跨 run fail/pass 实锤不稳定）；
+  排除策略改 fail-open（对齐 plan §2.2 人工复核队列）。
+- ⏳ I4：RQ4 成本–规模实验（主线）、门 1 归一化修复（`<CodeStep>`）、B2/B3、错误分类学、
+  第二模型、240 条扩样、论文。
+- 测试：`uv run pytest` 全绿（85 passed）。
 
 ## 快速开始
 
