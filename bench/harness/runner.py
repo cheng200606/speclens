@@ -221,6 +221,17 @@ def run(config: dict, repo_root: Path) -> Path:
             )
 
     # 4) 指标 + 记账
+    if resolved["baseline"] == "m_verified":
+        # 验证关逐规则结果归档（I3 可诊断性，docs/STATUS-I2.md §3-1）：
+        # 门 2/3 过滤了哪些规则必须在 run 目录内可审计。
+        from baselines.m_verified import verify_report
+
+        verify_snapshot = verify_report(str(spec_dir.resolve()), source)
+        if verify_snapshot is not None:
+            (run_dir / "verify_report.json").write_text(
+                json.dumps(verify_snapshot, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
     usage = getattr(adapter, "usage", None)
     usage_dict = usage.to_dict() if usage is not None else {}
     (run_dir / "usage.json").write_text(

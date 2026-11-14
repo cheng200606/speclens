@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from engine.rule_bank import build_rules, rules_source_from
-from engine.verify import verify_rules
+from engine.verify import GROUNDING_REVIEW_THRESHOLD, verify_rules
 
 if TYPE_CHECKING:
     from bench.harness.loader import Case
@@ -35,6 +35,11 @@ if TYPE_CHECKING:
 
 BASELINE_ID = "m_verified"
 
+# 验证关快照（I3 可诊断性）：key = (spec_dir_str, rules_source)。
+# lru_cache 保证验证每 run 只跑一次；快照供 runner 归档 verify_report.json，
+# 否则门 2/3 过滤了哪些规则无从归因（docs/STATUS-I2.md §3-1）。
+_LAST_VERIFY: dict[tuple[str, str], dict] = {}
+
 
 @lru_cache(maxsize=8)
 def _verified_rules(
@@ -42,19 +47,62 @@ def _verified_rules(
 ) -> tuple:
     rules, _diag = build_rules(Path(spec_dir_str), rules_source)
     rules = [r.model_copy(deep=True) for r in rules]
-    verified, _report = verify_rules(rules, Path(spec_dir_str), adapter=adapter)
+    verified, report = verify_rules(rules, Path(spec_dir_str), adapter=adapter)
+    _LAST_VERIFY[(str(Path(spec_dir_str).resolve()), rules_source)] = _verify_snapshot(
+        verified, report
+    )
     return tuple(verified)
 
 
-def _excluded(rule: RuleRecord) -> bool:
+def verify_report(spec_dir_str: str, rules_source: str = "synthesized") -> dict | None:
+    """最近一次验证关的逐规则快照；run 结束后由 runner 归档为 verify_report.json。"""
+    return _LAST_VERIFY.get((str(Path(spec_dir_str).resolve()), rules_source))
+
+
+def _verify_snapshot(verified: list[RuleRecord], report: dict) -> dict:
+    per_rule = []
+    for r in verified:
+        v = r.verification
+        per_rule.append(
+            {
+                "id": r.id,
+                "synthesis_id": r.synthesis_id,
+                "level": r.level,
+                "grounding": v.grounding,
+                "exec_test": v.exec_test,
+                "conflicts": list(v.conflicts or []),
+                "excluded": _excluded(r),
+                "exclusion_reasons": _exclusion_reasons(r),
+            }
+        )
+    reason_counts: dict[str, int] = {}
+    for x in per_rule:
+        for reason in x["exclusion_reasons"]:
+            reason_counts[reason] = reason_counts.get(reason, 0) + 1
+    return {
+        "n_rules": len(per_rule),
+        "n_kept": sum(1 for x in per_rule if not x["excluded"]),
+        "n_excluded": len(per_rule) - sum(1 for x in per_rule if not x["excluded"]),
+        "exclusion_reason_counts": reason_counts,
+        "rules": per_rule,
+        "verify_summary": report,
+    }
+
+
+def _exclusion_reasons(rule: RuleRecord) -> list[str]:
     v = rule.verification
-    if v.grounding is not None and v.grounding < 0.6:
-        return True
+    reasons: list[str] = []
+    if v.grounding is not None and v.grounding < GROUNDING_REVIEW_THRESHOLD:
+        reasons.append(f"grounding<{GROUNDING_REVIEW_THRESHOLD}")
     if v.exec_test == "fail":
-        return True
+        reasons.append("exec-fail")
     if v.conflicts:
-        return True
-    return False
+        reasons.append("conflicts")
+    return reasons
+
+
+def _excluded(rule: RuleRecord) -> bool:
+    return bool(_exclusion_reasons(rule))
 
 
 def _spec_dir_for_case(case: Case) -> Path:

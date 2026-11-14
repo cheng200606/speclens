@@ -75,6 +75,7 @@ config.resolved.yaml     # 实际配置（含 temperature / run_index / code_dig
 usage.json               # n_calls / tokens / latency / by_phase（支撑成本指标与 RQ4）
 spec_selection.json      # B1 纳入/省略的快照文件（对照公平性审计）
 rules_diagnostic.json    # 规则来源 / 引句逐字校验 / 对齐覆盖率（仅引擎类基线）
+verify_report.json       # M-verified 验证关逐规则 gate 结果与排除理由（可审计归因）
 ```
 
 归档哈希包含配置**与代码摘要 `code_digest`**：改代码后同配置会得到新目录，不覆盖历史结果。
