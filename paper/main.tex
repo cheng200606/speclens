@@ -1,0 +1,67 @@
+% SpecLens · SANER 2028 投稿骨架（I5 起步，2026-11-15）
+% 格式：正式投稿时换 IEEEtran 双栏（SANER 用 IEEE CNF 模板）；当前以 article 便于内容迭代。
+% 数据来源：experiments/runs/litmus-*（deepseek/deepseek-flash, temperature 0, run_index 0）
+%   与 litmus-minimax-*（第二模型）；所有表格数字须由 runner 产物重新生成后再入稿（勿手抄）。
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+\title{SpecLens: Measuring and Improving LLM Code Review\\Against Unseen Specifications}
+\author{Anonymous}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+% 论点主线（按 I2-I4 实证更新）：
+% 1) 规范在场使幻觉误报清零（FP 0.539 -> 0.077, p=0.031）——「知识注入」有效但已知；
+% 2) 全文 in-context 的有效性依赖「塞得下」：预算 236K->30K 检出 0.870->0.217（RQ4 失效模式）；
+% 3) 「规则找代码」vs「代码找规则」：B2 检索 1.3% 成本 0.478 检出（覆盖由命中决定）；
+% 4) 已知规则集下，编译静态检查器零成本追平全文 LLM 基线（B3 0.870/0.000）；
+% 5) LLM 自审式规则验证会静默移除关键 MUST 规则（3/12），应作人工复核信号而非过滤器。
+\end{abstract}
+
+\section{Introduction}
+% RQ1（测量）：LLM 对照未见规范的遵守率/误报率；RQ3（归因）：错误分类学；
+% RQ4（成本/规模）：预算阶梯 + 多仓库；RQ2（方法）：验证管线增益——当前实证不支持
+% 其作为主贡献（I2 判读 Go-RQ4），论文主线 = benchmark + measurement + 成本-效果。
+
+\section{Related Work}
+% 近邻（idea.md 定位修订 v2 表格）：LintCFG、RulePilot、GPTAid、AutoCommenter、
+% Code Review Agent Benchmark、Grounded Agentic Review；商业：Copilot instructions/
+% CodeRabbit/Macroscope。错位点：规则的可验证性与遵守的一致性。
+
+\section{The SpecLens-Bench Benchmark}
+% 4 规范快照（来源/许可/commit pin）；40 条 react19 标注（v0.2：TS-011 修订后 100% 人工确认）；
+% 难度分级与规则类型学（T1-T5）；标注指南 v1.2；240 条扩样进行中（I5）。
+% 新鲜度探测：deepseek-flash 对全部 4 规范 0.90-1.00（「未见」前提不成立的诚实报告）。
+
+\section{Study Design}
+% 方法臂：B0/B1/B2(RAG)/B3(static)/M-lite/M-verified(fail-open)；控制变量原则；
+% 记账（usage.json）与统计（精确二项 McNemar + violation/compliant 分组）。
+
+\section{Results}
+\subsection{RQ1: Specification Adherence (Measurement)}
+% 表：B0 检出 0.913 / FP 0.539；B1 0.870 / 0.077。机制：fp-hallucinated-standard 清零。
+\subsection{RQ2: Does Verification Help?}
+% M-lite 0.913/0.154 vs M-verified(fail-open) 0.870/0.154：验证关无检出增益；
+% 门 2 跨 run 不稳定证据（R-011 fail/pass）。教训：review-queue 而非 filter。
+\subsection{RQ3: Error Taxonomy}
+% 6 类（error-taxonomy-v0.json）；fp-hallucinated-standard / fp-off-scope（基准粒度教训）/
+% fp-rule-overgeneralization / fn-should-soft-wording（漏报方向为主）。
+\subsection{RQ4: Cost and Scale}
+% 预算阶梯表：0.870/0.565/0.435/0.217；B2 1.3% 成本；B3 零成本；B1 tokens 6.4x M。
+% TODO(I5)：真实多仓库（1k/10k/50k 行）嵌入实验替换字符预算代理。
+
+\section{Threats to Validity}
+% 单模型已由第二模型对照补齐（MiniMax-M2.1，待 I5 写入）；规范熟悉度（probe 0.90-1.00）；
+% 40 条规模；synthetic->handcrafted 复核流程；单文件 case 的生态效度。
+
+\section{Conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+\end{document}
