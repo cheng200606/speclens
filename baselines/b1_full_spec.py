@@ -41,7 +41,12 @@ def build_user_prompt(case: Case, spec_text: str) -> str:
 
 
 def predict_case(case: Case, adapter: ModelAdapter) -> list[Finding]:
-    spec_text, _used = spec_text_for_case(case)
+    # 默认 None = 规范全文不截断。此前硬编码 200_000 会静默丢弃快照文件，
+    # 使「全文基线」这一最关键对手看不到完整规范（docs/STATUS-I1.md S0-3）。
+    # 需要模拟长上下文受限时，在 config 中显式设置 spec_max_chars，
+    # runner 会把被省略的文件写入 run 产物以供审计。
+    cfg = getattr(adapter, "run_config", None) or {}
+    spec_text, _used = spec_text_for_case(case, cfg.get("spec_max_chars"))
     out = adapter.complete_json(
         system=SYSTEM,
         user=build_user_prompt(case, spec_text),

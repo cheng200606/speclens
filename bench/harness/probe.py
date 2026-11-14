@@ -14,6 +14,7 @@ import argparse
 import datetime as _dt
 import hashlib
 import json
+import re
 from pathlib import Path
 
 import yaml
@@ -84,11 +85,21 @@ def make_probe_adapter(model_spec: str) -> ModelAdapter:
 
 
 def run_probe(
-    probe_path: Path, adapter: ModelAdapter, output_dir: Path
+    probe_path: Path, adapter: ModelAdapter, output_dir: Path, force: bool = False
 ) -> tuple[Path, dict]:
+    """运行题库并返回 (run_dir, summary)。
+
+    I1 修订：run 目录包含**模型名**，否则跨模型的新鲜度探测会互相覆盖
+    （而「模型见过规范」的辩护恰恰需要跨模型对比）；同时禁止覆盖已有 run。
+    """
     bank = load_probe(probe_path)
     digest = hashlib.sha256(probe_path.read_bytes()).hexdigest()[:12]
-    run_dir = output_dir / f"probe-{bank.spec_id}-{digest}"
+    model_slug = re.sub(r"[^A-Za-z0-9._-]+", "-", adapter.name)[:48]
+    run_dir = output_dir / f"probe-{bank.spec_id}-{model_slug}-{digest}"
+    if run_dir.exists() and not force:
+        raise RuntimeError(
+            f"probe run 已存在，禁止覆盖：{run_dir}（确需重跑请传 force=True / --force）"
+        )
     (run_dir / "raw").mkdir(parents=True, exist_ok=True)
 
     per_question = []
@@ -123,6 +134,7 @@ def run_probe(
         if bank.questions
         else None,
         "model": adapter.name,
+        "probe_path": str(probe_path).replace("\\", "/"),
         "created": _dt.datetime.now(_dt.timezone.utc).isoformat(),
         "note": "accuracy 接近随机(0.25) => 视为未见规范；显著偏高 => 模型已熟悉",
         "per_question": per_question,
@@ -138,10 +150,14 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--probe", required=True, help="freshness_probe.yaml 路径")
     parser.add_argument("--model", default="mock-correct")
     parser.add_argument("--output-dir", default="experiments/runs")
+    parser.add_argument("--force", action="store_true", help="允许覆盖同名 probe run")
     args = parser.parse_args(argv)
 
     run_dir, summary = run_probe(
-        Path(args.probe), make_probe_adapter(args.model), Path(args.output_dir)
+        Path(args.probe),
+        make_probe_adapter(args.model),
+        Path(args.output_dir),
+        force=args.force,
     )
     print(f"[speclens] probe completed -> {run_dir}")
     printable = {k: v for k, v in summary.items() if k != "per_question"}

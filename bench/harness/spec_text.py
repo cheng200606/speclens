@@ -62,8 +62,16 @@ def csv_to_text(path: Path) -> str:
     return "\n".join(lines)
 
 
-def assemble_spec_text(spec_dir: Path, max_chars: int = 200_000) -> tuple[str, list[str]]:
-    """返回 (规范全文文本, 实际纳入的文件名列表)；超出 max_chars 的文件不纳入。"""
+def assemble_spec_text(
+    spec_dir: Path, max_chars: int | None = None
+) -> tuple[str, list[str]]:
+    """返回 (规范全文文本, 实际纳入的文件名列表)。
+
+    max_chars=None 表示**不截断**（默认）。此前默认 200_000 会静默丢弃超限
+    快照文件，使 B1 全文基线看不到完整规范，破坏控制变量（见 docs/STATUS-I1.md S0-3）。
+    需要复现「长上下文受限」场景时显式传入 max_chars，并通过
+    snapshot_selection() 把被丢弃的文件写入 run 产物。
+    """
     spec = load_spec(spec_dir)
     parts: list[str] = []
     used: list[str] = []
@@ -75,7 +83,7 @@ def assemble_spec_text(spec_dir: Path, max_chars: int = 200_000) -> tuple[str, l
             body = p.read_text(encoding="utf-8")
             if spec.spec_id == "react19":
                 body = clean_react_md(body)
-        if total + len(body) > max_chars:
+        if max_chars is not None and total + len(body) > max_chars:
             continue
         parts.append(f"## Snapshot file: {p.name}\n\n{body}")
         used.append(p.name)
@@ -87,7 +95,24 @@ def assemble_spec_text(spec_dir: Path, max_chars: int = 200_000) -> tuple[str, l
     return header + "\n\n".join(parts), used
 
 
-def get_spec_text(spec_dir: Path, max_chars: int = 200_000) -> tuple[str, list[str]]:
+def snapshot_selection(spec_dir: Path, max_chars: int | None = None) -> dict:
+    """返回快照文件纳入/省略情况，供 runner 写入 run 产物（可审计对照公平性）。"""
+    all_files = [p.name for p in load_snapshot_files(spec_dir)]
+    _text, used = get_spec_text(spec_dir, max_chars)
+    omitted = [f for f in all_files if f not in used]
+    return {
+        "spec_id": load_spec(spec_dir).spec_id,
+        "max_chars": max_chars,
+        "files_used": used,
+        "files_omitted": omitted,
+        "n_files_total": len(all_files),
+        "n_files_used": len(used),
+        "included_chars": len(_text),
+        "truncated": bool(omitted),
+    }
+
+
+def get_spec_text(spec_dir: Path, max_chars: int | None = None) -> tuple[str, list[str]]:
     """带进程内缓存的 assemble_spec_text（B1 逐 case 复用，避免重复读盘）。"""
     key = (str(spec_dir.resolve()), max_chars)
     if key not in _CACHE:
@@ -95,7 +120,9 @@ def get_spec_text(spec_dir: Path, max_chars: int = 200_000) -> tuple[str, list[s
     return _CACHE[key]
 
 
-def spec_text_for_case(case: Case, max_chars: int = 200_000) -> tuple[str, list[str]]:
+def spec_text_for_case(
+    case: Case, max_chars: int | None = None
+) -> tuple[str, list[str]]:
     """由 case 路径定位其规范目录（bench/cases/<spec>/<ID> → bench/specs/<spec>）。"""
     spec_dir = case.root.parents[2] / "specs" / case.root.parent.name
     return get_spec_text(spec_dir, max_chars)

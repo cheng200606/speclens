@@ -1,7 +1,16 @@
 # 生死实验 · B1 full-spec in-context（最关键对手）
-# 注意：真实运行时 spec 全文约 24 万字符（≈60K tokens），需长上下文模型
+# 规范全文 236,158 字符（≈60K tokens）；deepseek-flash 上下文窗口 1M tokens，可完整容纳。
+# I1：默认不按字符数截断；若刻意模拟上下文受限，显式设置 spec_max_chars，
+#     被省略的快照文件会写入 run 的 spec_selection.json 供审计。
+# 控制变量：四份 litmus 配置必须共用同一 model / temperature / rules_source。
 run_name: litmus-b1
 baseline: b1_full_spec
 cases_dir: bench/cases/react19
-model: mock-perfect
+model: deepseek/deepseek-flash
 temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 180
+# 与其余三份保持一致：关闭 thinking，避免 reasoning token 放大长上下文成本。
+litellm_kwargs:
+  thinking: {type: disabled}

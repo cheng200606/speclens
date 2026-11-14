@@ -1,7 +1,19 @@
-# 生死实验 · M-verified（完整方法 M：verify 过滤 + trace 证据链 + 聚合去重）
-# 与 M-lite 构成消融对照（plan.md §2.2）
+# 生死实验 · M-verified（完整方法 M：verify 三关 + trace 证据链 + 聚合去重）
+# 与 M-lite 构成消融对照（plan.md §2.2）；两者必须共用同一 rules_source。
+# I1：verify_rules 现在接收 adapter，门 2 正反例自审 / 门 3 语义矛盾会真正执行；
+#     adapter 不支持时保持 pending（不伪造结果）。
+# 控制变量：四份 litmus 配置必须共用同一 model / temperature / rules_source。
+# 注意：验证关会在首个 case 前产生约 44 条规则 × 3 次自审 + 上限 60 对矛盾判定，
+#       是四份配置中调用量最大的，建议先用单 case 冒烟再跑全量。
 run_name: litmus-mverified
 baseline: m_verified
 cases_dir: bench/cases/react19
-model: mock-perfect
+model: deepseek/deepseek-flash
 temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 180
+rules_source: aligned
+# 验证关 2/3 会额外产生上百次调用；关闭 thinking 以控制成本与不确定性。
+litellm_kwargs:
+  thinking: {type: disabled}

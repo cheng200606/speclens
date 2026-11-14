@@ -23,37 +23,61 @@ def mcnemar_exact(b: int, c: int) -> float:
     return min(1.0, 2.0 * tail / 2**n)
 
 
-def _correctness_from_run(run_dir: Path) -> dict[str, bool]:
-    """从 results.jsonl 读出逐 case 的「正确性」：
-    violation → 报告了 finding 即正确；compliant → 未报告即正确；borderline 不计。
-    """
-    out: dict[str, bool] = {}
+def _records_from_run(run_dir: Path) -> dict[str, dict]:
+    """逐 case 记录 {verdict, correct}；borderline 不计入主指标。"""
+    out: dict[str, dict] = {}
     for line in (run_dir / "results.jsonl").read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
         rec = json.loads(line)
-        if rec["resolved_verdict"] == "borderline":
+        verdict = rec["resolved_verdict"]
+        if verdict == "borderline":
             continue
         predicted = rec["predicted"]
-        out[rec["case_id"]] = (
-            predicted if rec["resolved_verdict"] == "violation" else not predicted
-        )
+        out[rec["case_id"]] = {
+            "verdict": verdict,
+            "correct": predicted if verdict == "violation" else not predicted,
+        }
     return out
 
 
-def mcnemar_between_runs(run_a: Path, run_b: Path) -> dict:
+def _correctness_from_run(run_dir: Path) -> dict[str, bool]:
+    """兼容旧接口：仅返回 case_id → 是否正确。"""
+    return {cid: r["correct"] for cid, r in _records_from_run(run_dir).items()}
+
+
+def mcnemar_between_runs(
+    run_a: Path, run_b: Path, subset: str = "all"
+) -> dict:
     """比较两次 run 的逐 case 正确性，返回 {"b","c","n_discordant","p"}。
 
     b = run_a 对而 run_b 错；c = run_a 错而 run_b 对。
+    subset ∈ {all, violation, compliant}：plan.md §2.4 的判据分别看
+    「检出 +10pp」与「误报 −20%」，混合整体正确率无法对应任一判据（S1-8）。
     """
-    corr_a = _correctness_from_run(run_a)
-    corr_b = _correctness_from_run(run_b)
-    common = sorted(set(corr_a) & set(corr_b))
-    b = sum(1 for cid in common if corr_a[cid] and not corr_b[cid])
-    c = sum(1 for cid in common if not corr_a[cid] and corr_b[cid])
+    if subset not in ("all", "violation", "compliant"):
+        raise ValueError(f"未知 subset={subset!r}")
+    rec_a = _records_from_run(run_a)
+    rec_b = _records_from_run(run_b)
+    common = sorted(
+        cid
+        for cid in set(rec_a) & set(rec_b)
+        if subset == "all" or rec_a[cid]["verdict"] == subset
+    )
+    b = sum(1 for cid in common if rec_a[cid]["correct"] and not rec_b[cid]["correct"])
+    c = sum(1 for cid in common if not rec_a[cid]["correct"] and rec_b[cid]["correct"])
     return {
         "n_paired": len(common),
         "b_a_right_b_wrong": b,
         "c_a_wrong_b_right": c,
         "p_mcnemar_exact": mcnemar_exact(b, c),
+        "subset": subset,
+    }
+
+
+def mcnemar_subsets(run_a: Path, run_b: Path) -> dict:
+    """同时给出 overall / violation-only / compliant-only 三组配对检验。"""
+    return {
+        name: mcnemar_between_runs(run_a, run_b, subset=name)
+        for name in ("all", "violation", "compliant")
     }

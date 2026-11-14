@@ -1,0 +1,10 @@
+# 评测链路验证专用（NON-SCIENTIFIC）· M-verified
+# 验证 verify 三关在 adapter 可用时真正执行（gate2 pass/fail 混合、gate3 调用受 cap 约束），
+# 以及证据链回填 / 聚合去重在对齐命名空间下仍工作。
+run_name: validate-mverified
+baseline: m_verified
+cases_dir: bench/cases/react19
+model: mock-scripted
+temperature: 0.0
+run_index: 0
+rules_source: aligned

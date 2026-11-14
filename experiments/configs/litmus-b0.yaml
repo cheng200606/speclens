@@ -1,7 +1,16 @@
 # 生死实验 · B0 zero-shot（plan.md §2.4）
-# mock-perfect 仅验证机械流程；真实运行把 model 换成 litellm 模型串（如 openai/gpt-5）
+# 真实模型配置：DeepSeek-V4.1-Flash（官方模型名 deepseek-flash），
+# litellm provider 前缀 deepseek/，密钥来自 .env 的 DEEPSEEK_API_KEY。
+# 控制变量：四份 litmus 配置必须共用同一 model / temperature / rules_source。
 run_name: litmus-b0
 baseline: b0_zero_shot
 cases_dir: bench/cases/react19
-model: mock-perfect
+model: deepseek/deepseek-flash
 temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 180
+# DeepSeek 默认开启 thinking；实测关闭后输出 token 从 42 降到 6、JSON 更干净。
+# 四份配置必须保持一致（控制变量）。若需更强推理，改成 {type: enabled} 并同步四份。
+litellm_kwargs:
+  thinking: {type: disabled}

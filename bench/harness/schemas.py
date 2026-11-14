@@ -115,10 +115,15 @@ class RuleVerification(BaseModel):
 
 
 class RuleRecord(BaseModel):
-    """引擎规则库条目：engine.extract 产出、engine.verify 补全校验。"""
+    """引擎规则库条目：engine.extract 产出、engine.verify 补全校验。
+
+    `synthesis_id` 记录自动合成的原始 ID：规则经 rule_bank 对齐到 canonical ID 后，
+    仍可回溯「哪条自动规则映射到了哪条冻结规则」，不丢失可审计性。
+    """
 
     id: RuleId
     spec_id: str
+    synthesis_id: RuleId | None = None
     level: Literal["MUST", "SHOULD", "MAY"]  # RFC2119
     category: Literal[
         "T1-style",

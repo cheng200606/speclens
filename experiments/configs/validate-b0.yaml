@@ -1,0 +1,10 @@
+# 评测链路验证专用（NON-SCIENTIFIC）
+# 目的：用带已知误差模式的 mock-scripted 产生非退化指标，验证
+#       detection_rate / false_positive_rate / rule_match_rate / McNemar / usage 记账。
+# 绝不用于论文结论，也不参与 litmus 生死实验判读。
+run_name: validate-b0
+baseline: b0_zero_shot
+cases_dir: bench/cases/react19
+model: mock-scripted
+temperature: 0.0
+run_index: 0

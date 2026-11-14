@@ -1,0 +1,8 @@
+# 评测链路验证专用（NON-SCIENTIFIC）· B1 全文基线
+# 默认不截断规范全文；spec_files_omitted 应为空（docs/STATUS-I1.md A5）。
+run_name: validate-b1
+baseline: b1_full_spec
+cases_dir: bench/cases/react19
+model: mock-scripted
+temperature: 0.0
+run_index: 0

@@ -174,16 +174,24 @@ def _contra_prompt(a: RuleRecord, b: RuleRecord) -> str:
 
 
 def detect_conflicts(
-    rules: list[RuleRecord], adapter=None, max_pairs: int = 60
+    rules: list[RuleRecord],
+    adapter=None,
+    max_pairs: int = 60,
+    stats: dict | None = None,
 ) -> dict[str, list[str]]:
     """规则间冲突检测（双向记录）。
 
     - 离线（无 adapter）：只报**断言重复**（确定性、零误报）。
-    - 有 adapter：对共享线索的规则对追加 LLM 语义矛盾判定（限 max_pairs 对）。
+    - 有 adapter：对共享线索的规则对追加 LLM 语义矛盾判定，**LLM 调用对数严格
+      受 max_pairs 限制**。原实现用 `len(conflicts) >= max_pairs` 收尾，只在已经
+      发现冲突时才生效，44 条规则真实接入会退化成最多 946 次调用（S0-4）。
       「use 必须在组件内调用」vs「use 不能在 try-catch 内调用」这类极性相反
       但语义相容的规则对，只有语义判定才能排除——故极性启发式不作为离线依据。
+    - stats 可选传入一个 dict，回填 `n_pairs_checked` / `n_pairs_skipped_by_cap`。
     """
     conflicts: dict[str, list[str]] = {}
+    n_checked = 0
+    n_skipped = 0
     for i, a in enumerate(rules):
         for b in rules[i + 1 :]:
             duplicate = _norm(a.assertion) == _norm(b.assertion)
@@ -195,6 +203,10 @@ def detect_conflicts(
                 continue
             if not (set(a.trigger.ast_cues) & set(b.trigger.ast_cues)):
                 continue
+            if n_checked >= max_pairs:
+                n_skipped += 1
+                continue
+            n_checked += 1
             from pydantic import ValidationError
 
             try:
@@ -209,8 +221,15 @@ def detect_conflicts(
             if verdict.contradict:
                 conflicts.setdefault(a.id, []).append(f"{b.id}:llm-contradict")
                 conflicts.setdefault(b.id, []).append(f"{a.id}:llm-contradict")
-            if len(conflicts) >= max_pairs:
-                return conflicts
+    if stats is not None:
+        stats.update(
+            {
+                "n_pairs_checked": n_checked,
+                "n_pairs_skipped_by_cap": n_skipped,
+                "max_pairs": max_pairs,
+                "within_cap": n_checked <= max_pairs,
+            }
+        )
     return conflicts
 
 
@@ -234,7 +253,8 @@ def verify_rules(
         spec_text, _used = assemble_spec_text(spec_dir)
     spec_text_norm = _norm(spec_text)
 
-    conflicts = detect_conflicts(rules, adapter=adapter)
+    conflict_stats: dict = {}
+    conflicts = detect_conflicts(rules, adapter=adapter, stats=conflict_stats)
     flagged: list[dict] = []
     for rule in rules:
         score, detail = grounding_score(rule, spec_text_norm)
@@ -268,6 +288,11 @@ def verify_rules(
         "n_flagged": len(flagged),
         "flagged_for_review": flagged,
         "gate2_llm": adapter is not None,
+        "gate2_exec_counts": {
+            state: sum(1 for r in rules if r.verification.exec_test == state)
+            for state in ("pass", "fail", "pending")
+        },
+        "gate3_stats": conflict_stats,
         "grounding_mean": round(
             sum(r.verification.grounding or 0.0 for r in rules) / max(1, len(rules)), 3
         ),

@@ -1,0 +1,67 @@
+{
+  "n_specs_total": 4,
+  "n_specs_with_cases": 1,
+  "n_cases_total": 17,
+  "kappa_verdict_overall": null,
+  "kappa_available": false,
+  "rule_set_jaccard_overall": null,
+  "thresholds": {
+    "kappa_min": 0.6,
+    "hard_ratio_min": 0.2,
+    "litmus_cases_min": 40,
+    "full_cases_min": 240
+  },
+  "per_spec": {
+    "react19": {
+      "n_cases": 17,
+      "verdict": {
+        "violation": 11,
+        "compliant": 4,
+        "borderline": 2
+      },
+      "difficulty": {
+        "medium": 6,
+        "easy": 9,
+        "hard": 2
+      },
+      "origin": {
+        "handcrafted": 17
+      },
+      "hard_ratio": 0.1176,
+      "n_dual_annotated": 0,
+      "dual_coverage": 0.0,
+      "kappa_verdict": null,
+      "kappa_available": false,
+      "rule_set_jaccard": null,
+      "canonical_rule_ids": [
+        "R-001",
+        "R-002",
+        "R-003",
+        "R-004",
+        "R-005",
+        "R-006",
+        "R-007",
+        "R-008",
+        "R-009",
+        "R-010",
+        "R-011",
+        "R-012"
+      ],
+      "unknown_referenced_rule_ids": [],
+      "quote_check": {
+        "n_rules": 12,
+        "n_verbatim": 12,
+        "missing_quote_rule_ids": [],
+        "all_verbatim": true
+      }
+    }
+  },
+  "warnings": [
+    "react19: hard 样本占比 11.8% < 20%",
+    "Cohen's κ 无法计算：全量集双标样本为 0（plan.md §2.3.3 降级预案尚未执行）",
+    "样本总数 17 < 生死实验最低线 40",
+    "样本总数 17 < 全量集最低线 240",
+    "仅 1/4 份规范有标注样本，RQ1/RQ3 跨规范分解不可行"
+  ],
+  "schema_errors": []
+}

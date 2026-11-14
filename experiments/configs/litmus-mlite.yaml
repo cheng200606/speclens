@@ -1,6 +1,17 @@
-# 生死实验 · M-lite（确定性规则提取 + 规则路由 + 逐规则审查，无验证关）
+# 生死实验 · M-lite（规则提取 + 规则路由 + 逐规则审查，无验证关）
+# I1：aligned 使合成规则 ID 与标注真值 R-xxx 同命名空间（见 docs/STATUS-I1.md P0-1）。
+#     规则内容仍为自动合成句，未注入人工标注；对齐覆盖率写入 rules_diagnostic.json。
+# 控制变量：四份 litmus 配置必须共用同一 model / temperature / rules_source。
+# 注意：本变体每个 case 最多触发 25 次逐规则调用，是四份配置中调用量最大的之一。
 run_name: litmus-mlite
 baseline: m_lite
 cases_dir: bench/cases/react19
-model: mock-perfect
+model: deepseek/deepseek-flash
 temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 180
+rules_source: aligned
+# 本变体调用量最大，关闭 thinking 对总成本影响最显著；须与其余三份一致。
+litellm_kwargs:
+  thinking: {type: disabled}

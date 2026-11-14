@@ -1,0 +1,129 @@
+# SpecLens-Bench · react19 冻结规则库（canonical rule bank）
+#
+# 用途：作为基准标注真值与引擎输出的**共享规则 ID 命名空间**。
+# 背景：engine.extract 产出 `react19-auto-NNN`，而 meta.yaml 标注使用 `R-xxx`，
+#       两者交集为空导致 rule_match_rate 在真实运行中恒为 0（详见 docs/STATUS-I1.md S0-1）。
+#
+# 约束：
+#   1. 每条 source_span.quote 必须是快照文件的**逐字子串**（经 engine.verify._norm 规范化后可命中）。
+#      12/12 已校验通过；引句与 docs/annotation-guide.md v1.1 的转述不同者，一律以快照原文为准。
+#   2. 规则 ID 永不复用（annotation-guide.md §4）。
+#   3. ast_cues 留空 = 全局适用：体现「规则找代码」而非「代码检索规则」，
+#      漏检由规则覆盖决定，不由检索命中决定（plan.md §2.2）。
+#   4. pos_example / neg_example 留空：本文件是人工冻结的真值词汇表，不是合成产物；
+#      正反例由 engine.verify 门 2 按需合成。
+#
+# 快照：bench/specs/react19/snapshot/，source_commit 46a54e059272，CC-BY-4.0。
+# 冻结日期：2026-11-13
+
+spec_id: react19
+frozen: "2026-11-13"
+source: "docs/annotation-guide.md §3 (v1.1)"
+rules:
+  - id: R-001
+    level: SHOULD
+    category: T2-api-usage
+    trigger: {scenario: "组件内异步数据获取", ast_cues: []}
+    assertion: "组件内取数应优先 use() 配合框架缓存/Suspense，避免在 useEffect 中手动取数并 setState"
+    source_span:
+      section: "reference-react-use.md"
+      quote: "Before `use`, a common approach was to fetch data in an Effect and update state when the data arrives. Compared to `use`, this approach requires managing loading and error states manually."
+
+  - id: R-002
+    level: SHOULD
+    category: T2-api-usage
+    trigger: {scenario: "表单提交与表单动作", ast_cues: []}
+    assertion: "表单提交应使用 Actions（useActionState / action 属性）处理，而非手动 onSubmit 加 setState"
+    source_span:
+      section: "reference-react-useActionState.md"
+      quote: "`useActionState` is a React Hook that lets you update state with side effects using [Actions](/reference/react/useTransition#functions-called-in-starttransition-are-called-actions)."
+
+  - id: R-003
+    level: MUST
+    category: T5-concurrency-resource
+    trigger: {scenario: "useEffect 中建立订阅/连接/定时器", ast_cues: []}
+    assertion: "useEffect 中建立订阅、连接或定时器的，必须返回清理函数"
+    source_span:
+      section: "reference-react-useEffect.md"
+      quote: "It should return a *cleanup function* with <CodeStep step={2}>cleanup code</CodeStep> that disconnects from that system."
+
+  - id: R-004
+    level: MUST
+    category: T2-api-usage
+    trigger: {scenario: "Hook 调用位置", ast_cues: []}
+    assertion: "Hook 只能在组件函数体顶层（early return 之前）或自定义 Hook 顶层调用，不得位于循环、条件、嵌套函数或 try/catch/finally 块内"
+    source_span:
+      section: "reference-rules-rules-of-hooks.md"
+      quote: "**Don’t call Hooks inside loops, conditions, nested functions, or `try`/`catch`/`finally` blocks.** Instead, always use Hooks at the top level of your React function, before any early returns."
+
+  - id: R-005
+    level: SHOULD
+    category: T2-api-usage
+    trigger: {scenario: "异步操作的乐观更新", ast_cues: []}
+    assertion: "异步操作的乐观更新应使用 useOptimistic 实现"
+    source_span:
+      section: "reference-react-useOptimistic.md"
+      quote: "`useOptimistic` is a React Hook that lets you optimistically update the UI."
+
+  - id: R-006
+    level: MUST
+    category: T2-api-usage
+    trigger: {scenario: "use 的调用上下文", ast_cues: []}
+    assertion: "use 只能在组件或 Hook 内调用，不得在普通工具函数中调用"
+    source_span:
+      section: "reference-react-use.md"
+      quote: "`use` must be called inside a Component or a Hook."
+
+  - id: R-007
+    level: MUST
+    category: T2-api-usage
+    trigger: {scenario: "传给 use 的 Promise 缓存", ast_cues: []}
+    assertion: "传给 use 的 Promise 必须缓存，跨重渲染复用同一实例"
+    source_span:
+      section: "reference-react-use.md"
+      quote: "Promises passed to `use` in Client Components must be cached so the same Promise instance is reused across re-renders."
+
+  - id: R-008
+    level: MUST
+    category: T5-concurrency-resource
+    trigger: {scenario: "服务端渲染与 Suspense 边界", ast_cues: []}
+    assertion: "服务端渲染中调用 use(browser()) 的组件必须处于 Suspense 边界内"
+    source_span:
+      section: "reference-react-use.md"
+      quote: "The component calling `use(browser())` must be inside a `<Suspense>` boundary during server rendering. Without one, server rendering fails."
+
+  - id: R-009
+    level: MUST
+    category: T2-api-usage
+    trigger: {scenario: "绕过 use 读取 Promise 内部字段", ast_cues: []}
+    assertion: "不得读取 promise.status 或 promise.value 绕过 use，应把 Promise 直接交给 use"
+    source_span:
+      section: "reference-react-use.md"
+      quote: "Never read `promise.status` or `promise.value` directly to bypass `use`; always pass the Promise to `use` and let React handle it."
+
+  - id: R-010
+    level: MUST
+    category: T5-concurrency-resource
+    trigger: {scenario: "useOptimistic setter 的调用上下文", ast_cues: []}
+    assertion: "useOptimistic 的 setter 必须在 Action 或 startTransition 内调用"
+    source_span:
+      section: "reference-react-useOptimistic.md"
+      quote: "The `set` function must be called inside an [Action](reference/react/useTransition#functions-called-in-starttransition-are-called-actions)."
+
+  - id: R-011
+    level: MUST
+    category: T2-api-usage
+    trigger: {scenario: "useActionState dispatchAction 的调用上下文", ast_cues: []}
+    assertion: "useActionState 的 dispatchAction 必须在 Action 中调用"
+    source_span:
+      section: "reference-react-useActionState.md"
+      quote: "`dispatchAction` must be called from an Action."
+
+  - id: R-012
+    level: MUST
+    category: T5-concurrency-resource
+    trigger: {scenario: "useOptimistic updater/reducer 的纯度", ast_cues: []}
+    assertion: "useOptimistic 的 updater/reducer 必须是纯函数，不得修改外部状态或依赖时间等外部量"
+    source_span:
+      section: "reference-react-useOptimistic.md"
+      quote: "It must be pure, should take the current state and reducer action arguments, and should return the next optimistic state."
