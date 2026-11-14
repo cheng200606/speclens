@@ -1,0 +1,55 @@
+{
+  "version": "v0",
+  "date": "2026-11-15",
+  "scope": "react19 40 cases, deepseek/deepseek-flash, temperature 0, run_index 0（I2-I4 各 run）",
+  "method": "case 级 FN/FP 逐条归类；消息文本人工判读",
+  "classes": {
+    "fp-hallucinated-standard": "无规范可用时，模型用通用工程想象（错误处理/缓存/竞态）替代规范条文 → 误报。B0 的 7 个 FP 中 6 个属此类；B1（全文规范在场）全部消失",
+    "fp-off-scope-true-pattern": "案例标注范围外的规则模式真实存在于代码中，所有方法一致『误报』——实为基准标注粒度问题而非方法错误（TS-011：标 R-008 合规，但代码含真实 R-007 违规模式）",
+    "fp-rule-overgeneralization": "逐规则审查缺少全文语境，把规范要求本身当作风险（TS-008：模块级缓存正是 R-007 的要求，M-lite/M-verified 却报『跨请求共享』）",
+    "fn-should-soft-wording": "SHOULD 级/描述性措辞（discouraged/建议）不触发模型违规判定（TS-001/TS-027 对 B0/B1）",
+    "fn-route-review-miss": "规则路由或逐规则审查未命中（TS-016 对 M 路径；B0/B1/B3 均可检出）",
+    "fn-static-indistinguishable": "静态不可判（B3 文档化漏检：R-005 无静态特征、R-007 具名未缓存函数、R-008 边界归属）"
+  },
+  "per_run": {
+    "B0": {
+      "FN": {"TS-001": "fn-should-soft-wording", "TS-027": "fn-should-soft-wording"},
+      "FP": {
+        "TS-002": "fp-hallucinated-standard",
+        "TS-008": "fp-hallucinated-standard",
+        "TS-011": "fp-off-scope-true-pattern",
+        "TS-013": "fp-hallucinated-standard",
+        "TS-018": "fp-hallucinated-standard",
+        "TS-025": "fp-hallucinated-standard",
+        "TS-026": "fp-hallucinated-standard"
+      }
+    },
+    "B1": {
+      "FN": {"TS-001": "fn-should-soft-wording", "TS-027": "fn-should-soft-wording", "TS-029": "fn-should-soft-wording"},
+      "FP": {"TS-011": "fp-off-scope-true-pattern"}
+    },
+    "M-lite": {
+      "FN": {"TS-001": "fn-should-soft-wording", "TS-016": "fn-route-review-miss"},
+      "FP": {"TS-008": "fp-rule-overgeneralization", "TS-011": "fp-off-scope-true-pattern"}
+    },
+    "M-verified_fail-open": {
+      "FN": {"TS-001": "fn-should-soft-wording", "TS-016": "fn-route-review-miss", "TS-029": "fn-llm-variance"},
+      "FP": {"TS-008": "fp-rule-overgeneralization", "TS-011": "fp-off-scope-true-pattern"}
+    },
+    "B3": {
+      "FN": {"TS-029": "fn-static-indistinguishable", "TS-033": "fn-static-indistinguishable", "TS-038": "fn-static-indistinguishable"},
+      "FP": {"TS-011": "fp-off-scope-true-pattern"}
+    }
+  },
+  "key_findings": [
+    "规范在场（B1/M）使 fp-hallucinated-standard 清零：误报率 0.539 → 0.077 的机制解释",
+    "TS-011 被全部 5 个方法一致『误报』——基准应补 R-007 标注或改代码（扩样前修）",
+    "M-lite/M-verified 独有的 fp-rule-overgeneralization（TS-008）是逐规则审查的语境缺失代价，全文 B1 无此问题",
+    "SHOULD 级描述性规则的漏检跨方法普遍存在（TS-001 只被 B3 静态命中）——『遵守不稳定』的主要形态是漏报方向",
+    "fn-static-indistinguishable 是 B3 的结构性边界，已文档化"
+  ],
+  "benchmark_actions": [
+    "TS-011：candidates——(a) resolved.rule_ids 补 [R-008, R-007] 并改 verdict 为 violation(multi-rule)，或 (b) 改代码移除内联 promise。扩样前由人工定夺",
+    "240 扩样时每个案例标注『范围内规则』并在指南中明确范围外真实模式不计 FP 的处理口径"
+  ]
+}

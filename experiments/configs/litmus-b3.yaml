@@ -1,0 +1,9 @@
+# I4 · B3 纯静态检查基线：零 LLM、完全确定性。
+# mock adapter 仅作接口占位（predict_case 不使用它）；make_report 对
+# baseline=b3_static 不做 NON-SCIENTIFIC 标记（指标有科学意义）。
+run_name: litmus-b3
+baseline: b3_static
+cases_dir: bench/cases/react19
+model: mock-perfect
+temperature: 0.0
+run_index: 0

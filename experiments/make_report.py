@@ -70,8 +70,12 @@ def make_report(
         label: json.loads((d / "summary.json").read_text(encoding="utf-8"))
         for label, d in found.items()
     }
+    # B3 静态检查是确定性基线（不调用 LLM），mock adapter 仅作接口占位，
+    # 其指标有科学意义（docs/STATUS-I4.md）。
     mock_runs = [
-        label for label, s in summaries.items() if is_mock_model(s.get("model", ""))
+        label
+        for label, s in summaries.items()
+        if is_mock_model(s.get("model", "")) and s.get("baseline") != "b3_static"
     ]
     scientific = not mock_runs
 

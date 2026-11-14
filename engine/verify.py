@@ -27,7 +27,9 @@ from bench.harness.spec_text import assemble_spec_text
 # ---------- 门 1：grounding ----------
 
 _MUST_KW = re.compile(r"\b(must|never|do not|don't|cannot|required)\b", re.I)
-_SHOULD_KW = re.compile(r"\b(should|avoid|discouraged|prefer|recommended)\b", re.I)
+_SHOULD_KW = re.compile(r"\bshould\b", re.I)
+_SOFT_KW = re.compile(r"\b(avoid|discouraged|prefer|recommended)\b", re.I)
+_CJK = re.compile(r"[\u4e00-\u9fff]")
 _STOP = {
     "the", "a", "an", "and", "or", "to", "of", "in", "on", "for", "with",
     "that", "this", "it", "is", "are", "be", "as", "by", "not", "you", "your",
@@ -37,6 +39,10 @@ _STOP = {
 
 _MD_LINK = re.compile(r"\[([^\]]+)\]\([^)]*\)")
 _BULLET = re.compile(r"^\s*[*\-+]\s+", re.M)
+# 提取器把跨列表项的多句引句用 "- " 拼接（"system. - It should..."）；
+# 规范文本侧列表符在行首已被 _BULLET 剥离，引句侧的句中列表符必须同样剥离，
+# 否则 quote_in_spec 恒 False（I4：此前 X-018/R-003/X-028/X-033 四条被误杀的直接原因）。
+_MID_BULLET = re.compile(r"([.!?;:])\s+[-*+]\s+")
 
 
 def _norm(text: str) -> str:
@@ -46,6 +52,7 @@ def _norm(text: str) -> str:
     """
     text = _MD_LINK.sub(r"\1", text)
     text = _BULLET.sub("", text)
+    text = _MID_BULLET.sub(r"\1 ", text)
     return re.sub(r"\s+", " ", text.replace("*", "")).strip().lower()
 
 
@@ -54,40 +61,70 @@ def _content_words(text: str) -> set[str]:
     return {w for w in words if w not in _STOP}
 
 
-def _level_consistent(level: str, quote: str) -> bool:
-    """引句的规范性措辞与声明等级是否一致；引句两者兼备或皆无时视为中性。"""
+def _level_consistent(level: str, quote: str) -> tuple[bool, str | None]:
+    """引句的规范性措辞与声明等级是否一致；引句两者兼备或皆无时视为中性。
+
+    I4 修订（docs/STATUS-I4.md D1）：
+    - "should" 是 React 文档的教程式指令语气（"It should return a cleanup function"），
+      冻结规则据此判 MUST 属标注人裁量 —— 容忍并记 note，不再扣分
+      （此前 R-003 因该项 + 跨语言零重叠被门 1 误杀）。
+    - 软建议词（prefer/avoid/discouraged/recommended）上声明 MUST 仍判不一致
+      （过度声明，真会放大误报）；硬强制句上声明 SHOULD 判不一致（弱化声明，漏检方向）。
+    """
     has_must = bool(_MUST_KW.search(quote))
     has_should = bool(_SHOULD_KW.search(quote))
-    if has_must and not has_should:
-        return level == "MUST"
-    if has_should and not has_must:
-        return level in ("SHOULD", "MAY")
-    return True
+    has_soft = bool(_SOFT_KW.search(quote))
+    if has_must and not (has_should or has_soft):
+        return level == "MUST", None if level == "MUST" else "under-claim: hard-normative quote"
+    if has_soft and not (has_must or has_should):
+        if level == "MUST":
+            return False, "over-claim: soft-recommendation quote declared MUST"
+        return True, None
+    if has_should and not (has_must or has_soft):
+        if level == "MUST":
+            return True, "tutorial-should: quote uses should-wording, MUST declared by annotation"
+        return True, None
+    return True, None
 
 
 def grounding_score(rule: RuleRecord, spec_text_norm: str) -> tuple[float, dict]:
-    """返回 (score∈[0,1], 分项明细)。引句必须在快照中逐字存在（权重 0.5）。"""
+    """返回 (score∈[0,1], 分项明细)。引句必须在快照中逐字存在（权重 0.5）。
+
+    I4 修订：断言为中文而引句为英文时（canonical 冻结规则皆如此），
+    词面重叠无定义——原实现按 0 计入并叠加等级扣分，把 R-003 压到 0.5 误杀。
+    跨语言时权重重归一为 quote_in_spec 0.5 + level 0.5；等级张力降级为 note
+    （仅软建议词 + MUST 声明的过度声明仍判 False，会在明细中暴露）。
+    """
     quote_norm = _norm(rule.source_span.quote)
     assert_norm = _norm(rule.assertion)
     quote_in_spec = quote_norm in spec_text_norm
     assert_words = _content_words(assert_norm)
     quote_words = _content_words(quote_norm)
-    overlap = (
-        len(assert_words & quote_words) / max(1, len(assert_words | quote_words))
-        if assert_words or quote_words
-        else 0.0
-    )
-    level_ok = _level_consistent(rule.level, rule.source_span.quote)
-    score = (
-        (1.0 if quote_in_spec else 0.0) * 0.5
-        + overlap * 0.3
-        + (1.0 if level_ok else 0.0) * 0.2
-    )
-    return round(score, 3), {
+    level_ok, level_note = _level_consistent(rule.level, rule.source_span.quote)
+    cross_language = bool(_CJK.search(assert_norm)) and bool(quote_words)
+    if cross_language:
+        overlap = None
+        score = (1.0 if quote_in_spec else 0.0) * 0.5 + (1.0 if level_ok else 0.0) * 0.5
+    else:
+        overlap = (
+            len(assert_words & quote_words) / max(1, len(assert_words | quote_words))
+            if assert_words or quote_words
+            else 0.0
+        )
+        score = (
+            (1.0 if quote_in_spec else 0.0) * 0.5
+            + overlap * 0.3
+            + (1.0 if level_ok else 0.0) * 0.2
+        )
+    detail = {
         "quote_in_spec": quote_in_spec,
-        "content_overlap": round(overlap, 3),
+        "content_overlap": round(overlap, 3) if overlap is not None else None,
         "level_consistent": level_ok,
+        "cross_language": cross_language,
     }
+    if level_note:
+        detail["level_note"] = level_note
+    return round(score, 3), detail
 
 
 # ---------- 门 2：executability ----------

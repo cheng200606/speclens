@@ -25,11 +25,20 @@ _REGISTRY: dict[str, Baseline] = {}
 
 
 def get_baseline(baseline_id: str) -> Baseline:
-    from baselines import b0_zero_shot, b1_full_spec, m_lite, m_verified
+    from baselines import (
+        b0_zero_shot,
+        b1_full_spec,
+        b2_rag,
+        b3_static,
+        m_lite,
+        m_verified,
+    )
 
     registry = {
         b0_zero_shot.BASELINE_ID: b0_zero_shot,
         b1_full_spec.BASELINE_ID: b1_full_spec,
+        b2_rag.BASELINE_ID: b2_rag,
+        b3_static.BASELINE_ID: b3_static,
         m_lite.BASELINE_ID: m_lite,
         m_verified.BASELINE_ID: m_verified,
     }

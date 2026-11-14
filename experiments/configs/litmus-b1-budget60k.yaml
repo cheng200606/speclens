@@ -1,0 +1,13 @@
+# I4 RQ4 · 规格预算阶梯：B1 在 60K 字符预算下（模拟更小上下文 / 多规范负载）
+# budget 档位见 docs/STATUS-I4.md；spec_selection.json 记录被省略的快照文件
+run_name: litmus-b1-budget60k
+baseline: b1_full_spec
+cases_dir: bench/cases/react19
+model: deepseek/deepseek-flash
+temperature: 0.0
+run_index: 0
+spec_max_chars: 60000
+litellm_num_retries: 3
+litellm_timeout_s: 180
+litellm_kwargs:
+  thinking: {type: disabled}

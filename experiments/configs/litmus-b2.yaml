@@ -1,0 +1,12 @@
+# I4 · B2 RAG 基线：BM25 段落检索（top-6）+ 局部上下文单次审查。
+# 「代码找规则」范式对照（plan.md §2.4）；控制变量与四份 litmus 配置一致。
+run_name: litmus-b2
+baseline: b2_rag
+cases_dir: bench/cases/react19
+model: deepseek/deepseek-flash
+temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 180
+litellm_kwargs:
+  thinking: {type: disabled}

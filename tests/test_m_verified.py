@@ -23,12 +23,15 @@ def test_m_verified_registered():
 
 
 def test_m_verified_offline_filters_flagged_rules():
-    # 离线 verify（adapter=None）：gate1 过滤后剩 40 条规则（44 - 4 条低 grounding）
+    # I4 归一化修复后（句中列表符剥离），44 条合成引句全部逐字可溯源，
+    # 门 1（grounding）不再有离线排除——此测试改为固定该不变量，
+    # 防止归一化回归再次静默误杀规则。
     rules = list(get_baseline("m_verified")._verified_rules(str(REACT19.resolve())))
     excluded = {r.id for r in rules if get_baseline("m_verified")._excluded(r)}
-    assert len(excluded) == 4
-    kept = {r.id for r in rules} - excluded
-    assert len(kept) == 40
+    assert len(excluded) == 0
+    scores = [r.verification.grounding for r in rules]
+    assert min(scores) >= 0.6
+    assert all(s == 1.0 for s in scores)
 
 
 def test_m_verified_end_to_end_with_mock():
