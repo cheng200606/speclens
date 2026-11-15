@@ -31,7 +31,7 @@ def test_bench_health_reports_real_gaps_honestly():
     aux = report["per_spec"]["react19-repo"]
     assert aux["n_cases"] == 18  # RQ4 仓库梯度集（共享 react19 规则库）
     assert report["n_specs_total"] == 4
-    assert report["n_specs_with_cases"] == 4  # react19 + react19-repo + airbnb + agents-sdk
+    assert report["n_specs_with_cases"] == 5  # react19 + react19-repo + airbnb + agents-sdk + asvs
     assert report["kappa_available"] is False
     assert report["kappa_verdict_overall"] is None
     r19 = report["per_spec"]["react19"]
