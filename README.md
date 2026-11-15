@@ -27,8 +27,9 @@
   B3 静态基线（检出 0.870 / 误报 0.077 / 零 token）；B2 BM25 检索基线（0.478 / 1.3% 成本）；
   RQ4 预算阶梯（B1: 0.870 → 0.565 → 0.435 → 0.217）；错误分类学 v0
   （`experiments/reports/error-taxonomy-v0.json`，含 TS-011 基准标注粒度问题）。
-- ⏳ I5：第二模型（待用户提供 API key）、240 条扩样（先修 TS-011 标注）、真实多仓库 RQ4、
-  arXiv 报告骨架、论文。
+- ✅ 第二模型对照：MiniMax-M3.1-Flash 四配置 + 4 规范探测完成（检出更强、误报高度异质、
+  fp-rule-inversion 新类；asvs 对其部分未见 0.70）。报告 `experiments/reports/litmus-minimax-2026-11-15.md`。
+- ⏳ I5：240 条扩样（TS-011 已修，扩样可启动）、真实多仓库 RQ4、arXiv 报告正文、论文。
 - 测试：`uv run pytest` 全绿（89 passed）。
 
 ## 快速开始

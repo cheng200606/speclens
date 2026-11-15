@@ -111,3 +111,26 @@ top-6 段落 + 单次审查：**检出 0.478 / 误报 0.077 / 31.9K tokens（B1 
    `env.py`/`.env.example` 已加 MINIMAX_API_KEY 映射。**待用户把 key 填入 .env 后**
    按 `docs/reproduce.md` §7 冒烟 + 全量四配置 + 新鲜度探测。
 3. RQ3 遗留项收口：`fp-off-scope-true-pattern` 类随 TS-011 修订消除（taxonomy JSON 已记决议）。
+
+## 8. 追记二（2026-11-15：双模型对照完成）
+
+第二模型 = **MiniMax-M3.1-Flash**（配置里的 M2.1 被服务端弃用 err 2069，/v1/models 实测后改选；
+Token Plan key 在 OpenAI 兼容路由上可用）。四配置 + 4 规范探测全部完成。
+
+| 配置 | deepseek-flash 检出/误报 | MiniMax-M3.1-Flash 检出/误报 |
+|---|---|---|
+| B0 | 0.913 / 0.539 | 1.000 / 0.615 |
+| B1 | 0.870 / 0.077 | 0.913 / 0.231 |
+| M-lite | 0.913 / 0.154 | 0.870\* / 0.923 |
+| M-verified(fail-open) | 0.870 / 0.077 | 1.000\* / 0.923 |
+| B3 静态 | 0.870 / 0.000 | n/a（无模型） |
+
+\* 含 case errors：mlite 4/40（TS-029/033/038 计 FN + TS-035 borderline；schema 三次重试均缺字段），
+mverified 1/40。错误率如实报告。
+
+跨模型发现：①检出侧 MiniMax 全面更强（M-verified 1.0）；②误报侧高度异质——M 路径 0.923 vs 0.154，
+且出现新类 **fp-rule-inversion**（把 R-009 反向用成"要求补 status/value"）；③schema 脆弱率 10%；
+④新鲜度跨模型不同：asvs 0.70（部分未见）vs deepseek 0.95——第二模型在 asvs 上更接近论文的 unseen 前提。
+工程修复：runner fail-soft（单 case 异常不再击穿长 run，errors.json + n_case_errors）、probe --api-base
+（MiniMax 中国区 key 绑定）、tenacity 补依赖（litellm 重试路径锁定树缺失）。产物：
+`experiments/reports/litmus-minimax-2026-11-15.md`。
