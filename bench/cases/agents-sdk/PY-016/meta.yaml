@@ -1,0 +1,14 @@
+case_id: PY-016
+verdict: compliant
+difficulty: medium
+rule_ids: [agents-003]
+origin: synthetic
+files: ["code/moderator.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [agents-003]
+    notes: "用 input_guardrails 在 agent 运行的同时对用户输入做校验，符合 agents-003。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [agents-003]

@@ -1,0 +1,14 @@
+case_id: PY-117
+verdict: violation
+difficulty: medium
+rule_ids: [asvs-V6.2.10]
+origin: synthetic
+files: ["code/password_policy.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [asvs-V6.2.10]
+    notes: "强制 90 天轮换密码，违反 asvs-V6.2.10（不得要求周期性轮换）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [asvs-V6.2.10]

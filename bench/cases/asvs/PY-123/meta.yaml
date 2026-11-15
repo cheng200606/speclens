@@ -1,0 +1,14 @@
+case_id: PY-123
+verdict: violation
+difficulty: medium
+rule_ids: [asvs-V7.5.2]
+origin: synthetic
+files: ["code/sessions.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [asvs-V7.5.2]
+    notes: "用户无法查看/终止自己的活动会话（无任何用户侧会话管理端点），违反 asvs-V7.5.2。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [asvs-V7.5.2]

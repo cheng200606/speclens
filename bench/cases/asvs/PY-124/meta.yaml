@@ -1,0 +1,14 @@
+case_id: PY-124
+verdict: compliant
+difficulty: medium
+rule_ids: [asvs-V7.5.2]
+origin: synthetic
+files: ["code/sessions.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V7.5.2]
+    notes: "提供查看并二次认证后终止自己全部会话的端点，符合 asvs-V7.5.2。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V7.5.2]

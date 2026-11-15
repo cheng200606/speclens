@@ -1,0 +1,14 @@
+case_id: PY-014
+verdict: compliant
+difficulty: medium
+rule_ids: [agents-004]
+origin: synthetic
+files: ["code/gatekeeper.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [agents-004]
+    notes: "阻塞式 guardrail（run_in_parallel=False），tripwire 触发时昂贵模型不启动，符合 agents-004。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [agents-004]

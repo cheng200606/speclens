@@ -1,0 +1,14 @@
+case_id: PY-013
+verdict: violation
+difficulty: medium
+rule_ids: [agents-004]
+origin: synthetic
+files: ["code/gatekeeper.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [agents-004]
+    notes: "意图是省昂贵模型开销却用并行 guardrail（tripwire 触发前模型已启动），违反 agents-004。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [agents-004]

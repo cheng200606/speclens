@@ -1,0 +1,14 @@
+case_id: TS-060
+verdict: compliant
+difficulty: medium
+rule_ids: [R-003]
+origin: synthetic
+files: ["code/Ticker.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-003]
+    notes: "Effect 建立事件订阅并返回清理函数。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-003]

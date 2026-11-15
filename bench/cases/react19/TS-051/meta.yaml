@@ -1,0 +1,14 @@
+case_id: TS-051
+verdict: violation
+difficulty: medium
+rule_ids: [R-005]
+origin: synthetic
+files: ["code/SubmitButton.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-005]
+    notes: "提交前手动 setState 预置成功文案模拟乐观反馈，未用 useOptimistic。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-005]

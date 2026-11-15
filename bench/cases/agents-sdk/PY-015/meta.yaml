@@ -1,0 +1,14 @@
+case_id: PY-015
+verdict: violation
+difficulty: medium
+rule_ids: [agents-003]
+origin: synthetic
+files: ["code/moderator.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [agents-003]
+    notes: "对不可信用户输入的筛查放在昂贵模型完成之后，未用 input_guardrails 在输入侧并行校验，违反 agents-003。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [agents-003]

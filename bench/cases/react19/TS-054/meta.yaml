@@ -1,0 +1,14 @@
+case_id: TS-054
+verdict: compliant
+difficulty: hard
+rule_ids: [R-008]
+origin: synthetic
+files: ["code/LocaleBar.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-008]
+    notes: "调用 use(browserLocales()) 的组件被 Suspense 边界包裹，SSR 可用。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-008]

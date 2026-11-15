@@ -1,0 +1,14 @@
+case_id: PY-011
+verdict: violation
+difficulty: medium
+rule_ids: [agents-008]
+origin: synthetic
+files: ["code/rewrite.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [agents-008]
+    notes: "自定义 model input 回调返回 dict 而非 ModelInputData，违反 agents-008。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [agents-008]

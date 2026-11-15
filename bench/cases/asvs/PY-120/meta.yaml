@@ -1,0 +1,14 @@
+case_id: PY-120
+verdict: compliant
+difficulty: hard
+rule_ids: [asvs-V6.4.3]
+origin: synthetic
+files: ["code/reset.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V6.4.3]
+    notes: "重置流程要求先通过 MFA 再建立会话，符合 asvs-V6.4.3。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V6.4.3]

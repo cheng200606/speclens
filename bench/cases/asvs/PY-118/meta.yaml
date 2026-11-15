@@ -1,0 +1,14 @@
+case_id: PY-118
+verdict: compliant
+difficulty: medium
+rule_ids: [asvs-V6.2.10]
+origin: synthetic
+files: ["code/password_policy.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V6.2.10]
+    notes: "密码有效直至发现泄露或用户主动更换，无强制轮换，符合 asvs-V6.2.10。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V6.2.10]
