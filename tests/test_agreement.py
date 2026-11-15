@@ -35,7 +35,7 @@ def test_bench_health_reports_real_gaps_honestly():
     assert report["kappa_available"] is False
     assert report["kappa_verdict_overall"] is None
     r19 = report["per_spec"]["react19"]
-    assert r19["hard_ratio"] == 0.2  # 12/60（I5 两批新增 3 例 hard）
+    assert r19["hard_ratio"] == 0.1935  # 12/62（I5 两批扩充 + 2 mined 均为 medium）
     assert r19["n_dual_annotated"] == 0
     assert r19["quote_check"]["all_verbatim"] is True
     assert r19["unknown_referenced_rule_ids"] == []
