@@ -1,0 +1,14 @@
+case_id: PY-103
+verdict: violation
+difficulty: medium
+rule_ids: [asvs-V6.2.12]
+origin: synthetic
+files: ["code/register.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [asvs-V6.2.12]
+    notes: "注册时不做泄露密码库检查，违反 asvs-V6.2.12。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [asvs-V6.2.12]

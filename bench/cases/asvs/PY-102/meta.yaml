@@ -1,0 +1,14 @@
+case_id: PY-102
+verdict: compliant
+difficulty: easy
+rule_ids: [asvs-V6.2.9]
+origin: synthetic
+files: ["code/register.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V6.2.9]
+    notes: "密码长度上限 128，允许至少 64 字符，符合 asvs-V6.2.9。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V6.2.9]

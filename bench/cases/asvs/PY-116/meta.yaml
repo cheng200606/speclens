@@ -1,0 +1,14 @@
+case_id: PY-116
+verdict: compliant
+difficulty: medium
+rule_ids: [asvs-V5.2.1]
+origin: synthetic
+files: ["code/upload.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V5.2.1]
+    notes: "上传前校验 Content-Length 上限，符合 asvs-V5.2.1。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V5.2.1]

@@ -1,0 +1,14 @@
+case_id: PY-106
+verdict: compliant
+difficulty: medium
+rule_ids: [asvs-V1.1.2]
+origin: synthetic
+files: ["code/render.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V1.1.2]
+    notes: "输出经 html.escape 编码后拼入 HTML，符合 asvs-V1.1.2。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V1.1.2]

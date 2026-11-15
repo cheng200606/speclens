@@ -1,0 +1,14 @@
+case_id: PY-108
+verdict: compliant
+difficulty: easy
+rule_ids: [asvs-V3.3.3]
+origin: synthetic
+files: ["code/session.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V3.3.3]
+    notes: "会话 cookie 使用 __Host- 前缀，符合 asvs-V3.3.3。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V3.3.3]

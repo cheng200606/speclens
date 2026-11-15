@@ -1,0 +1,14 @@
+case_id: PY-109
+verdict: violation
+difficulty: medium
+rule_ids: [asvs-V7.3.1]
+origin: synthetic
+files: ["code/session.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [asvs-V7.3.1]
+    notes: "会话无任何不活动超时/绝对寿命校验，违反 asvs-V7.3.1。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [asvs-V7.3.1]

@@ -1,0 +1,14 @@
+case_id: PY-115
+verdict: violation
+difficulty: medium
+rule_ids: [asvs-V5.2.1]
+origin: synthetic
+files: ["code/upload.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [asvs-V5.2.1]
+    notes: "上传接口不限制文件大小，违反 asvs-V5.2.1。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [asvs-V5.2.1]

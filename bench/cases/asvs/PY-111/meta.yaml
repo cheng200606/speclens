@@ -1,0 +1,14 @@
+case_id: PY-111
+verdict: violation
+difficulty: medium
+rule_ids: [asvs-V7.4.5]
+origin: synthetic
+files: ["code/admin.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [asvs-V7.4.5]
+    notes: "管理员无法终止特定用户会话（无 revoke 接口），违反 asvs-V7.4.5。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [asvs-V7.4.5]
