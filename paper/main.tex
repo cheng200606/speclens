@@ -44,17 +44,53 @@
 % 记账（usage.json）与统计（精确二项 McNemar + violation/compliant 分组）。
 
 \section{Results}
+
 \subsection{RQ1: Specification Adherence (Measurement)}
-% 表：B0 检出 0.913 / FP 0.539；B1 0.870 / 0.077。机制：fp-hallucinated-standard 清零。
-\subsection{RQ2: Does Verification Help?}
-% M-lite 0.913/0.154 vs M-verified(fail-open) 0.870/0.154：验证关无检出增益；
-% 门 2 跨 run 不稳定证据（R-011 fail/pass）。教训：review-queue 而非 filter。
+Without the specification (B0), the model detects 91.3\% of violations but flags
+6 of 13 compliant files (FP 0.539); with the full specification in context (B1),
+false positives drop to 0.077 (McNemar $p=0.031$) while detection is statistically
+unchanged. The mechanism, confirmed by our error taxonomy, is that zero-shot review
+substitutes plausible software-engineering standards (error handling, caching,
+concurrency hygiene) for the actual specification---a failure class we call
+\emph{hallucinated standard}, which disappears entirely once the specification is
+present. On the second model (MiniMax-M3.1-Flash) the same class reproduces
+(FP 0.615 $ightarrow$ 0.231), but suppression is weaker, showing that the
+adherence gap is heterogeneous across models.
+
+\subsection{RQ2: Does Rule Verification Help?}
+Our verification pipeline (grounding, executability self-review, conflict check)
+does not improve detection over M-lite: 0.870 vs 0.913 on the single-model pilot.
+Root-cause analysis over archived per-rule gate reports shows the executability
+gate falsely failed a MUST-level rule whose quote is verbatim from the snapshot
+(grounding 1.0), silently removing it and costing 13 detection points; the same
+gate passed the identical rule on a re-run at temperature 0. We therefore adopt a
+fail-open policy---LLM self-review marks rules for human review instead of
+removing them---and conclude that LLM self-review should serve as a review signal,
+not a filter.
+
 \subsection{RQ3: Error Taxonomy}
-% 6 类（error-taxonomy-v0.json）；fp-hallucinated-standard / fp-off-scope（基准粒度教训）/
-% fp-rule-overgeneralization / fn-should-soft-wording（漏报方向为主）。
+We classify every false positive and false negative of five configurations into
+six classes. Beyond hallucinated standards, the notable classes are
+\emph{rule inversion} (a second model inverts a prohibition into a requirement),
+\emph{rule over-generalization} (per-rule review lacking document context flags
+mandated caching as a risk), and \emph{soft-wording misses} (SHOULD-level
+descriptive rules are systematically under-detected). One benchmark artifact---a
+compliant case containing an out-of-scope real violation pattern, flagged
+consistently by all five configurations---was resolved by revising the case,
+illustrating how consistent cross-configuration disagreement localizes annotation
+granularity problems.
+
 \subsection{RQ4: Cost and Scale}
-% 预算阶梯表：0.870/0.565/0.435/0.217；B2 1.3% 成本；B3 零成本；B1 tokens 6.4x M。
-% TODO(I5)：真实多仓库（1k/10k/50k 行）嵌入实验替换字符预算代理。
+Full-specification review is effective only while the specification fits in
+context: shrinking the budget from 236K to 30K characters collapses detection
+from 0.870 to 0.217 while false positives stay low. On real repository gradients
+(1k/10k/50k-line generated repositories with an embedded violation), B1 consumes
+4.21M tokens for the 18-case suite versus 68K for rule-routed review---a
+62$	imes$ gap at identical effectiveness---because routing resolves which files
+a rule applies to and benign files cost nothing. A lexical-retrieval baseline
+reaches 0.478 detection at 1.3\% of B1's cost, and a compiled static checker
+matches B1's detection and false-positive profile at zero marginal cost,
+delineating when knowledge organization beats context stuffing.
 
 \section{Threats to Validity}
 % 单模型已由第二模型对照补齐（MiniMax-M2.1，待 I5 写入）；规范熟悉度（probe 0.90-1.00）；
