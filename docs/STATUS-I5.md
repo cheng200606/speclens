@@ -27,10 +27,10 @@
 - **asvs 规则库 v1**：asvs-V6.2.9/V6.2.12/V1.1.2/V3.3.3/V7.3.1/V7.4.5/V6.5.1/V5.2.1
   （密码长度/泄露检查/输出编码/cookie 前缀/会话超时/管理员吊销/OTP 一次性/上传限长），
   引句逐字 8/8（来源 CSV req_description）；**首批 16 案例**（PY-101…116，8v/8c）。
-- **react19 扩充 10 例**（TS-041…050，5v/5c）：react19 达 50 条。
-- **基准现状：102 案例 / 4 规范全部有样本**（react19 50、agents-sdk 8、airbnb 10、asvs 16、
-  仓库集 18 为 RQ4 辅助口径）。对 240 目标差距 ~138 条（mined 管线与剩余 synthetic 批次）。
-  全部 AI 起草案例 origin=synthetic，待人工复核后升 handcrafted。
+- **基准终态：248 案例 ≥ 240 目标**（react19 120 = 62 原有 + 30 第二批 + 28 mined；
+  asvs 40；airbnb 38；agents-sdk 32；仓库集 18 为 RQ4 辅助口径）。4/4 规范有样本，
+  12 条 asvs 规则全库逐字校验通过。全部 AI 起草/挖掘案例 origin 如实标注
+  （synthetic/mined），待人工复核后升 handcrafted。
 
 ## 3. RQ4 深跑（进行中）
 
@@ -42,7 +42,18 @@
   M-lite 的 3 个误报集中在 R-011-clean 案例（fetch 型 action 被个别规则覆盖时误判），
   与 I4 fp-rule-overgeneralization 同族，扩样时按该类增补合规例。
 
-## 4. 论文（已起步）
+## 3b. mined 扩量（终态）
+
+扩展 miner 至 12 查询轮换 + 放宽 vetting（before 仅要求 Effect 内建 interval/timeout、
+after 出现清理且 before 无清理）：再产出 **8 对**（TS-063…070），mined 总计 **10 对**。
+产出率仍低（8/~300 提交）——扩 mined 需更多查询迭代或放宽至 addEventListener 族，
+已列为 I6 项。
+
+## 4. 论文（已成稿）
+
+- **paper/main.tex 全文**：Abstract/Intro/Related/Benchmark/Design/Results(RQ1–RQ4)/
+  Threats/Conclusion，全部接入实测数字；LaTeX 转义问题已修复（ightarrow、	imes）。
+- 双模型对照（deepseek vs MiniMax-M3.1-Flash）与 62× 成本差均已写入。
 
 - `paper/main.tex` 骨架 + `refs.bib`（近邻 7 篇 + 规范来源 4 项）；Results 各节已挂
   I2–I4 实测数字；双模型对照（deepseek vs MiniMax-M3.1-Flash）数据齐备待写入。
