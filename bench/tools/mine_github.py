@@ -161,11 +161,12 @@ def _get_text(url: str) -> str:
 
 def emit(candidates: list[dict]) -> None:
     out_dir = REPO_ROOT / "bench" / "cases" / "react19"
+    existing = {p.name for p in out_dir.iterdir() if p.is_dir()}
+    next_id = max((int(x.split("-")[1]) for x in existing), default=60) + 1
     n = 0
-    for i, c in enumerate(candidates, 61):
-        cid = f"TS-{i:03d}" if not (REPO_ROOT / "bench" / "cases" / "react19" / f"TS-{i:03d}").exists() else None
-        if cid is None:
-            continue
+    for c in candidates:
+        cid = f"TS-{next_id:03d}"
+        next_id += 1
         d = out_dir / cid / "code"
         d.mkdir(parents=True, exist_ok=True)
         (d / "hook.ts").write_text(c["before"], encoding="utf-8", newline="\n")

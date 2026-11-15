@@ -1,0 +1,14 @@
+case_id: TS-114
+verdict: violation
+difficulty: medium
+rule_ids: [R-003]
+origin: mined
+files: ["code/hook.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "GitHub 修复对挖掘（Rohitroy1037/AI-Powered-Investment-Research-Platform@1cb9d70a，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Rohitroy1037/AI-Powered-Investment-Research-Platform/commit/1cb9d70a9dd304c037f882c7f07f83d752dcd540（AI 挖掘，待人工复核。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]

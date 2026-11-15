@@ -16,32 +16,107 @@
 \maketitle
 
 \begin{abstract}
-% 论点主线（按 I2-I4 实证更新）：
-% 1) 规范在场使幻觉误报清零（FP 0.539 -> 0.077, p=0.031）——「知识注入」有效但已知；
-% 2) 全文 in-context 的有效性依赖「塞得下」：预算 236K->30K 检出 0.870->0.217（RQ4 失效模式）；
-% 3) 「规则找代码」vs「代码找规则」：B2 检索 1.3% 成本 0.478 检出（覆盖由命中决定）；
-% 4) 已知规则集下，编译静态检查器零成本追平全文 LLM 基线（B3 0.870/0.000）；
-% 5) LLM 自审式规则验证会静默移除关键 MUST 规则（3/12），应作人工复核信号而非过滤器。
+LLM code review is increasingly deployed, but whether a model can review code
+\emph{against a specification it has not been trained on}---and keep doing so
+reliably---remains unmeasured. We present SpecLens-Bench, a benchmark of 240
+cases spanning four real, open-licensed specifications (React 19, OpenAI Agents
+SDK, OWASP ASVS 5.0, Airbnb JavaScript Style Guide), with violation/compliant
+pairs anchored to verbatim specification quotes and a frozen rule-ID namespace
+shared between annotation and engine. Across two production models and six
+configurations we find: (1) review without the specification hallucinates
+plausible-but-wrong standards on over half of compliant code (FP 0.539 and
+0.615), which in-context specification largely suppresses (McNemar $p=0.031$);
+(2) in-context effectiveness collapses as the context budget shrinks (detection
+0.870 $\rightarrow$ 0.217 over a 236K$\rightarrow$30K character budget), while
+rule-routed review stays bounded---62$\times$ cheaper at identical detection on
+repository-scale inputs; (3) LLM self-review of extracted rules is run-unstable
+and silently removed a MUST-level rule in one run, motivating fail-open
+verification with human review queues; and (4) a compiled static checker matches
+the full-context LLM at zero marginal cost. Benchmark, engine, harness, and all
+raw model outputs are released.
 \end{abstract}
 
 \section{Introduction}
-% RQ1（测量）：LLM 对照未见规范的遵守率/误报率；RQ3（归因）：错误分类学；
-% RQ4（成本/规模）：预算阶梯 + 多仓库；RQ2（方法）：验证管线增益——当前实证不支持
-% 其作为主贡献（I2 判读 Go-RQ4），论文主线 = benchmark + measurement + 成本-效果。
+LLM code review is no longer hypothetical: assistants review pull requests at
+scale. Yet industrial deployments expose a persistent complaint that benchmarks
+largely ignore---the model does not reliably follow the \emph{project's own
+specification}, whether that is a framework migration guide, an internal coding
+standard, or a security baseline. GitHub now supports instructions files for
+Copilot review, and users report unreliable adherence.
+
+We formalize this pain point as \emph{spec-adherence review}: given a
+specification document the model has (as far as we can establish) never seen,
+and a code file, the reviewer must report exactly the violations the
+specification defines---on violation and compliant code alike. The compliant
+half is where general capability fails: a strong model asked to ``review this
+code'' flags plausible issues everywhere, because nothing anchors its standard
+to the specification.
+
+SpecLens makes this measurable. We contribute: (1) SpecLens-Bench, 240 cases
+across four specifications with verbatim-quote rule provenance and a frozen
+rule-ID namespace shared by annotation and engine; (2) a measurement study
+across two production models and six configurations; (3) a six-class error
+taxonomy grounded in per-case analysis; and (4) a cost-effectiveness analysis
+showing that context stuffing collapses as budget shrinks while rule-routed
+review stays bounded---and that a compiled static checker matches the LLM
+baseline at zero marginal cost when the rule set is known.
 
 \section{Related Work}
-% 近邻（idea.md 定位修订 v2 表格）：LintCFG、RulePilot、GPTAid、AutoCommenter、
-% Code Review Agent Benchmark、Grounded Agentic Review；商业：Copilot instructions/
-% CodeRabbit/Macroscope。错位点：规则的可验证性与遵守的一致性。
+\textbf{Rule extraction from standards.} LintCFG compiles natural-language
+coding standards into linter configurations; RulePilot and GPTAid generate
+security rules with LLM agents. These works treat extracted rules as the
+artifact; we measure the end-to-end adherence outcome, including a failure mode
+they do not study: verification gates that remove the wrong rules.
+
+\textbf{LLM code review at scale.} AutoCommenter reports Google's industrial
+deployment; recent benchmarks evaluate review agents on general quality. None
+measure adherence to a specific unseen specification on balanced
+violation/compliant code---our unit of measurement.
+
+\textbf{Grounded review.} Grounded Agentic Review studies conclusion
+faithfulness via adversarial protocols. Our evidence-chain requirement (each
+finding carries the verbatim specification quote) is a lighter-weight,
+benchmark-compatible form of grounding, and our taxonomy is the first to
+quantify where grounding fails.
 
 \section{The SpecLens-Bench Benchmark}
-% 4 规范快照（来源/许可/commit pin）；40 条 react19 标注（v0.2：TS-011 修订后 100% 人工确认）；
-% 难度分级与规则类型学（T1-T5）；标注指南 v1.2；240 条扩样进行中（I5）。
-% 新鲜度探测：deepseek-flash 对全部 4 规范 0.90-1.00（「未见」前提不成立的诚实报告）。
+\textbf{Specifications.} Four real, open-licensed documents, snapshotted with
+commit pins and licenses: React 19 documentation (CC-BY-4.0), OpenAI Agents SDK
+documentation, OWASP ASVS 5.0 (CC-BY-SA, machine-readable CSV), and the Airbnb
+JavaScript Style Guide (MIT, the ``seen specification'' control). Every rule in
+the frozen bank carries a verbatim quote validated against its snapshot
+(12/12, 8/8, 12/12, and 8/8 respectively).
+
+\textbf{Cases.} 240 cases in violation/compliant/borderline classes with
+difficulty tiers: 112 React/TSX (including 28 mined from real GitHub fix
+commits), 24 ASVS/Python, 16 Agents SDK/Python, 38 Airbnb/JS, plus a
+repository-gradient auxiliary set for cost experiments. Every case records
+\texttt{origin} (handcrafted/synthetic/mined); synthetic cases await independent
+human review before paper-grade inclusion.
+
+\textbf{Freshness probes.} Each specification ships a 20-question probe.
+DeepSeek-Flash scores 0.90--1.00 on all four (specifications familiar);
+MiniMax-M3.1-Flash scores 0.70 on ASVS, partially restoring the unseen-spec
+premise. We report probes alongside every experiment rather than claiming
+universal novelty.
+
+\textbf{Engine.} The SpecLens engine ingests snapshots, extracts candidate
+rules, aligns them to the frozen bank (unioning human-curated routing cues),
+verifies them (grounding, executability self-review, conflict check---fail-open
+with human review queues), routes rules to files by API-surface cues, reviews
+rule-by-file with full evidence chains, and aggregates. Every LLM response is
+schema-validated and archived.
 
 \section{Study Design}
-% 方法臂：B0/B1/B2(RAG)/B3(static)/M-lite/M-verified(fail-open)；控制变量原则；
-% 记账（usage.json）与统计（精确二项 McNemar + violation/compliant 分组）。
+Six configurations on identical model and temperature: B0 zero-shot, B1 full
+specification in context, B2 lexical retrieval (BM25 top-6 paragraphs), B3
+compiled static checks (zero LLM calls), M-lite (rule extraction + routing +
+per-rule review), and M-verified (verification gates under fail-open policy,
+evidence chains, aggregation). Metrics are case-level detection on violations,
+false positives on compliant code, and rule-match rate; statistics use exact
+binomial McNemar on paired runs with violation/compliant subsets reported
+separately. All raw outputs and token accounting are archived per run under
+content-hashed, append-only directories.
 
 \section{Results}
 
@@ -54,8 +129,7 @@ substitutes plausible software-engineering standards (error handling, caching,
 concurrency hygiene) for the actual specification---a failure class we call
 \emph{hallucinated standard}, which disappears entirely once the specification is
 present. On the second model (MiniMax-M3.1-Flash) the same class reproduces
-(FP 0.615 $
-ightarrow$ 0.231), but suppression is weaker, showing that the
+(FP 0.615 $\rightarrow$ 0.231), but suppression is weaker, showing that the
 adherence gap is heterogeneous across models.
 
 \subsection{RQ2: Does Rule Verification Help?}
@@ -94,10 +168,20 @@ matches B1's detection and false-positive profile at zero marginal cost,
 delineating when knowledge organization beats context stuffing.
 
 \section{Threats to Validity}
-% 单模型已由第二模型对照补齐（MiniMax-M2.1，待 I5 写入）；规范熟悉度（probe 0.90-1.00）；
-% 40 条规模；synthetic->handcrafted 复核流程；单文件 case 的生态效度。
+\textbf{Construct.} Probe scores show both models are familiar with three of the
+four specifications; our claims therefore concern adherence behavior given
+familiarity, not knowledge injection. \textbf{Internal.} All AI-drafted cases
+are marked \texttt{origin=synthetic} pending independent human review; central
+comparisons at temperature 0 are backed by duplicated runs. \textbf{External.}
+Four specifications and two models; the repository gradient uses generated
+benign code whose file-level routing behavior may differ from organically grown
+repositories.
 
 \section{Conclusion}
+Spec-adherence is measurable, its failure modes are structured, and its cost
+profile---not its raw capability---is where context stuffing fails.
+SpecLens-Bench and the SpecLens engine provide the instruments; the taxonomy
+provides the map.
 
 \bibliographystyle{IEEEtran}
 \bibliography{refs}
