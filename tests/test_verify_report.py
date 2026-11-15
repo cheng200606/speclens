@@ -21,12 +21,12 @@ def test_runner_archives_verify_report(tmp_path: Path):
 
     # 结构完整性：44 条合成规则逐条有 gate 结果与排除判定
     assert vr["policy"] == "fail-open"  # I3：仅确定性门 1 排除，门 2/3 只标记
-    assert vr["n_rules"] == 44
-    assert vr["n_kept"] + vr["n_excluded"] == 44
-    assert vr["n_kept"] == 44  # I4 归一化修复后门 1 离线零排除（防回归不变量）
-    assert len(vr["rules"]) == 44
+    assert vr["n_rules"] == 87
+    assert vr["n_kept"] + vr["n_excluded"] == 87
+    assert vr["n_kept"] == 87  # I4 零排除不变量在 I7 提取器泛化后仍成立（防回归）
+    assert len(vr["rules"]) == 87
     ids = {r["id"] for r in vr["rules"]}
-    assert len(ids) == 44  # 无重复 ID
+    assert len(ids) == 87  # 无重复 ID
 
     # 逐规则字段
     first = vr["rules"][0]
@@ -34,12 +34,12 @@ def test_runner_archives_verify_report(tmp_path: Path):
         assert key in first
 
     # mock 适配器不支持合成：门 2 全部 pending（不伪造），排除只来自 grounding/conflicts
-    assert vr["verify_summary"]["gate2_exec_counts"]["pending"] == 44
+    assert vr["verify_summary"]["gate2_exec_counts"]["pending"] == 87
     assert vr["exclusion_reason_counts"].get("exec-fail", 0) == 0
     assert vr["review_flag_counts"].get("exec-fail", 0) == 0  # pending 不标 exec-fail
 
     # 汇总报告随附（原 verify_rules 的返回不再被丢弃）
-    assert vr["verify_summary"]["n_rules"] == 44
+    assert vr["verify_summary"]["n_rules"] == 87
     assert vr["verify_summary"]["n_flagged"] == 0
 
 

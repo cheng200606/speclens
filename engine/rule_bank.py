@@ -96,19 +96,37 @@ def validate_quotes(rules: list[RuleRecord], spec_dir: Path) -> dict:
 
 
 def _similarity(a: RuleRecord, b: RuleRecord) -> tuple[float, str]:
-    """合成规则 ↔ 冻结规则的引句相似度，返回 (score, method)。"""
+    """合成规则 ↔ 冻结规则的相似度，返回 (score, method)。
+
+    I7：引句 Jaccard 之外增加「assertion+quote 联合内容词 Jaccard」信号——
+    ASVS 类规范的 canonical 引句（req_description）与提取句字面差异大，
+    但 assertion 语义词重叠高；取两信号较大者。
+    """
     qa = _norm(a.source_span.quote)
     qb = _norm(b.source_span.quote)
     if qa and qb and qa == qb:
         return 1.0, "exact"
     if qa and qb and (qa in qb or qb in qa):
         return 0.9, "containment"
+
+    def _combined(r: RuleRecord) -> str:
+        return _norm(f"{r.assertion} {r.source_span.quote}")
+
+    best = 0.0
+    method = "none"
     wa = _content_words(qa)
     wb = _content_words(qb)
-    if not wa or not wb:
-        return 0.0, "none"
-    jaccard = len(wa & wb) / len(wa | wb)
-    return (round(jaccard, 3), "jaccard") if jaccard >= MATCH_THRESHOLD else (0.0, "none")
+    if wa and wb:
+        j = len(wa & wb) / len(wa | wb)
+        if j >= MATCH_THRESHOLD:
+            best, method = round(j, 3), "jaccard"
+    ca = _content_words(_combined(a))
+    cb = _content_words(_combined(b))
+    if ca and cb:
+        jc = len(ca & cb) / len(ca | cb)
+        if jc >= MATCH_THRESHOLD and jc > best:
+            best, method = round(jc, 3), "jaccard-combined"
+    return best, method
 
 
 def align_rules(

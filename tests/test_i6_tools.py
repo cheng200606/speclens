@@ -11,11 +11,11 @@ REPO = Path(__file__).resolve().parent.parent
 # ---------------------------------------------------------------- gen_i6_configs
 
 def test_i6_configs_complete_and_valid():
-    """24 份配置（4 规范 × 2 模型 × 3 基线），mlite 必须 rules_source: aligned。"""
+    """32 份配置（4 规范 × 2 模型 × 4 基线），mlite/mverified 必须 rules_source: aligned。"""
     cfg_dir = REPO / "experiments" / "configs"
     specs = {"airbnb", "agents-sdk", "asvs", "react19"}
     models = {"ds", "mx"}
-    baselines = {"b0", "b1", "mlite"}
+    baselines = {"b0", "b1", "mlite", "mverified"}
     count = 0
     for path in cfg_dir.glob("i6-*.yaml"):
         cfg = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -25,12 +25,12 @@ def test_i6_configs_complete_and_valid():
         assert cfg["temperature"] == 0.0
         if model == "mx":
             assert "api_base" in cfg.get("litellm_kwargs", {})
-        if bkey == "mlite":
+        if bkey in ("mlite", "mverified"):
             assert cfg["rules_source"] == "aligned"
         else:
             assert "rules_source" not in cfg
         count += 1
-    assert count == len(specs) * len(models) * len(baselines) == 24
+    assert count == len(specs) * len(models) * len(baselines) == 32
 
 
 # ---------------------------------------------------------------- gen_tables

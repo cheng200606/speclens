@@ -30,11 +30,11 @@ def test_ingest_sections_have_sources():
 
 def test_extract_rules_grounding_and_levels():
     rules = extract_rules(REACT19)
-    assert 10 <= len(rules) <= 60
+    assert 10 <= len(rules) <= 400  # I7 adaptive cap 随规范规模
     for r in rules:
         assert r.level in ("MUST", "SHOULD")
         assert r.source_span.quote == r.assertion  # 溯源即断言原文
-        assert len(r.assertion) >= 40
+        assert len(r.assertion) >= 25  # I7 行候选最短 25 字符
     assert any(r.level == "MUST" for r in rules)
     # 规范句已知存在于快照：use 必须在组件或 Hook 内调用
     assert any("must be called inside a Component or a Hook" in r.assertion for r in rules)

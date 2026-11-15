@@ -1,0 +1,1232 @@
+{
+ "version": "v1",
+ "scope": "i6 B0/B1 runs: 4 specs x 2 models (B0) + B1（全量 120/38/32/40 案例）",
+ "method": "结构化程序归类（全量，非抽样）；fn-conservative-empty / fn-missed-rule / fp-off-scope-true-pattern（候选，引句均来自冻结规则=规范背书）/ fp-annotated-rule-flag / fp-invalid-rule-ref；「真实」性人工抽检另录 sample 字段",
+ "runs": {
+  "react19-ds-b0": {
+   "run": "i6-react19-ds-b0-b5a713b72fa7",
+   "n_classified": 35,
+   "counts": {
+    "fn-conservative-empty": 6,
+    "fp-flagged-non-annotated": 29
+   },
+   "per_case": {
+    "TS-001": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-002": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-008": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-011": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-013": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-018": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-025": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-026": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-027": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-041": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-050": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-052": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-054": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-055": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-059": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-064": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-065": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-070": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-074": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-078": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-082": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-087": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-088": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-090": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-092": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-094": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-096": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-098": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-100": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-102": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-103": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-106": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-108": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-110": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-112": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  },
+  "react19-ds-b1": {
+   "run": "i6-react19-ds-b1-983913bd4aaa",
+   "n_classified": 24,
+   "counts": {
+    "fn-conservative-empty": 20,
+    "fp-flagged-non-annotated": 4
+   },
+   "per_case": {
+    "TS-001": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-027": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-029": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-041": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-050": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-051": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-054": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-056": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-063": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-065": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-067": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-069": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-087": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-090": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-091": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-093": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-103": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-105": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-107": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-108": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-116": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-117": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-118": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-120": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    }
+   }
+  },
+  "react19-mx-b0": {
+   "run": "i6-react19-mx-b0-aff93fa3dc89",
+   "n_classified": 40,
+   "counts": {
+    "fp-flagged-non-annotated": 36,
+    "fn-conservative-empty": 4
+   },
+   "per_case": {
+    "TS-002": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-008": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-011": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-013": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-019": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-025": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-026": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-042": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-048": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-050": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-052": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-054": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-055": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-059": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-062": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-064": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-066": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-068": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-070": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-074": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-078": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-080": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-082": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-086": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-088": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-090": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-092": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-094": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-096": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-098": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-100": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-102": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-104": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-106": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-108": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-110": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-112": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-118": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-119": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-120": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    }
+   }
+  },
+  "react19-mx-b1": {
+   "run": "i6-react19-mx-b1-c057cb5b8aaa",
+   "n_classified": 22,
+   "counts": {
+    "fn-conservative-empty": 11,
+    "fp-flagged-non-annotated": 11
+   },
+   "per_case": {
+    "TS-001": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-011": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-013": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-019": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-024": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-027": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-041": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-050": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-051": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-054": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-065": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-078": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-087": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-090": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-093": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-094": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-100": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-103": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-105": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-107": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "TS-108": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "TS-118": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    }
+   }
+  },
+  "airbnb-ds-b0": {
+   "run": "i6-airbnb-ds-b0-7c80f0c86607",
+   "n_classified": 7,
+   "counts": {
+    "fn-conservative-empty": 7
+   },
+   "per_case": {
+    "JS-003": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "JS-011": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "JS-012": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "JS-013": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "JS-014": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "JS-022": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "JS-023": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    }
+   }
+  },
+  "airbnb-ds-b1": {
+   "run": "i6-airbnb-ds-b1-d94e4733b742",
+   "n_classified": 4,
+   "counts": {
+    "fp-flagged-non-annotated": 4
+   },
+   "per_case": {
+    "JS-002": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-006": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-008": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-010": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  },
+  "airbnb-mx-b0": {
+   "run": "i6-airbnb-mx-b0-2a176ef25eec",
+   "n_classified": 3,
+   "counts": {
+    "fp-flagged-non-annotated": 2,
+    "fn-conservative-empty": 1
+   },
+   "per_case": {
+    "JS-002": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-003": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "JS-006": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  },
+  "airbnb-mx-b1": {
+   "run": "i6-airbnb-mx-b1-130c3de8f44b",
+   "n_classified": 14,
+   "counts": {
+    "fp-flagged-non-annotated": 14
+   },
+   "per_case": {
+    "JS-002": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-004": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-006": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-008": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-010": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-017": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-018": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-019": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-020": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-027": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-029": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-030": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-042": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "JS-044": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  },
+  "agents-sdk-ds-b0": {
+   "run": "i6-agents-sdk-ds-b0-9bead505dc0e",
+   "n_classified": 12,
+   "counts": {
+    "fn-conservative-empty": 7,
+    "fp-flagged-non-annotated": 5
+   },
+   "per_case": {
+    "PY-005": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-007": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-011": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-016": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-017": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-022": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-024": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-025": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-027": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-028": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-031": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-032": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  },
+  "agents-sdk-ds-b1": {
+   "run": "i6-agents-sdk-ds-b1-e0af07679531",
+   "n_classified": 12,
+   "counts": {
+    "fn-conservative-empty": 11,
+    "fp-flagged-non-annotated": 1
+   },
+   "per_case": {
+    "PY-005": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-008": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-009": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-011": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-013": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-017": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-021": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-023": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-025": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-027": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-029": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-031": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    }
+   }
+  },
+  "agents-sdk-mx-b0": {
+   "run": "i6-agents-sdk-mx-b0-b2e840041354",
+   "n_classified": 16,
+   "counts": {
+    "fp-flagged-non-annotated": 15,
+    "fn-conservative-empty": 1
+   },
+   "per_case": {
+    "PY-004": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-006": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-008": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-010": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-012": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-014": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-016": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-017": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-018": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-020": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-022": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-024": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-026": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-028": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-030": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-032": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  },
+  "agents-sdk-mx-b1": {
+   "run": "i6-agents-sdk-mx-b1-1e0711591b84",
+   "n_classified": 11,
+   "counts": {
+    "fp-flagged-non-annotated": 8,
+    "fn-conservative-empty": 3
+   },
+   "per_case": {
+    "PY-002": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-004": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-005": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-008": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-014": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-016": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-017": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-022": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-024": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-031": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-032": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  },
+  "asvs-ds-b0": {
+   "run": "i6-asvs-ds-b0-b8da04d71f48",
+   "n_classified": 19,
+   "counts": {
+    "fp-flagged-non-annotated": 8,
+    "fn-conservative-empty": 11
+   },
+   "per_case": {
+    "PY-102": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-104": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-107": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-110": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-111": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-113": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-114": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-116": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-117": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-119": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-120": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-123": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-126": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-127": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-129": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-131": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-133": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-135": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-138": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  },
+  "asvs-ds-b1": {
+   "run": "i6-asvs-ds-b1-01c2a73a88bd",
+   "n_classified": 15,
+   "counts": {
+    "fn-conservative-empty": 14,
+    "fp-flagged-non-annotated": 1
+   },
+   "per_case": {
+    "PY-103": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-109": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-111": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-113": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-115": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-116": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-119": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-121": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-123": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-127": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-131": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-133": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-135": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-137": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-139": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    }
+   }
+  },
+  "asvs-mx-b0": {
+   "run": "i6-asvs-mx-b0-67a073094c47",
+   "n_classified": 17,
+   "counts": {
+    "fp-flagged-non-annotated": 14,
+    "fn-conservative-empty": 3
+   },
+   "per_case": {
+    "PY-102": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-104": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-108": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-110": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-112": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-114": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-116": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-120": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-121": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-123": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-124": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-126": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-128": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-131": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-134": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-136": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-140": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  },
+  "asvs-mx-b1": {
+   "run": "i6-asvs-mx-b1-c0cea440cc43",
+   "n_classified": 16,
+   "counts": {
+    "fp-flagged-non-annotated": 15,
+    "fn-conservative-empty": 1
+   },
+   "per_case": {
+    "PY-102": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-104": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-108": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-109": {
+     "verdict": "violation",
+     "class": "fn-conservative-empty"
+    },
+    "PY-110": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-112": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-114": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-116": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-120": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-122": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-124": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-128": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-134": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-136": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-138": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    },
+    "PY-140": {
+     "verdict": "compliant",
+     "class": "fp-flagged-non-annotated"
+    }
+   }
+  }
+ }
+}

@@ -25,10 +25,12 @@ BASELINES = {
     "b0": "b0_zero_shot",
     "b1": "b1_full_spec",
     "mlite": "m_lite",
+    "mverified": "m_verified",
 }
-# mlite 需要 aligned 规则库（引擎从快照提取+对齐冻结库）
+# mlite/mverified 需要 aligned 规则库（引擎从快照提取+对齐冻结库）
 EXTRA_LINES = {
     "mlite": "rules_source: aligned\n",
+    "mverified": "rules_source: aligned\n",
 }
 
 TPL = """# I6 全量重跑（gen_i6_configs.py 生成）：{spec} × {model_key} × {bkey}

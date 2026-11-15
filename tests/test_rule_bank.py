@@ -54,13 +54,13 @@ def test_build_rules_sources_and_oracle_flag():
     assert diag_c["oracle_leakage"] is True
 
     aligned, diag_a = build_rules(REACT19, "aligned")
-    assert len(aligned) == 44
+    assert len(aligned) == 87  # I7 提取器泛化后（adaptive cap + 行候选）
     assert diag_a["oracle_leakage"] is False
     assert diag_a["alignment"]["n_matched"] >= 7
     assert diag_a["quote_check"]["all_verbatim"]
 
     synthesized, diag_s = build_rules(REACT19, "synthesized")
-    assert len(synthesized) == 44
+    assert len(synthesized) == 87
     assert all(r.id.startswith("react19-auto-") for r in synthesized)
     assert diag_s["rules_source"] == "synthesized"
 

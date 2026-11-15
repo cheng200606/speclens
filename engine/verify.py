@@ -43,16 +43,20 @@ _BULLET = re.compile(r"^\s*[*\-+]\s+", re.M)
 # 规范文本侧列表符在行首已被 _BULLET 剥离，引句侧的句中列表符必须同样剥离，
 # 否则 quote_in_spec 恒 False（I4：此前 X-018/R-003/X-028/X-033 四条被误杀的直接原因）。
 _MID_BULLET = re.compile(r"([.!?;:])\s+[-*+]\s+")
+# I7：提取清洗会剥「5.1 」式列表编号前缀，规范化两侧必须同步剥离，
+# 否则行候选引句（airbnb/编号清单式规范）在门 1 被误杀。
+_LIST_NUM = re.compile(r"^\s*\(?\d+(?:\.\d+)*\)?\.?\s+", re.M)
 
 
 def _norm(text: str) -> str:
-    """规范化：拆 markdown 链接外壳、去列表符/加粗符、压空白、小写。
+    """规范化：拆 markdown 链接外壳、去列表符/加粗符/编号前缀、压空白、小写。
 
     断言经过提取清洗（链接已拆），快照原文没有——两侧必须同构才能逐字比对。
     """
     text = _MD_LINK.sub(r"\1", text)
     text = _BULLET.sub("", text)
     text = _MID_BULLET.sub(r"\1 ", text)
+    text = _LIST_NUM.sub("", text)
     return re.sub(r"\s+", " ", text.replace("*", "")).strip().lower()
 
 
