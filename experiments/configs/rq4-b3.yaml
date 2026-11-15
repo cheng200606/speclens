@@ -1,0 +1,7 @@
+# I5 RQ4 · B3 静态检查于仓库梯度（零 LLM，确定性）
+run_name: rq4-b3
+baseline: b3_static
+cases_dir: bench/cases/react19-repo
+model: mock-perfect
+temperature: 0.0
+run_index: 0

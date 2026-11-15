@@ -24,10 +24,27 @@ class Case:
             self._file_cache[name] = (self.root / name).read_text(encoding="utf-8")
         return self._file_cache[name]
 
+    def spec_dir(self) -> "Path":
+        """案例所属规范目录（bench/cases/<spec>/<ID> -> bench/specs/<spec>）。
+
+        I5：RQ4 仓库集目录带 "-repo" 后缀（react19-repo），共享 react19 的
+        快照与冻结规则库，由 spec_name_for_case 剥离后缀。
+        """
+        return self.root.parents[2] / "specs" / spec_name_for_case(self)
+
 
 def load_spec(spec_dir: Path) -> SpecMeta:
     data = yaml.safe_load((spec_dir / "spec.yaml").read_text(encoding="utf-8"))
     return SpecMeta.model_validate(data)
+
+
+def spec_name_for_case(case: "Case") -> str:
+    """案例所属规范名：目录名去掉 RQ4 仓库集的 "-repo" 后缀。
+
+    I5 起真实仓库梯度案例放 bench/cases/react19-repo/（共享 react19 的快照与
+    冻结规则库），目录名后缀用于与生死实验的 40 条基准分离口径。
+    """
+    return case.root.parent.name.removesuffix("-repo")
 
 
 def load_cases(cases_dir: Path) -> list[Case]:

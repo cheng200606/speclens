@@ -1,0 +1,13 @@
+# I5 RQ4 · 真实仓库梯度（RP-001…018：6 模式 × 1k/10k/50k 行， benign 路由为零）
+# 生成器：bench/tools/gen_repo_cases.py（确定性，可复现）
+run_name: rq4-mlite
+baseline: m_lite
+cases_dir: bench/cases/react19-repo
+model: deepseek/deepseek-flash
+temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 300
+rules_source: aligned
+litellm_kwargs:
+  thinking: {type: disabled}

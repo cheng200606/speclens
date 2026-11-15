@@ -122,7 +122,7 @@ def _excluded(rule: RuleRecord) -> bool:
 
 
 def _spec_dir_for_case(case: Case) -> Path:
-    return case.root.parents[2] / "specs" / case.root.parent.name
+    return case.spec_dir()
 
 
 def predict_case(case: Case, adapter: ModelAdapter) -> list[Finding]:

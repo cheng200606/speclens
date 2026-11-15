@@ -124,5 +124,5 @@ def spec_text_for_case(
     case: Case, max_chars: int | None = None
 ) -> tuple[str, list[str]]:
     """由 case 路径定位其规范目录（bench/cases/<spec>/<ID> → bench/specs/<spec>）。"""
-    spec_dir = case.root.parents[2] / "specs" / case.root.parent.name
+    spec_dir = spec_dir = case.spec_dir()
     return get_spec_text(spec_dir, max_chars)

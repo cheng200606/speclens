@@ -147,11 +147,24 @@ def align_rules(
             }
         )
 
+    # I5 路由 v2：命中 canonical 的合成规则，其 trigger.ast_cues 与冻结规则的
+    # 人工声明 API 面取并集。cues 只是路由键（成本机制），assertion/quote 不变，
+    # grounding 校验不受影响；未命中规则继续走路由 v2 的断言派生。
+    canon_by_id = {c.id: c for c in canonical}
     rules: list[RuleRecord] = []
     for i, s in enumerate(synthesized):
         relabeled = s.model_copy(deep=True)
         relabeled.synthesis_id = s.id
         relabeled.id = assigned.get(i, f"{UNMATCHED_PREFIX}-{i + 1:03d}")
+        cid = assigned.get(i)
+        if cid:
+            merged = list(
+                dict.fromkeys(
+                    [*relabeled.trigger.ast_cues, *canon_by_id[cid].trigger.ast_cues]
+                )
+            )
+            relabeled.trigger = relabeled.trigger.model_copy(deep=True)
+            relabeled.trigger.ast_cues = merged
         rules.append(relabeled)
 
     report = AlignmentReport(

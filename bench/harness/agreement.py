@@ -85,7 +85,9 @@ def validate_bench(repo_root: Path) -> dict:
         all_pairs.extend(pairs)
         all_rule_pairs.extend(rule_pairs)
 
-        bank_path = specs_root / spec_id / "rules.yaml"
+        # RQ4 仓库集（react19-repo 等）共享基础规范的冻结规则库
+        bank_spec = spec_id.removesuffix("-repo")
+        bank_path = specs_root / bank_spec / "rules.yaml"
         canonical_ids: set[str] = set()
         quote_check = None
         if bank_path.exists():
@@ -94,7 +96,7 @@ def validate_bench(repo_root: Path) -> dict:
             from engine.rule_bank import load_rule_bank, validate_quotes
 
             quote_check = validate_quotes(
-                load_rule_bank(specs_root / spec_id), specs_root / spec_id
+                load_rule_bank(specs_root / bank_spec), specs_root / bank_spec
             )
         referenced = {
             rid

@@ -118,7 +118,7 @@ def build_user_prompt(case: Case, excerpts: list[str]) -> str:
 
 
 def predict_case(case: Case, adapter: ModelAdapter) -> list[Finding]:
-    spec_dir = case.root.parents[2] / "specs" / case.root.parent.name
+    spec_dir = spec_dir = case.spec_dir()
     excerpts = retrieve(spec_dir, case)
     out = adapter.complete_json(
         system=SYSTEM,

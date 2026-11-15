@@ -58,7 +58,7 @@ def code_digest(repo_root: Path) -> str:
     h = hashlib.sha256()
     files: list[Path] = []
     for pattern in _DIGEST_GLOBS:
-        files.extend(sorted(repo_root.glob(pattern)))
+        files.extend(sorted(p for p in repo_root.glob(pattern) if p.is_file()))
     for p in files:
         h.update(str(p.relative_to(repo_root)).replace("\\", "/").encode("utf-8"))
         h.update(p.read_bytes())
@@ -118,7 +118,8 @@ def build_scripted_script(cases: list[Case]) -> dict:
 
 
 def _spec_dir(repo_root: Path, config: dict) -> Path:
-    spec_id = Path(config["cases_dir"]).name
+    # RQ4 仓库集（react19-repo）共享基础规范（loader.spec_name_for_case 同口径）
+    spec_id = Path(config["cases_dir"]).name.removesuffix("-repo")
     return repo_root / "bench" / "specs" / spec_id
 
 

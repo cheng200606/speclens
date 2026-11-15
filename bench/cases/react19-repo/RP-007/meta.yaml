@@ -1,0 +1,35 @@
+case_id: RP-007
+verdict: violation
+difficulty: medium
+rule_ids: [R-007]
+origin: synthetic
+files:
+  - "code/src/components/Widget0000.tsx"
+  - "code/src/components/Widget0001.tsx"
+  - "code/src/components/Widget0002.tsx"
+  - "code/src/components/Widget0003.tsx"
+  - "code/src/components/Widget0004.tsx"
+  - "code/src/components/Widget0005.tsx"
+  - "code/src/components/Widget0006.tsx"
+  - "code/src/components/Widget0007.tsx"
+  - "code/src/components/Widget0008.tsx"
+  - "code/src/components/Widget0009.tsx"
+  - "code/src/components/Widget0010.tsx"
+  - "code/src/components/Widget0011.tsx"
+  - "code/src/components/Widget0012.tsx"
+  - "code/src/components/Widget0013.tsx"
+  - "code/src/components/Widget0014.tsx"
+  - "code/src/components/Widget0015.tsx"
+  - "code/src/components/Widget0016.tsx"
+  - "code/src/components/Widget0017.tsx"
+  - "code/src/components/Widget0018.tsx"
+  - "code/src/features/Target.tsx"
+  - "code/src/index.tsx"
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-007]
+    notes: "每次渲染新建 Promise 并直接交给 use，未做任何缓存，Suspense 会在重渲染时反复回退。 规模档 1k（21 文件 / 1072 行），目标文件嵌于 src/features/Target.tsx。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-007]
