@@ -1,0 +1,14 @@
+case_id: PY-003
+verdict: violation
+difficulty: medium
+rule_ids: [agents-002]
+origin: synthetic
+files: ["code/support.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [agents-002]
+    notes: "动态 instructions 函数打印提示词却不返回，违反 agents-002（must return the prompt）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [agents-002]

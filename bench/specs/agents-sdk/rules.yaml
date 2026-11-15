@@ -1,0 +1,96 @@
+spec_id: agents-sdk
+frozen: '2026-11-15'
+source: bench/specs/agents-sdk/snapshot/
+rules:
+- id: agents-001
+  level: MUST
+  category: T2-api-usage
+  trigger:
+    scenario: Agent 需要结构化输出时必须设置 output_type
+    ast_cues: []
+  assertion: Agent 需要结构化输出时必须设置 output_type
+  source_span:
+    section: agents.md L183
+    quote: When you pass an `output_type`, that tells the model to use structured
+      outputs instead of regular plain text responses.
+- id: agents-002
+  level: MUST
+  category: T2-api-usage
+  trigger:
+    scenario: 动态 instructions 函数必须返回 prompt 字符串
+    ast_cues: []
+  assertion: 动态 instructions 函数必须返回 prompt 字符串
+  source_span:
+    section: agents.md L246
+    quote: The function will receive the agent and context, and must return the prompt.
+- id: agents-003
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: guardrails 用于在 agent 运行前后并行校验输入与输出
+    ast_cues: []
+  assertion: guardrails 用于在 agent 运行前后并行校验输入与输出
+  source_span:
+    section: agents.md L309
+    quote: Guardrails allow you to run checks/validations on user input in parallel
+      to the agent running, and on the agent's output once it is produced.
+- id: agents-004
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: 需要阻断昂贵模型启动时用阻塞式 guardrail（run_in_parallel=False）
+    ast_cues: []
+  assertion: 需要阻断昂贵模型启动时用阻塞式 guardrail（run_in_parallel=False）
+  source_span:
+    section: guardrails.md L40
+    quote: 'Blocking execution (`run_in_parallel=False`): The guardrail runs and completes
+      *before* the agent starts. If the guardrail tripwire is triggered, the agent
+      never executes, preventing token consumption and tool execution.'
+- id: agents-005
+  level: MUST
+  category: T2-api-usage
+  trigger:
+    scenario: function tool 的描述取自函数 docstring（或显式 description）
+    ast_cues: []
+  assertion: function tool 的描述取自函数 docstring（或显式 description）
+  source_span:
+    section: tools.md L365
+    quote: Tool description will be taken from the docstring of the function (or you
+      can provide a description)
+- id: agents-006
+  level: MUST
+  category: T2-api-usage
+  trigger:
+    scenario: 手工构造 FunctionTool 时必须在 on_invoke_tool 内处理错误
+    ast_cues: []
+  assertion: 手工构造 FunctionTool 时必须在 on_invoke_tool 内处理错误
+  source_span:
+    section: tools.md L677
+    quote: If you are manually creating a `FunctionTool` object, then you must handle
+      errors inside the `on_invoke_tool` function.
+- id: agents-007
+  level: MUST
+  category: T2-api-usage
+  trigger:
+    scenario: 每个目标 agent 注册一个 handoff()，让模型在多个目的地间选择
+    ast_cues: []
+  assertion: 每个目标 agent 注册一个 handoff()，让模型在多个目的地间选择
+  source_span:
+    section: handoffs.md L44
+    quote: The [`handoff()`][agents.handoffs.handoff] helper always transfers control
+      to the specific `agent` you passed in. If you have multiple possible destinations,
+      register one handoff per destination and let the model choose among them. Use
+      a custom [`Handoff`][agents.handoffs.Handoff] only when your own handoff code
+      must decide which agent to return at invocation time.
+- id: agents-008
+  level: MUST
+  category: T2-api-usage
+  trigger:
+    scenario: 自定义 model input 回调必须返回 ModelInputData 对象
+    ast_cues: []
+  assertion: 自定义 model input 回调必须返回 ModelInputData 对象
+  source_span:
+    section: running_agents.md L447
+    quote: The return value must be a [`ModelInputData`][agents.run.ModelInputData]
+      object. Its `input` field is required and must be a list of input items. Returning
+      any other shape raises a `UserError`.

@@ -1,0 +1,14 @@
+case_id: PY-006
+verdict: compliant
+difficulty: easy
+rule_ids: [agents-005]
+origin: synthetic
+files: ["code/weather.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [agents-005]
+    notes: "@function_tool 函数带 docstring 描述，符合 agents-005。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [agents-005]

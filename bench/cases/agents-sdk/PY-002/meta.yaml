@@ -1,0 +1,14 @@
+case_id: PY-002
+verdict: compliant
+difficulty: medium
+rule_ids: [agents-001]
+origin: synthetic
+files: ["code/summarizer.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [agents-001]
+    notes: "设置 output_type 为 Pydantic 模型，得到结构化输出，符合 agents-001。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [agents-001]

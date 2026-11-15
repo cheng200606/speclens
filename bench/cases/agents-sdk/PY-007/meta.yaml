@@ -1,0 +1,14 @@
+case_id: PY-007
+verdict: violation
+difficulty: hard
+rule_ids: [agents-006]
+origin: synthetic
+files: ["code/patcher.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [agents-006]
+    notes: "手工构造 FunctionTool 却不在 on_invoke_tool 里处理错误，异常直接外泄，违反 agents-006。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [agents-006]
