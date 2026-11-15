@@ -5,7 +5,7 @@
 - `rq4-ladder.tex` (10 lines)
 - `rq4-repo.tex` (9 lines)
 - `rq3-taxonomy.tex` (11 lines)
-- `macros.tex` (33 lines)
+- `macros.tex` (40 lines)
 
 ## i6 runs used
 

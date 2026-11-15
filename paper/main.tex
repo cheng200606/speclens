@@ -182,16 +182,26 @@ fail-open policy---LLM self-review marks rules for human review instead of
 removing them---and conclude that LLM self-review should serve as a review signal,
 not a filter.
 
-The full-benchmark rerun adds a generality limit: the M pipeline does not transfer
-across specifications for free. Under the leak-free \texttt{aligned} regime (the
-returned rule set contains only LLM-synthesized rules; canonical rules never enter),
-alignment coverage falls from \mlAlignReact{} on React 19 to \mlAlignAgents{} on
-Agents SDK, \mlAlignAirbnb{} on Airbnb, and \mlAlignAsvs{} on ASVS---whose
-requirement-style prose yields only two synthesized rules and zero review calls.
-Rule-routed detection collapses accordingly (from \mliteDetDS{} to
-\mliteDetAgents, \mliteDetAirbnb, and \mliteDetAsvs). Knowledge organization's
-advantage is thus bound to its supporting infrastructure (alignment and routing
-curation), which currently must be rebuilt per specification.
+The full-benchmark rerun quantified, then closed part of, the transfer gap.
+Under the leak-free \texttt{aligned} regime, the v1 deterministic extractor
+(built for React's prose style: English-modal sentences, a React-identifier
+cue whitelist, heading-only sectioning) aligned \mlAlignReactVone{} of React
+rules, \mlAlignAgentsVone{} of Agents SDK, \mlAlignAirbnbVone{} of Airbnb, and
+\mlAlignAsvsVone{} of ASVS---whose CSV requirements were silently unreachable
+and whose prose yields no review calls---collapsing rule-routed detection to
+\mliteDetAgentsVone, \mliteDetAirbnbVone, and \mliteDetAsvsVone{} respectively.
+Root-causing showed the failure is extraction-bound, not method-bound: after
+generalizing the harvester (requirement-level sectioning for CSV sources,
+imperative rules, generalized identifier cues, a code-block sentinel that keeps
+quotes verbatim) and matching on assertion+quote content words, alignment
+coverage reaches \mlAlignReact{} / \mlAlignAgents{} / \mlAlignAirbnb{} /
+\mlAlignAsvs{}, and rule-routed detection recovers to \mliteDetAirbnb{}
+(Airbnb), \mliteDetAgents{} (Agents SDK---above its full-spec baseline), and
+\mliteDetAsvs{} (ASVS) at near-zero false positives, unchanged by verification
+gates. Knowledge organization transfers when, and only when, its extraction and
+alignment infrastructure is ported; the port itself is bounded, deterministic,
+and auditable work---the residual gap (ASVS detection still below zero-shot)
+is the pipeline's current frontier.
 
 \subsection{RQ3: Error Taxonomy}
 We classify every false positive and false negative of five configurations into
@@ -208,7 +218,13 @@ scale: on Airbnb, B1's residual ``false positives'' are mostly \emph{true}
 style violations outside each compliant case's annotated rule scope (e.g.,
 double-quoted strings in a file scoped to the references rule)---with the whole
 guide in context, a reviewer reviews everything it can, so single-rule case
-scoping systematically converts true findings into benchmark FPs.
+scoping systematically converts true findings into benchmark FPs. A
+structural taxonomy over the full B0/B1 rerun (16 runs) adds a class the pilot
+could not see: \emph{conservative empty review}---100 false negatives where the
+model returns zero findings on a violation, concentrated in DeepSeek B1
+(React 20, ASVS 14, Agents SDK 11) and rare in MiniMax B1, which over-flags
+instead. Over-suppression and over-flagging are two models' answers to the
+same question.
 
 \begin{table}[t]
 \centering

@@ -35,7 +35,9 @@ def _csv_sections(body: str) -> list[dict]:
         if chapter not in groups:
             groups[chapter] = []
             order.append(chapter)
-        groups[chapter].append(f"{req_id}: {desc}")
+        # 保留原始行（含 "(Lx)"）——章节文本是引句溯源的唯一真源，
+        # 任何重组都会让提取引句不再逐字（I7：asvs 门 1 全灭的直接原因）。
+        groups[chapter].append(m.group(0))
     for chapter in order:
         text = "\n".join(groups[chapter])
         if len(text) < 40:

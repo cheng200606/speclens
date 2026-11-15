@@ -26,6 +26,13 @@
     "b3": "rq4-b3-dd6d88f4ebfe"
   },
   "b2": "litmus-b2-bd4dfc99b0ae",
+  "mlite-v1": {
+    "_comment": "I6 提取器 v1（React 形）的 M-lite run，供 RQ2 两版本对比；v2 走 find_i6 最新",
+    "react19": "i6-react19-ds-mlite-48c8673c88a1",
+    "agents-sdk": "i6-agents-sdk-ds-mlite-d84620b01010",
+    "airbnb": "i6-airbnb-ds-mlite-1b416ddc3153",
+    "asvs": "i6-asvs-ds-mlite-19afc8e29b32"
+  },
   "i6": {
     "discover": true
   }

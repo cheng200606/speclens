@@ -325,6 +325,22 @@ def gen_macros(m: dict) -> str:
             return "\\textbf{TODO}"
         return f"{r['summary']['detection_rate']:.3f}"
 
+    # 提取器 v1（I6 历史 run，manifest 固定）→ RQ2 两版本对比
+    def _ml_v1_align(spec: str) -> str:
+        rid = m.get("mlite-v1", {}).get(spec, "")
+        r = load(rid) if rid else None
+        if r is None:
+            return "\\textbf{TODO}"
+        a = json.loads((r["dir"] / "rules_diagnostic.json").read_text(encoding="utf-8"))["alignment"]
+        return f"{a['n_matched']}/{a['n_canonical']}"
+
+    def _ml_v1_det(spec: str) -> str:
+        rid = m.get("mlite-v1", {}).get(spec, "")
+        r = load(rid) if rid else None
+        if r is None:
+            return "\\textbf{TODO}"
+        return f"{r['summary']['detection_rate']:.3f}"
+
     def _spec_n(spec: str) -> int:
         return sum(
             1 for d in (ROOT / "bench" / "cases" / spec).iterdir() if d.is_dir()
@@ -364,6 +380,13 @@ def gen_macros(m: dict) -> str:
         f"\\newcommand{{\\mliteDetAgents}}{{{_ml_det('agents-sdk')}}}",
         f"\\newcommand{{\\mliteDetAirbnb}}{{{_ml_det('airbnb')}}}",
         f"\\newcommand{{\\mliteDetAsvs}}{{{_ml_det('asvs')}}}",
+        f"\\newcommand{{\\mlAlignReactVone}}{{{_ml_v1_align('react19')}}}",
+        f"\\newcommand{{\\mlAlignAgentsVone}}{{{_ml_v1_align('agents-sdk')}}}",
+        f"\\newcommand{{\\mlAlignAirbnbVone}}{{{_ml_v1_align('airbnb')}}}",
+        f"\\newcommand{{\\mlAlignAsvsVone}}{{{_ml_v1_align('asvs')}}}",
+        f"\\newcommand{{\\mliteDetAgentsVone}}{{{_ml_v1_det('agents-sdk')}}}",
+        f"\\newcommand{{\\mliteDetAirbnbVone}}{{{_ml_v1_det('airbnb')}}}",
+        f"\\newcommand{{\\mliteDetAsvsVone}}{{{_ml_v1_det('asvs')}}}",
         "",
     ]
     return "\n".join(lines)
