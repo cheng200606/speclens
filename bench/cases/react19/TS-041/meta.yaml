@@ -1,0 +1,14 @@
+case_id: TS-041
+verdict: violation
+difficulty: medium
+rule_ids: [R-002]
+origin: synthetic
+files: ["code/ContactForm.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-002]
+    notes: "表单提交走 onSubmit+setState，未用 Actions。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-002]

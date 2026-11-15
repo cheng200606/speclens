@@ -23,7 +23,7 @@ def test_load_spec_react19():
 def test_load_all_cases():
     cases = load_cases(CASES_DIR)
     by_id = {c.meta.case_id: c.meta.resolved.verdict.value for c in cases}
-    assert len(by_id) == 40  # TS-001..TS-040（I2 扩样后）
+    assert len(by_id) == 50  # TS-001..TS-050（I5 react19 扩充后）
     assert by_id["TS-001"] == "violation"
     assert by_id["TS-002"] == "compliant"
     assert by_id["TS-005"] == "borderline"
@@ -38,8 +38,8 @@ def test_load_all_cases():
     assert by_id["TS-036"] == "borderline"
     assert by_id["TS-040"] == "violation"
     # verdict 分布（I2 扩样后：合规占比 ≥30%）
-    assert sum(v == "violation" for v in by_id.values()) == 23
-    assert sum(v == "compliant" for v in by_id.values()) == 13
+    assert sum(v == "violation" for v in by_id.values()) == 28
+    assert sum(v == "compliant" for v in by_id.values()) == 18
     assert sum(v == "borderline" for v in by_id.values()) == 4
 
 

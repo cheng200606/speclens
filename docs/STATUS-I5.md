@@ -21,7 +21,16 @@
 - **airbnb 规则库 v1 草案**：airbnb-001…008（引用/解构/默认参数/箭头函数/单引号/
   严格相等/多行大括号），引句逐字 8/8；**首批 10 案例**（JS-001…010，5v/5c，
   origin=synthetic 待人工复核）。基准总量：68 案例 / 3/4 规范有样本。
-- 240 目标差距：~172 条（agents-sdk 与 asvs 未建样、react19 扩充、mined 管线未建）。
+- **agents-sdk 规则库 v1**：agents-001…008（output_type/动态 instructions/guardrails
+  并行与阻塞/工具 docstring/FunctionTool 错误处理/每目的地一 handoff/ModelInputData），
+  引句逐字 8/8；**首批 8 案例**（PY-001…008，4v/4c）。
+- **asvs 规则库 v1**：asvs-V6.2.9/V6.2.12/V1.1.2/V3.3.3/V7.3.1/V7.4.5/V6.5.1/V5.2.1
+  （密码长度/泄露检查/输出编码/cookie 前缀/会话超时/管理员吊销/OTP 一次性/上传限长），
+  引句逐字 8/8（来源 CSV req_description）；**首批 16 案例**（PY-101…116，8v/8c）。
+- **react19 扩充 10 例**（TS-041…050，5v/5c）：react19 达 50 条。
+- **基准现状：102 案例 / 4 规范全部有样本**（react19 50、agents-sdk 8、airbnb 10、asvs 16、
+  仓库集 18 为 RQ4 辅助口径）。对 240 目标差距 ~138 条（mined 管线与剩余 synthetic 批次）。
+  全部 AI 起草案例 origin=synthetic，待人工复核后升 handcrafted。
 
 ## 3. RQ4 深跑（进行中）
 

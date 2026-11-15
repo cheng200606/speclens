@@ -1,0 +1,14 @@
+case_id: TS-043
+verdict: violation
+difficulty: easy
+rule_ids: [R-006]
+origin: synthetic
+files: ["code/theme.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-006]
+    notes: "use() 在普通工具函数（非组件/Hook）中调用。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-006]

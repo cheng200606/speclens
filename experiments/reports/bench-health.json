@@ -1,7 +1,7 @@
 {
   "n_specs_total": 4,
-  "n_specs_with_cases": 1,
-  "n_cases_total": 40,
+  "n_specs_with_cases": 5,
+  "n_cases_total": 102,
   "kappa_verdict_overall": null,
   "kappa_available": false,
   "rule_set_jaccard_overall": null,
@@ -12,23 +12,175 @@
     "full_cases_min": 240
   },
   "per_spec": {
-    "react19": {
-      "n_cases": 40,
+    "agents-sdk": {
+      "n_cases": 8,
       "verdict": {
-        "violation": 23,
-        "compliant": 13,
+        "violation": 4,
+        "compliant": 4
+      },
+      "difficulty": {
+        "medium": 4,
+        "easy": 2,
+        "hard": 2
+      },
+      "origin": {
+        "synthetic": 8
+      },
+      "hard_ratio": 0.25,
+      "n_dual_annotated": 0,
+      "dual_coverage": 0.0,
+      "kappa_verdict": null,
+      "kappa_available": false,
+      "rule_set_jaccard": null,
+      "canonical_rule_ids": [
+        "agents-001",
+        "agents-002",
+        "agents-003",
+        "agents-004",
+        "agents-005",
+        "agents-006",
+        "agents-007",
+        "agents-008"
+      ],
+      "unknown_referenced_rule_ids": [],
+      "quote_check": {
+        "n_rules": 8,
+        "n_verbatim": 8,
+        "missing_quote_rule_ids": [],
+        "all_verbatim": true
+      }
+    },
+    "airbnb": {
+      "n_cases": 10,
+      "verdict": {
+        "violation": 5,
+        "compliant": 5
+      },
+      "difficulty": {
+        "easy": 10
+      },
+      "origin": {
+        "synthetic": 10
+      },
+      "hard_ratio": 0.0,
+      "n_dual_annotated": 0,
+      "dual_coverage": 0.0,
+      "kappa_verdict": null,
+      "kappa_available": false,
+      "rule_set_jaccard": null,
+      "canonical_rule_ids": [
+        "airbnb-001",
+        "airbnb-002",
+        "airbnb-003",
+        "airbnb-004",
+        "airbnb-005",
+        "airbnb-006",
+        "airbnb-007",
+        "airbnb-008"
+      ],
+      "unknown_referenced_rule_ids": [],
+      "quote_check": {
+        "n_rules": 8,
+        "n_verbatim": 8,
+        "missing_quote_rule_ids": [],
+        "all_verbatim": true
+      }
+    },
+    "asvs": {
+      "n_cases": 16,
+      "verdict": {
+        "violation": 8,
+        "compliant": 8
+      },
+      "difficulty": {
+        "easy": 4,
+        "medium": 10,
+        "hard": 2
+      },
+      "origin": {
+        "synthetic": 16
+      },
+      "hard_ratio": 0.125,
+      "n_dual_annotated": 0,
+      "dual_coverage": 0.0,
+      "kappa_verdict": null,
+      "kappa_available": false,
+      "rule_set_jaccard": null,
+      "canonical_rule_ids": [
+        "asvs-V1.1.2",
+        "asvs-V3.3.3",
+        "asvs-V5.2.1",
+        "asvs-V6.2.12",
+        "asvs-V6.2.9",
+        "asvs-V6.5.1",
+        "asvs-V7.3.1",
+        "asvs-V7.4.5"
+      ],
+      "unknown_referenced_rule_ids": [],
+      "quote_check": {
+        "n_rules": 8,
+        "n_verbatim": 8,
+        "missing_quote_rule_ids": [],
+        "all_verbatim": true
+      }
+    },
+    "react19": {
+      "n_cases": 50,
+      "verdict": {
+        "violation": 28,
+        "compliant": 18,
         "borderline": 4
       },
       "difficulty": {
-        "medium": 16,
-        "easy": 14,
-        "hard": 10
+        "medium": 25,
+        "easy": 16,
+        "hard": 9
       },
       "origin": {
-        "handcrafted": 17,
-        "synthetic": 23
+        "handcrafted": 40,
+        "synthetic": 10
       },
-      "hard_ratio": 0.25,
+      "hard_ratio": 0.18,
+      "n_dual_annotated": 0,
+      "dual_coverage": 0.0,
+      "kappa_verdict": null,
+      "kappa_available": false,
+      "rule_set_jaccard": null,
+      "canonical_rule_ids": [
+        "R-001",
+        "R-002",
+        "R-003",
+        "R-004",
+        "R-005",
+        "R-006",
+        "R-007",
+        "R-008",
+        "R-009",
+        "R-010",
+        "R-011",
+        "R-012"
+      ],
+      "unknown_referenced_rule_ids": [],
+      "quote_check": {
+        "n_rules": 12,
+        "n_verbatim": 12,
+        "missing_quote_rule_ids": [],
+        "all_verbatim": true
+      }
+    },
+    "react19-repo": {
+      "n_cases": 18,
+      "verdict": {
+        "violation": 9,
+        "compliant": 9
+      },
+      "difficulty": {
+        "medium": 18
+      },
+      "origin": {
+        "synthetic": 18
+      },
+      "hard_ratio": 0.0,
       "n_dual_annotated": 0,
       "dual_coverage": 0.0,
       "kappa_verdict": null,
@@ -58,9 +210,12 @@
     }
   },
   "warnings": [
+    "airbnb: hard 样本占比 0.0% < 20%",
+    "asvs: hard 样本占比 12.5% < 20%",
+    "react19: hard 样本占比 18.0% < 20%",
+    "react19-repo: hard 样本占比 0.0% < 20%",
     "Cohen's κ 无法计算：全量集双标样本为 0（plan.md §2.3.3 降级预案尚未执行）",
-    "样本总数 40 < 全量集最低线 240",
-    "仅 1/4 份规范有标注样本，RQ1/RQ3 跨规范分解不可行"
+    "样本总数 102 < 全量集最低线 240"
   ],
   "schema_errors": []
 }

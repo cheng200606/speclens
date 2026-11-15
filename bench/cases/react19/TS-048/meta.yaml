@@ -1,0 +1,14 @@
+case_id: TS-048
+verdict: compliant
+difficulty: medium
+rule_ids: [R-012]
+origin: synthetic
+files: ["code/cart.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-012]
+    notes: "乐观 reducer 纯函数，符合 R-012。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-012]

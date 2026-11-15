@@ -1,0 +1,14 @@
+case_id: TS-042
+verdict: compliant
+difficulty: medium
+rule_ids: [R-002]
+origin: synthetic
+files: ["code/ContactForm.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-002]
+    notes: "提交交由 form action（useActionState），符合 R-002。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-002]

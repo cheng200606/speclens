@@ -1,0 +1,14 @@
+case_id: TS-046
+verdict: compliant
+difficulty: medium
+rule_ids: [R-009]
+origin: synthetic
+files: ["code/Avatar.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-009]
+    notes: "Promise 交给 use，不读 status/value，符合 R-009。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-009]
