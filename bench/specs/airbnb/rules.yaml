@@ -1,0 +1,91 @@
+# SpecLens-Bench · airbnb 冻结规则库（v1 草案，2026-11-15；I5 跨规范扩样第一批）
+#
+# 与 react19/rules.yaml 同构：quote 为快照逐字子串（validate_quotes 校验），
+# ID 命名空间 airbnb-NNN（annotation-guide §4）。level：指南条目为祈使句
+# （Use ...），映射 MUST。首批 8 条为引用/解构/参数/引号/相等/括号类，
+# 后续批次（I5）补齐异步与剩余章节。
+
+spec_id: airbnb
+frozen: "2026-11-15"
+source: "bench/specs/airbnb/snapshot/airbnb-javascript-readme.md"
+rules:
+  - id: airbnb-001
+    level: MUST
+    category: T1-style
+    trigger:
+      scenario: "声明引用一律用 const，避免 var"
+      ast_cues: []
+    assertion: "声明引用一律用 const，避免 var"
+    source_span:
+      section: "line 2.1"
+      quote: "Use `const` for all of your references; avoid using `var`."
+  - id: airbnb-002
+    level: MUST
+    category: T1-style
+    trigger:
+      scenario: "访问并使用对象的多个属性时用对象解构"
+      ast_cues: []
+    assertion: "访问并使用对象的多个属性时用对象解构"
+    source_span:
+      section: "line 5.1"
+      quote: "Use object destructuring when accessing and using multiple properties of an object"
+  - id: airbnb-003
+    level: MUST
+    category: T1-style
+    trigger:
+      scenario: "使用数组解构"
+      ast_cues: []
+    assertion: "使用数组解构"
+    source_span:
+      section: "line 5.2"
+      quote: "Use array destructuring"
+  - id: airbnb-004
+    level: MUST
+    category: T1-style
+    trigger:
+      scenario: "用默认参数语法而非修改函数实参"
+      ast_cues: []
+    assertion: "用默认参数语法而非修改函数实参"
+    source_span:
+      section: "line 7.7"
+      quote: "Use default parameter syntax rather than mutating function arguments."
+  - id: airbnb-005
+    level: MUST
+    category: T1-style
+    trigger:
+      scenario: "匿名内联回调用箭头函数记法"
+      ast_cues: []
+    assertion: "匿名内联回调用箭头函数记法"
+    source_span:
+      section: "line 8.1"
+      quote: "When you must use an anonymous function (as when passing an inline callback), use arrow function notation."
+  - id: airbnb-006
+    level: MUST
+    category: T1-style
+    trigger:
+      scenario: "字符串用单引号"
+      ast_cues: []
+    assertion: "字符串用单引号"
+    source_span:
+      section: "line 6.1"
+      quote: "Use single quotes `''` for strings."
+  - id: airbnb-007
+    level: MUST
+    category: T1-style
+    trigger:
+      scenario: "全等比较用 === 与 !=="
+      ast_cues: []
+    assertion: "全等比较用 === 与 !=="
+    source_span:
+      section: "line 15.1"
+      quote: "Use `===` and `!==` over `==` and `!=`."
+  - id: airbnb-008
+    level: MUST
+    category: T1-style
+    trigger:
+      scenario: "多行语句块必须加大括号"
+      ast_cues: []
+    assertion: "多行语句块必须加大括号"
+    source_span:
+      section: "line 16.1"
+      quote: "Use braces with all multiline blocks."

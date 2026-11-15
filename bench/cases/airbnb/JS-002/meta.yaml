@@ -1,0 +1,14 @@
+case_id: JS-002
+verdict: compliant
+difficulty: easy
+rule_ids: [airbnb-001]
+origin: synthetic
+files: ["code/reference.js"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [airbnb-001]
+    notes: "全部引用使用 const，无 var。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [airbnb-001]

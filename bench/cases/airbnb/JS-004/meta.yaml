@@ -1,0 +1,14 @@
+case_id: JS-004
+verdict: compliant
+difficulty: easy
+rule_ids: [airbnb-002]
+origin: synthetic
+files: ["code/profile.js"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [airbnb-002]
+    notes: "使用对象解构取多个属性，符合 5.1。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [airbnb-002]

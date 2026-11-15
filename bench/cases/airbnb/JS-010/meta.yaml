@@ -1,0 +1,14 @@
+case_id: JS-010
+verdict: compliant
+difficulty: easy
+rule_ids: [airbnb-008]
+origin: synthetic
+files: ["code/policy.js"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [airbnb-008]
+    notes: "多行块均加大括号，符合 16.1。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [airbnb-008]

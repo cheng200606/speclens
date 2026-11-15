@@ -1,0 +1,14 @@
+case_id: JS-003
+verdict: violation
+difficulty: easy
+rule_ids: [airbnb-002]
+origin: synthetic
+files: ["code/profile.js"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [airbnb-002]
+    notes: "重复访问对象多个属性而未用对象解构，违反 5.1。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [airbnb-002]

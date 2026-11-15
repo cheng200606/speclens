@@ -1,0 +1,14 @@
+case_id: JS-001
+verdict: violation
+difficulty: easy
+rule_ids: [airbnb-001]
+origin: synthetic
+files: ["code/reference.js"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [airbnb-001]
+    notes: "用 var 声明引用，违反 2.1（应使用 const）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [airbnb-001]
