@@ -1,0 +1,32 @@
+{
+  "_comment": "论文表格的 canonical run 固定清单（gen_tables.py 消费）。历史 run 以 ID 固定保证再生成确定性；i6-* run 自动发现（见 gen_tables.find_i6）。",
+  "litmus40": {
+    "ds": {
+      "b0": "litmus-b0-5f5dfcc1e01e",
+      "b1": "litmus-b1-9bf71b835496",
+      "mlite": "litmus-mlite-e86ebe663681",
+      "mverified": "litmus-mverified-4ec0c8febcb8"
+    },
+    "mx": {
+      "b0": "litmus-minimax-b0-ed4c7cdb4d51",
+      "b1": "litmus-minimax-b1-2b3fafe1154a",
+      "mlite": "litmus-minimax-mlite-e122e867d6f7",
+      "mverified": "litmus-minimax-mverified-5c084c57a98a"
+    }
+  },
+  "budget-ladder": {
+    "b1-full": "litmus-b1-9bf71b835496",
+    "b1-120k": "litmus-b1-budget120k-83cc1b40edca",
+    "b1-60k": "litmus-b1-budget60k-9f7831fcc5c1",
+    "b1-30k": "litmus-b1-budget30k-a91db6409137"
+  },
+  "rq4-repo": {
+    "b1": "rq4-b1-d68ae172b9c5",
+    "mlite": "rq4-mlite-0e0f0452a32a",
+    "b3": "rq4-b3-dd6d88f4ebfe"
+  },
+  "b2": "litmus-b2-bd4dfc99b0ae",
+  "i6": {
+    "discover": true
+  }
+}

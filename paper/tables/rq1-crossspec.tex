@@ -1,0 +1,18 @@
+\begin{tabular}{llrrrrrr}
+\toprule
+ & & \multicolumn{2}{c}{B0 (no spec)} & \multicolumn{2}{c}{B1 (full spec)} & & \\
+Specification & Model & Det.\ \% & FP \% & Det.\ \% & FP \% & $n$ & $p$ (FP) \\
+\midrule
+React 19 & DeepSeek-Flash & 91.0 & 59.2 & 70.2 & 8.2 & 120 & $<$0.001 \\
+React 19 & MiniMax-M3.1-Flash & -- & -- & -- & -- & -- & -- \\
+\addlinespace
+Airbnb JS & DeepSeek-Flash & 63.2 & 0.0 & 100.0 & 21.1 & 38 & 0.125 \\
+Airbnb JS & MiniMax-M3.1-Flash & 94.7 & 10.5 & -- & -- & 38 & -- \\
+\addlinespace
+Agents SDK & DeepSeek-Flash & 56.2 & 31.2 & 31.2 & 6.2 & 32 & 0.219 \\
+Agents SDK & MiniMax-M3.1-Flash & -- & -- & 81.2 & 50.0 & -- & -- \\
+\addlinespace
+OWASP ASVS & DeepSeek-Flash & 45.0 & 40.0 & 30.0 & 5.0 & 40 & 0.016 \\
+OWASP ASVS & MiniMax-M3.1-Flash & -- & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}

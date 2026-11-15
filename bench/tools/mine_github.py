@@ -77,26 +77,77 @@ def _has_cleanup(code: str) -> bool:
     )
 
 
+def _has_listener_effect(code: str) -> bool:
+    """Effect 内 addEventListener（I6 扩展：事件订阅族，R-003 同族）。"""
+    return bool(
+        re.search(r"useEffect\s*\(", code) and re.search(r"addEventListener\s*\(", code)
+    )
+
+
+def _has_listener_cleanup(code: str) -> bool:
+    return bool(
+        re.search(r"removeEventListener\s*\(", code)
+        and re.search(r"return\s*(\(|\w+\s*=>)", code)
+    )
+
+
+def _vet_pair(before: str, after: str) -> bool:
+    """机械 vetting（I6 放宽为双族）：interval/timeout 族或事件订阅族。"""
+    if (
+        _has_effect_interval(before)
+        and _has_cleanup(after)
+        and not _has_cleanup(before)
+    ):
+        return True
+    return bool(
+        _has_listener_effect(before)
+        and _has_listener_cleanup(after)
+        and not _has_listener_cleanup(before)
+    )
+
+
+def _emitted_keys() -> set[tuple[str, str]]:
+    """已 emit 的 mined 案例（repo, sha8），避免重复入样。"""
+    out = set()
+    for meta in (REPO_ROOT / "bench" / "cases" / "react19").glob("TS-*/meta.yaml"):
+        m = re.search(r"修复对挖掘（([^@]+)@([0-9a-f]{8})", meta.read_text(encoding="utf-8"))
+        if m:
+            out.add((m.group(1), m.group(2)))
+    return out
+
+
 QUERIES = [
+    # interval/timeout 族
     "clearInterval cleanup fix",
     "useEffect cleanup fix",
     "add clearInterval unmount",
     "clearInterval memory leak fix",
     "useEffect clearInterval unmount",
     "cleanup subscription unmount fix",
-    "removeEventListener cleanup useEffect",
     "fix interval leak",
     "clear timeout unmount fix",
     "cleanup effect memory leak",
     "stop interval on unmount",
     "fix timer cleanup",
+    "setInterval clearInterval react fix",
+    # 事件订阅族（I6 扩展）
+    "addEventListener removeEventListener fix",
+    "removeEventListener useEffect fix",
+    "event listener leak fix",
+    "remove listener on unmount",
+    "cleanup event listener unmount",
+    "fix listener leak react",
+    "unsubscribe on unmount fix",
+    "subscription cleanup unmount fix",
 ]
 
 
-def search_candidates(max_commit_fetch: int = 25) -> list[dict]:
+def search_candidates(max_commit_fetch: int = 25, cap: int = 20) -> list[dict]:
     out: list[dict] = []
+    emitted = _emitted_keys()
+    seen: set[tuple[str, str]] = set(emitted)
     for query in QUERIES:
-        if len(out) >= 8:
+        if len(out) >= cap:
             break
         q = urllib.parse.quote(query)
         try:
@@ -107,8 +158,13 @@ def search_candidates(max_commit_fetch: int = 25) -> list[dict]:
         items = data.get("items", [])
         print(f"query {query!r}: total={data.get('total_count')} fetched={len(items)}")
         for item in items[:max_commit_fetch]:
+            if len(out) >= cap:
+                break
             sha = item["sha"]
             repo = item["repository"]["full_name"]
+            key = (repo, sha[:8])
+            if key in seen:
+                continue
             try:
                 detail = _get(f"https://api.github.com/repos/{repo}/commits/{sha}")
             except Exception as exc:
@@ -116,9 +172,11 @@ def search_candidates(max_commit_fetch: int = 25) -> list[dict]:
                 continue
             for file in detail.get("files", []):
                 patch = file.get("patch") or ""
-                if "setInterval" not in patch and "setTimeout" not in patch:
-                    continue
-                if "clearInterval" not in patch and "clearTimeout" not in patch:
+                if not (
+                    "clearInterval" in patch
+                    or "clearTimeout" in patch
+                    or "removeEventListener" in patch
+                ):
                     continue
                 parent_sha = detail["parents"][0]["sha"]
                 raw_url = f"https://raw.githubusercontent.com/{repo}/{parent_sha}/{file['filename']}"
@@ -131,11 +189,8 @@ def search_candidates(max_commit_fetch: int = 25) -> list[dict]:
                     after = _get_text(after_url)
                 except Exception:
                     continue
-                if (
-                _has_effect_interval(before)
-                and _has_cleanup(after)
-                and not _has_cleanup(before)
-            ):
+                if _vet_pair(before, after):
+                    seen.add(key)
                     out.append({
                         "repo": repo,
                         "commit": sha,
@@ -145,6 +200,7 @@ def search_candidates(max_commit_fetch: int = 25) -> list[dict]:
                         "after": after,
                     })
                     print(f"CANDIDATE {repo}@{sha[:8]} {file['filename']}")
+                    break
                 time.sleep(0.5)
     return out
 

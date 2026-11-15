@@ -1,0 +1,595 @@
+# I6 · 全库 synthetic/mined 案例人工复核清单
+
+生成：`uv run python -m bench.tools.gen_review_checklist`（勿手改本清单结构；
+复核结论写回各案例 meta.yaml：通过 → `origin: handcrafted`，标注 `reviewed_by`；
+不通过 → 修代码或改 claim 后保留 synthetic。全部清零后本清单应输出 0 待复核。）
+
+复核口径（与 I2 复核一致）：
+1. verdict 是否成立（violation 确有规范条文支撑；compliant 确无范围内违规）；
+2. rule_ids 是否是「最贴」的规则（不是沾边就挂）；
+3. 代码是否自洽可运行（无语法错/未定义符号）；
+4. 范围外真实模式不算违规（见 error taxonomy fp-off-scope-true-pattern 口径）。
+**待复核总数：190**（react19/airbnb/agents-sdk/asvs 分组见下）
+
+
+## React 19（R-xxx）（80 待复核）
+
+- [ ] **TS-041** · violation · `R-002` · medium · origin=synthetic · files: code/ContactForm.tsx
+      - claim: 表单提交走 onSubmit+setState，未用 Actions。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-041/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-042** · compliant · `R-002` · medium · origin=synthetic · files: code/ContactForm.tsx
+      - claim: 提交交由 form action（useActionState），符合 R-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-042/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-043** · violation · `R-006` · easy · origin=synthetic · files: code/theme.ts
+      - claim: use() 在普通工具函数（非组件/Hook）中调用。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-043/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-044** · compliant · `R-006` · easy · origin=synthetic · files: code/theme.ts
+      - claim: use() 在自定义 Hook 内调用，符合 R-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-044/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-045** · violation · `R-009` · medium · origin=synthetic · files: code/Avatar.tsx
+      - claim: 读取 promise.value 拼字符串绕过 use。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-045/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-046** · compliant · `R-009` · medium · origin=synthetic · files: code/Avatar.tsx
+      - claim: Promise 交给 use，不读 status/value，符合 R-009。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-046/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-047** · violation · `R-012` · medium · origin=synthetic · files: code/cart.tsx
+      - claim: 乐观 reducer 依赖外部变量 counter，非纯函数。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-047/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-048** · compliant · `R-012` · medium · origin=synthetic · files: code/cart.tsx
+      - claim: 乐观 reducer 纯函数，符合 R-012。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-048/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-049** · violation · `R-010` · medium · origin=synthetic · files: code/Reactions.tsx
+      - claim: 乐观 setter 在渲染期直接调用。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-049/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-050** · compliant · `R-010` · medium · origin=synthetic · files: code/Reactions.tsx
+      - claim: 乐观 setter 在 startTransition 内调用，符合 R-010。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-050/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-051** · violation · `R-005` · medium · origin=synthetic · files: code/SubmitButton.tsx
+      - claim: 提交前手动 setState 预置成功文案模拟乐观反馈，未用 useOptimistic。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-051/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-052** · compliant · `R-005` · medium · origin=synthetic · files: code/SubmitButton.tsx
+      - claim: 乐观反馈用 useOptimistic 实现并在 Action 中调用 setter。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-052/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-053** · violation · `R-008` · hard · origin=synthetic · files: code/LocaleBar.tsx
+      - claim: 服务端渲染读取 browser 值的组件不在任何 Suspense 边界内。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-053/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-054** · compliant · `R-008` · hard · origin=synthetic · files: code/LocaleBar.tsx
+      - claim: 调用 use(browserLocales()) 的组件被 Suspense 边界包裹，SSR 可用。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-054/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-055** · compliant · `R-001` · medium · origin=synthetic · files: code/Activity.tsx
+      - claim: 取数走 use() 与缓存 fetcher，无 Effect 手动取数。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-055/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-056** · violation · `R-001` · medium · origin=synthetic · files: code/Activity.tsx
+      - claim: useEffect + setState 手动取数（无缓存、无清理），未用 use()。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-056/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-057** · violation · `R-006` · easy · origin=synthetic · files: code/profile.ts
+      - claim: use() 在普通回调函数中调用，非组件/Hook。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-057/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-058** · compliant · `R-006` · easy · origin=synthetic · files: code/profile.ts
+      - claim: use() 在自定义 Hook 内调用，符合 R-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-058/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-059** · compliant · `R-007` · hard · origin=synthetic · files: code/Query.tsx
+      - claim: 按参数键控的缓存 Promise 交给 use，重渲染复用同一实例。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-059/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-060** · compliant · `R-003` · medium · origin=synthetic · files: code/Ticker.tsx
+      - claim: Effect 建立事件订阅并返回清理函数。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-060/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-061** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（juffalx/Mesobe-NEXT-JS@5022a911，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/juffalx/Mesobe-NEXT-JS/commit/5022a911df8800127c3a0062ffd09b850379caa9（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-061/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-062** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（adm01-debug/Promo_Gifts_V4@ff61eec4，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/adm01-debug/Promo_Gifts_V4/commit/ff61eec48743c82f7cd5bec70255062157de578c（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-062/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-063** · violation · `R-001` · medium · origin=synthetic · files: code/Prices.tsx
+      - claim: useEffect 手动取数（变体 A）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-063/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-064** · compliant · `R-001` · medium · origin=synthetic · files: code/Prices.tsx
+      - claim: use() + 键控缓存（变体 A）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-064/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-065** · violation · `R-002` · medium · origin=synthetic · files: code/SignupCard.tsx
+      - claim: onSubmit 手动处理（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-065/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-066** · compliant · `R-002` · medium · origin=synthetic · files: code/SignupCard.tsx
+      - claim: action prop（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-066/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-067** · violation · `R-003` · medium · origin=synthetic · files: code/Presence.tsx
+      - claim: WebSocket 订阅无清理（变体 A）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-067/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-068** · compliant · `R-003` · medium · origin=synthetic · files: code/Presence.tsx
+      - claim: WebSocket 订阅带关闭（变体 A）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-068/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-069** · violation · `R-005` · medium · origin=synthetic · files: code/ReactionPill.tsx
+      - claim: 手动乐观点赞（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-069/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-070** · compliant · `R-005` · medium · origin=synthetic · files: code/ReactionPill.tsx
+      - claim: useOptimistic 点赞（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-070/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-071** · violation · `R-006` · easy · origin=synthetic · files: code/prefs.ts
+      - claim: use() 在普通函数（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-071/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-072** · compliant · `R-006` · easy · origin=synthetic · files: code/prefs.ts
+      - claim: use() 在 usePrefs Hook（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-072/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-073** · violation · `R-007` · medium · origin=synthetic · files: code/Ticker.tsx
+      - claim: use(fetch(...)) 内联（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-073/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-074** · compliant · `R-007` · medium · origin=synthetic · files: code/Ticker.tsx
+      - claim: 键控缓存 + use()（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-074/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-075** · violation · `R-009` · medium · origin=synthetic · files: code/DocMeta.tsx
+      - claim: 读 promise.status 分支（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-075/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-076** · compliant · `R-009` · medium · origin=synthetic · files: code/DocMeta.tsx
+      - claim: use() 直读（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-076/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-077** · violation · `R-010` · medium · origin=synthetic · files: code/Votes.tsx
+      - claim: 乐观 setter 渲染期调用（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-077/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-078** · compliant · `R-010` · medium · origin=synthetic · files: code/Votes.tsx
+      - claim: 乐观 setter 在 Action 内（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-078/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-079** · violation · `R-011` · medium · origin=synthetic · files: code/Renamer.tsx
+      - claim: dispatch 在 await 后的普通回调（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-079/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-080** · compliant · `R-011` · medium · origin=synthetic · files: code/Renamer.tsx
+      - claim: dispatch 在 Action 内（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-080/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-081** · violation · `R-012` · medium · origin=synthetic · files: code/Logger.tsx
+      - claim: 乐观 reducer 写 sessionStorage（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-081/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-082** · compliant · `R-012` · medium · origin=synthetic · files: code/Logger.tsx
+      - claim: 纯乐观 reducer（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-082/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-083** · violation · `R-003` · medium · origin=synthetic · files: code/Reporter.tsx
+      - claim: addEventListener 无清理（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-083/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-084** · compliant · `R-003` · medium · origin=synthetic · files: code/Reporter.tsx
+      - claim: addEventListener 带清理（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-084/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-085** · violation · `R-004` · medium · origin=synthetic · files: code/Gate.tsx
+      - claim: Hook 在条件分支内（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-085/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-086** · compliant · `R-004` · medium · origin=synthetic · files: code/Gate.tsx
+      - claim: Hook 在条件分支外（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-086/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-087** · violation · `R-002` · medium · origin=synthetic · files: code/VoteForm.tsx
+      - claim: 手动表单（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-087/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-088** · compliant · `R-002` · medium · origin=synthetic · files: code/VoteForm.tsx
+      - claim: action prop（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-088/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-089** · violation · `R-008` · hard · origin=synthetic · files: code/GeoHint.tsx
+      - claim: SSR use(browser()) 无边界（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-089/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-090** · compliant · `R-008` · hard · origin=synthetic · files: code/GeoHint.tsx
+      - claim: SSR use(browser()) 有边界（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-090/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-091** · violation · `R-001` · medium · origin=synthetic · files: code/Feed.tsx
+      - claim: useEffect 取数（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-091/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-092** · compliant · `R-001` · medium · origin=synthetic · files: code/Feed.tsx
+      - claim: use() + 缓存（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-092/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-093** · violation · `R-005` · medium · origin=synthetic · files: code/Bookmark.tsx
+      - claim: 手动乐观收藏（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-093/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-094** · compliant · `R-005` · medium · origin=synthetic · files: code/Bookmark.tsx
+      - claim: useOptimistic 收藏（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-094/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-095** · violation · `R-007` · medium · origin=synthetic · files: code/Profile.tsx
+      - claim: use(profileFetch(id)) 未缓存（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-095/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-096** · compliant · `R-007` · medium · origin=synthetic · files: code/Profile.tsx
+      - claim: 键控缓存 use（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-096/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-097** · violation · `R-006` · easy · origin=synthetic · files: code/cart.ts
+      - claim: use() 在 helper（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-097/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-098** · compliant · `R-006` · easy · origin=synthetic · files: code/cart.ts
+      - claim: use() 在 useCartTotal Hook（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-098/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-099** · violation · `R-010` · medium · origin=synthetic · files: code/FollowChip.tsx
+      - claim: 乐观 setter 在渲染期（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-099/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-100** · compliant · `R-010` · medium · origin=synthetic · files: code/FollowChip.tsx
+      - claim: 乐观 setter 在 Action（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-100/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-101** · violation · `R-011` · medium · origin=synthetic · files: code/Inviter.tsx
+      - claim: dispatch 在 promise 回调（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-101/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-102** · compliant · `R-011` · medium · origin=synthetic · files: code/Inviter.tsx
+      - claim: dispatch 在 Action（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-102/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-103** · violation · `R-012` · medium · origin=synthetic · files: code/Undo.tsx
+      - claim: 乐观 updater 引用全局配置（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-103/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-104** · compliant · `R-012` · medium · origin=synthetic · files: code/Undo.tsx
+      - claim: 纯乐观 updater（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-104/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-105** · violation · `R-002` · medium · origin=synthetic · files: code/Newsletter.tsx
+      - claim: 手动订阅表单（新语境）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-105/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-106** · compliant · `R-002` · medium · origin=synthetic · files: code/Newsletter.tsx
+      - claim: action prop 订阅表单（新语境）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-106/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-107** · violation · `R-005` · medium · origin=synthetic · files: code/DeleteCard.tsx
+      - claim: 手动乐观删除（新语境）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-107/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-108** · compliant · `R-005` · medium · origin=synthetic · files: code/DeleteCard.tsx
+      - claim: useOptimistic 删除（新语境）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-108/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-109** · violation · `R-007` · medium · origin=synthetic · files: code/Stats.tsx
+      - claim: use(fetch(...)) 内联（新语境）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-109/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-110** · compliant · `R-007` · medium · origin=synthetic · files: code/Stats.tsx
+      - claim: 缓存 + use()（新语境）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-110/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-111** · violation · `R-011` · medium · origin=synthetic · files: code/Forwarder.tsx
+      - claim: dispatch 在 interval 回调（新语境）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-111/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-112** · compliant · `R-011` · medium · origin=synthetic · files: code/Forwarder.tsx
+      - claim: dispatch 在 Action + interval 正确清理（新语境）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/react19/TS-112/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-113** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（Rohitroy1037/AI-Powered-Investment-Research-Platform@1cb9d70a，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Rohitroy1037/AI-Powered-Investment-Research-Platform/commit/1cb9d70a9dd304c037f882c7f07f83d752dcd540（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-113/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-114** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（Rohitroy1037/AI-Powered-Investment-Research-Platform@1cb9d70a，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Rohitroy1037/AI-Powered-Investment-Research-Platform/commit/1cb9d70a9dd304c037f882c7f07f83d752dcd540（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-114/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-115** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（Rohitroy1037/AI-Powered-Investment-Research-Platform@1cb9d70a，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Rohitroy1037/AI-Powered-Investment-Research-Platform/commit/1cb9d70a9dd304c037f882c7f07f83d752dcd540（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-115/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-116** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（MTES-MCT/monitorfish@af8d67a5，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/MTES-MCT/monitorfish/commit/af8d67a5f4063ee6d0fd2e2b34414588ca658e3d（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-116/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-117** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（MTES-MCT/monitorfish@af8d67a5，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/MTES-MCT/monitorfish/commit/af8d67a5f4063ee6d0fd2e2b34414588ca658e3d（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-117/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-118** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（Rochafelip/concord-mvp@4b00bd1f，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Rochafelip/concord-mvp/commit/4b00bd1f7c47d5b94ef2da3d752b8e03fd206c69（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-118/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-119** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（youngpashkaa/react-template@2b42f5aa，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/youngpashkaa/react-template/commit/2b42f5aa9d464ca9dd457ff1608499e0ff70dc4f（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-119/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-120** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（crimsonCarnival/lrc-studio-client@75db7cb5，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/crimsonCarnival/lrc-studio-client/commit/75db7cb5fd91529aa0d50d99acf0b066b41692ac（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-120/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+
+## Airbnb JS（airbnb-NNN）（38 待复核）
+
+- [ ] **JS-001** · violation · `airbnb-001` · easy · origin=synthetic · files: code/reference.js
+      - claim: 用 var 声明引用，违反 2.1（应使用 const）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-001/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-002** · compliant · `airbnb-001` · easy · origin=synthetic · files: code/reference.js
+      - claim: 全部引用使用 const，无 var。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-002/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-003** · violation · `airbnb-002` · easy · origin=synthetic · files: code/profile.js
+      - claim: 重复访问对象多个属性而未用对象解构，违反 5.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-003/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-004** · compliant · `airbnb-002` · easy · origin=synthetic · files: code/profile.js
+      - claim: 使用对象解构取多个属性，符合 5.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-004/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-005** · violation · `airbnb-004` · easy · origin=synthetic · files: code/greet.js
+      - claim: 在函数体内给实参赋默认值（修改函数实参），违反 7.7。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-005/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-006** · compliant · `airbnb-004` · easy · origin=synthetic · files: code/greet.js
+      - claim: 使用默认参数语法，符合 7.7。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-006/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-007** · violation · `airbnb-007` · easy · origin=synthetic · files: code/compare.js
+      - claim: 使用 == / != 宽松比较，违反 15.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-007/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-008** · compliant · `airbnb-007` · easy · origin=synthetic · files: code/compare.js
+      - claim: 使用 === / !== 严格比较，符合 15.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-008/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-009** · violation · `airbnb-008` · easy · origin=synthetic · files: code/policy.js
+      - claim: 多行 if/for 块无大括号，违反 16.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-009/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-010** · compliant · `airbnb-008` · easy · origin=synthetic · files: code/policy.js
+      - claim: 多行块均加大括号，符合 16.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-010/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-011** · violation · `airbnb-002` · easy · origin=synthetic · files: code/inventory.js
+      - claim: 连续访问对象多个属性而未解构（变体 1），违反 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-011/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-012** · violation · `airbnb-002` · easy · origin=synthetic · files: code/catalog.js
+      - claim: 连续访问对象多个属性而未解构（变体 2），违反 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-012/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-013** · violation · `airbnb-002` · easy · origin=synthetic · files: code/audit.js
+      - claim: 连续访问对象多个属性而未解构（变体 3），违反 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-013/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-014** · violation · `airbnb-002` · easy · origin=synthetic · files: code/orderbook.js
+      - claim: 连续访问对象多个属性而未解构（变体 4），违反 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-014/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-017** · compliant · `airbnb-002` · easy · origin=synthetic · files: code/inventory.js
+      - claim: 对象解构取多属性（变体 1），符合 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-017/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-018** · compliant · `airbnb-002` · easy · origin=synthetic · files: code/catalog.js
+      - claim: 对象解构取多属性（变体 2），符合 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-018/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-019** · compliant · `airbnb-002` · easy · origin=synthetic · files: code/audit.js
+      - claim: 对象解构取多属性（变体 3），符合 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-019/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-020** · compliant · `airbnb-002` · easy · origin=synthetic · files: code/orderbook.js
+      - claim: 对象解构取多属性（变体 4），符合 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-020/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-021** · violation · `airbnb-005` · easy · origin=synthetic · files: code/telemetry.js
+      - claim: 匿名内联回调用 function 记法（变体 1），违反 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-021/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-022** · violation · `airbnb-005` · easy · origin=synthetic · files: code/webhooks.js
+      - claim: 匿名内联回调用 function 记法（变体 2），违反 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-022/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-023** · violation · `airbnb-005` · easy · origin=synthetic · files: code/audit.js
+      - claim: 匿名内联回调用 function 记法（变体 3），违反 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-023/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-024** · violation · `airbnb-005` · easy · origin=synthetic · files: code/sync.js
+      - claim: 匿名内联回调用 function 记法（变体 4），违反 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-024/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-027** · compliant · `airbnb-005` · easy · origin=synthetic · files: code/telemetry.js
+      - claim: 内联回调用箭头函数（变体 1），符合 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-027/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-028** · compliant · `airbnb-005` · easy · origin=synthetic · files: code/webhooks.js
+      - claim: 内联回调用箭头函数（变体 2），符合 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-028/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-029** · compliant · `airbnb-005` · easy · origin=synthetic · files: code/audit.js
+      - claim: 内联回调用箭头函数（变体 3），符合 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-029/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-030** · compliant · `airbnb-005` · easy · origin=synthetic · files: code/sync.js
+      - claim: 内联回调用箭头函数（变体 4），符合 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-030/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-031** · violation · `airbnb-006` · easy · origin=synthetic · files: code/i18n.js
+      - claim: 字符串用双引号（变体 1），违反 airbnb-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-031/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-032** · violation · `airbnb-006` · easy · origin=synthetic · files: code/theme.js
+      - claim: 字符串用双引号（变体 2），违反 airbnb-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-032/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-033** · violation · `airbnb-006` · easy · origin=synthetic · files: code/report.js
+      - claim: 字符串用双引号（变体 3），违反 airbnb-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-033/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-034** · violation · `airbnb-006` · easy · origin=synthetic · files: code/exporter.js
+      - claim: 字符串用双引号（变体 4），违反 airbnb-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-034/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-037** · compliant · `airbnb-006` · easy · origin=synthetic · files: code/i18n.js
+      - claim: 字符串用单引号（变体 1），符合 airbnb-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-037/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-038** · compliant · `airbnb-006` · easy · origin=synthetic · files: code/theme.js
+      - claim: 字符串用单引号（变体 2），符合 airbnb-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-038/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-039** · compliant · `airbnb-006` · easy · origin=synthetic · files: code/report.js
+      - claim: 字符串用单引号（变体 3），符合 airbnb-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-039/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-040** · compliant · `airbnb-006` · easy · origin=synthetic · files: code/exporter.js
+      - claim: 字符串用单引号（变体 4），符合 airbnb-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-040/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-041** · violation · `airbnb-003` · easy · origin=synthetic · files: code/coordinates.js
+      - claim: 多返回值用下标访问而非数组解构，违反 airbnb-003。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-041/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-042** · compliant · `airbnb-003` · easy · origin=synthetic · files: code/coordinates.js
+      - claim: 数组解构，符合 airbnb-003。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-042/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-043** · violation · `airbnb-003` · easy · origin=synthetic · files: code/rgb.js
+      - claim: 下标访问返回数组（变体），违反 airbnb-003。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-043/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **JS-044** · compliant · `airbnb-003` · easy · origin=synthetic · files: code/rgb.js
+      - claim: 数组解构（变体），符合 airbnb-003。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/airbnb/JS-044/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+
+## OpenAI Agents SDK（agents-NNN）（32 待复核）
+
+- [ ] **PY-001** · violation · `agents-001` · medium · origin=synthetic · files: code/summarizer.py
+      - claim: 需要 JSON 结果却不设 output_type，靠手工解析纯文本，违反 agents-001。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-001/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-002** · compliant · `agents-001` · medium · origin=synthetic · files: code/summarizer.py
+      - claim: 设置 output_type 为 Pydantic 模型，得到结构化输出，符合 agents-001。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-002/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-003** · violation · `agents-002` · medium · origin=synthetic · files: code/support.py
+      - claim: 动态 instructions 函数打印提示词却不返回，违反 agents-002（must return the prompt）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-003/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-004** · compliant · `agents-002` · medium · origin=synthetic · files: code/support.py
+      - claim: 动态 instructions 函数返回 prompt 字符串，符合 agents-002。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-004/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-005** · violation · `agents-005` · easy · origin=synthetic · files: code/weather.py
+      - claim: @function_tool 函数没有 docstring，工具描述缺失，违反 agents-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-005/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-006** · compliant · `agents-005` · easy · origin=synthetic · files: code/weather.py
+      - claim: @function_tool 函数带 docstring 描述，符合 agents-005。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-006/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-007** · violation · `agents-006` · hard · origin=synthetic · files: code/patcher.py
+      - claim: 手工构造 FunctionTool 却不在 on_invoke_tool 里处理错误，异常直接外泄，违反 agents-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-007/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-008** · compliant · `agents-006` · hard · origin=synthetic · files: code/patcher.py
+      - claim: on_invoke_tool 内 try/except 处理错误并返回错误信息，符合 agents-006。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-008/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-009** · violation · `agents-007` · hard · origin=synthetic · files: code/router.py
+      - claim: 两个目的地只注册了一个 handoff()，第二个目的地靠指令文字提示模型直接调用，违反 agents-007（每目的地一 handoff）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-009/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-010** · compliant · `agents-007` · hard · origin=synthetic · files: code/router.py
+      - claim: 每个目的地各注册一个 handoff()，模型在两者间选择，符合 agents-007。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-010/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-011** · violation · `agents-008` · medium · origin=synthetic · files: code/rewrite.py
+      - claim: 自定义 model input 回调返回 dict 而非 ModelInputData，违反 agents-008。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-011/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-012** · compliant · `agents-008` · medium · origin=synthetic · files: code/rewrite.py
+      - claim: 回调返回 ModelInputData 且 input 为输入项列表，符合 agents-008。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-012/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-013** · violation · `agents-004` · medium · origin=synthetic · files: code/gatekeeper.py
+      - claim: 意图是省昂贵模型开销却用并行 guardrail（tripwire 触发前模型已启动），违反 agents-004。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-013/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-014** · compliant · `agents-004` · medium · origin=synthetic · files: code/gatekeeper.py
+      - claim: 阻塞式 guardrail（run_in_parallel=False），tripwire 触发时昂贵模型不启动，符合 agents-004。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-014/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-015** · violation · `agents-003` · medium · origin=synthetic · files: code/moderator.py
+      - claim: 对不可信用户输入的筛查放在昂贵模型完成之后，未用 input_guardrails 在输入侧并行校验，违反 agents-003。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-015/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-016** · compliant · `agents-003` · medium · origin=synthetic · files: code/moderator.py
+      - claim: 用 input_guardrails 在 agent 运行的同时对用户输入做校验，符合 agents-003。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-016/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-017** · violation · `agents-001` · medium · origin=synthetic · files: code/extractor.py
+      - claim: 无 output_type（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-017/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-018** · compliant · `agents-001` · medium · origin=synthetic · files: code/extractor.py
+      - claim: output_type 设置（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-018/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-019** · violation · `agents-002` · medium · origin=synthetic · files: code/planner.py
+      - claim: 拼好后未 return（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-019/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-020** · compliant · `agents-002` · medium · origin=synthetic · files: code/planner.py
+      - claim: 返回 prompt（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-020/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-021** · violation · `agents-003` · medium · origin=synthetic · files: code/sentinel.py
+      - claim: 筛查在 agent 之后（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-021/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-022** · compliant · `agents-003` · medium · origin=synthetic · files: code/sentinel.py
+      - claim: input_guardrails（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-022/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-023** · violation · `agents-004` · medium · origin=synthetic · files: code/cost_guard.py
+      - claim: 并行模式（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-023/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-024** · compliant · `agents-004` · medium · origin=synthetic · files: code/cost_guard.py
+      - claim: 阻塞模式（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-024/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-025** · violation · `agents-005` · easy · origin=synthetic · files: code/translate.py
+      - claim: 无 docstring（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-025/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-026** · compliant · `agents-005` · easy · origin=synthetic · files: code/translate.py
+      - claim: 带 docstring（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-026/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-027** · violation · `agents-006` · medium · origin=synthetic · files: code/fetcher_tool.py
+      - claim: 无错误处理（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-027/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-028** · compliant · `agents-006` · medium · origin=synthetic · files: code/fetcher_tool.py
+      - claim: 错误处理（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-028/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-029** · violation · `agents-007` · medium · origin=synthetic · files: code/escalation.py
+      - claim: 三个目的地只注册一个 handoff（新语境），违反 agents-007。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-029/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-030** · compliant · `agents-007` · medium · origin=synthetic · files: code/escalation.py
+      - claim: 每个目的地各一 handoff（新语境），符合 agents-007。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-030/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-031** · violation · `agents-008` · medium · origin=synthetic · files: code/custom_input.py
+      - claim: 回调返回 list 而非 ModelInputData（新语境），违反 agents-008。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-031/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-032** · compliant · `agents-008` · medium · origin=synthetic · files: code/custom_input.py
+      - claim: 回调返回 ModelInputData（新语境），符合 agents-008。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/agents-sdk/PY-032/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+
+## OWASP ASVS 5.0（asvs-V*）（40 待复核）
+
+- [ ] **PY-101** · violation · `asvs-V6.2.9` · easy · origin=synthetic · files: code/register.py
+      - claim: 注册接口 maxlength=20 限制密码长度，不允许 64 字符密码，违反 asvs-V6.2.9。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-101/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-102** · compliant · `asvs-V6.2.9` · easy · origin=synthetic · files: code/register.py
+      - claim: 密码长度上限 128，允许至少 64 字符，符合 asvs-V6.2.9。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-102/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-103** · violation · `asvs-V6.2.12` · medium · origin=synthetic · files: code/register.py
+      - claim: 注册时不做泄露密码库检查，违反 asvs-V6.2.12。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-103/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-104** · compliant · `asvs-V6.2.12` · medium · origin=synthetic · files: code/register.py
+      - claim: 注册时对照泄露密码库校验，符合 asvs-V6.2.12。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-104/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-105** · violation · `asvs-V1.1.2` · medium · origin=synthetic · files: code/render.py
+      - claim: 用户输入未经输出编码直接拼进 HTML，违反 asvs-V1.1.2。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-105/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-106** · compliant · `asvs-V1.1.2` · medium · origin=synthetic · files: code/render.py
+      - claim: 输出经 html.escape 编码后拼入 HTML，符合 asvs-V1.1.2。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-106/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-107** · violation · `asvs-V3.3.3` · easy · origin=synthetic · files: code/session.py
+      - claim: 会话 cookie 无 __Host- 前缀，违反 asvs-V3.3.3。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-107/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-108** · compliant · `asvs-V3.3.3` · easy · origin=synthetic · files: code/session.py
+      - claim: 会话 cookie 使用 __Host- 前缀，符合 asvs-V3.3.3。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-108/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-109** · violation · `asvs-V7.3.1` · medium · origin=synthetic · files: code/session.py
+      - claim: 会话无任何不活动超时/绝对寿命校验，违反 asvs-V7.3.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-109/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-110** · compliant · `asvs-V7.3.1` · medium · origin=synthetic · files: code/session.py
+      - claim: 中间件校验会话不活动超时与绝对寿命，符合 asvs-V7.3.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-110/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-111** · violation · `asvs-V7.4.5` · medium · origin=synthetic · files: code/admin.py
+      - claim: 管理员无法终止特定用户会话（无 revoke 接口），违反 asvs-V7.4.5。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-111/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-112** · compliant · `asvs-V7.4.5` · medium · origin=synthetic · files: code/admin.py
+      - claim: 锁定用户同时吊销其全部活动会话，符合 asvs-V7.4.5。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-112/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-113** · violation · `asvs-V6.5.1` · hard · origin=synthetic · files: code/otp.py
+      - claim: OTP 校验后未失效，可重复使用，违反 asvs-V6.5.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-113/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-114** · compliant · `asvs-V6.5.1` · hard · origin=synthetic · files: code/otp.py
+      - claim: OTP 校验成功即删除（一次性），符合 asvs-V6.5.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-114/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-115** · violation · `asvs-V5.2.1` · medium · origin=synthetic · files: code/upload.py
+      - claim: 上传接口不限制文件大小，违反 asvs-V5.2.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-115/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-116** · compliant · `asvs-V5.2.1` · medium · origin=synthetic · files: code/upload.py
+      - claim: 上传前校验 Content-Length 上限，符合 asvs-V5.2.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-116/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-117** · violation · `asvs-V6.2.10` · medium · origin=synthetic · files: code/password_policy.py
+      - claim: 强制 90 天轮换密码，违反 asvs-V6.2.10（不得要求周期性轮换）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-117/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-118** · compliant · `asvs-V6.2.10` · medium · origin=synthetic · files: code/password_policy.py
+      - claim: 密码有效直至发现泄露或用户主动更换，无强制轮换，符合 asvs-V6.2.10。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-118/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-119** · violation · `asvs-V6.4.3` · hard · origin=synthetic · files: code/reset.py
+      - claim: 忘记密码重置直接建立新会话，绕过已启用的 MFA，违反 asvs-V6.4.3。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-119/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-120** · compliant · `asvs-V6.4.3` · hard · origin=synthetic · files: code/reset.py
+      - claim: 重置流程要求先通过 MFA 再建立会话，符合 asvs-V6.4.3。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-120/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-121** · violation · `asvs-V6.5.4` · medium · origin=synthetic · files: code/otp.py
+      - claim: OTP 为 4 位纯数字（约 13.3 bits），低于 20 bits 熵要求，违反 asvs-V6.5.4。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-121/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-122** · compliant · `asvs-V6.5.4` · medium · origin=synthetic · files: code/otp.py
+      - claim: OTP 为 6 位 base32 字母数字（约 28 bits），符合 asvs-V6.5.4。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-122/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-123** · violation · `asvs-V7.5.2` · medium · origin=synthetic · files: code/sessions.py
+      - claim: 用户无法查看/终止自己的活动会话（无任何用户侧会话管理端点），违反 asvs-V7.5.2。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-123/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-124** · compliant · `asvs-V7.5.2` · medium · origin=synthetic · files: code/sessions.py
+      - claim: 提供查看并二次认证后终止自己全部会话的端点，符合 asvs-V7.5.2。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-124/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-125** · violation · `asvs-V6.2.9` · easy · origin=synthetic · files: code/signup.py
+      - claim: 前端 maxlength=12（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-125/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-126** · compliant · `asvs-V6.2.9` · easy · origin=synthetic · files: code/signup.py
+      - claim: 允许 72 字符（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-126/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-127** · violation · `asvs-V6.2.12` · medium · origin=synthetic · files: code/changepw.py
+      - claim: 改密不做泄露检查（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-127/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-128** · compliant · `asvs-V6.2.12` · medium · origin=synthetic · files: code/changepw.py
+      - claim: 改密对照泄露库（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-128/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-129** · violation · `asvs-V1.1.2` · medium · origin=synthetic · files: code/preview.py
+      - claim: 插值未编码（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-129/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-130** · compliant · `asvs-V1.1.2` · medium · origin=synthetic · files: code/preview.py
+      - claim: html.escape（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-130/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-131** · violation · `asvs-V3.3.3` · easy · origin=synthetic · files: code/auth_cookie.py
+      - claim: 无 __Host- 前缀（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-131/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-132** · compliant · `asvs-V3.3.3` · easy · origin=synthetic · files: code/auth_cookie.py
+      - claim: __Host- 前缀（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-132/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-133** · violation · `asvs-V7.3.1` · medium · origin=synthetic · files: code/api_session.py
+      - claim: 只验签名不校验时效（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-133/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-134** · compliant · `asvs-V7.3.1` · medium · origin=synthetic · files: code/api_session.py
+      - claim: 签名 + 时效（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-134/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-135** · violation · `asvs-V7.4.5` · medium · origin=synthetic · files: code/org_admin.py
+      - claim: 停用不吊销会话（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-135/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-136** · compliant · `asvs-V7.4.5` · medium · origin=synthetic · files: code/org_admin.py
+      - claim: 停用并吊销会话（变体）。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-136/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-137** · violation · `asvs-V6.4.3` · medium · origin=synthetic · files: code/forgot.py
+      - claim: 重置后直接登录态返回（新语境），违反 asvs-V6.4.3。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-137/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-138** · compliant · `asvs-V6.4.3` · medium · origin=synthetic · files: code/forgot.py
+      - claim: 重置后要求重新完整认证（含 MFA），符合 asvs-V6.4.3。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-138/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-139** · violation · `asvs-V6.5.1` · medium · origin=synthetic · files: code/login_otp.py
+      - claim: 登录 OTP 校验通过未消费（新语境），违反 asvs-V6.5.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-139/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **PY-140** · compliant · `asvs-V6.5.1` · medium · origin=synthetic · files: code/login_otp.py
+      - claim: 登录 OTP 一次性消费（新语境），符合 asvs-V6.5.1。（AI 起草，待人工复核后可升 handcrafted。）
+      - VS Code 打开 bench/cases/asvs/PY-140/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。

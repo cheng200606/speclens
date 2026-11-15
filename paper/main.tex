@@ -7,6 +7,7 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
+\input{tables/macros}
 
 \title{SpecLens: Measuring and Improving LLM Code Review\\Against Unseen Specifications}
 \author{Anonymous}
@@ -18,7 +19,7 @@
 \begin{abstract}
 LLM code review is increasingly deployed, but whether a model can review code
 \emph{against a specification it has not been trained on}---and keep doing so
-reliably---remains unmeasured. We present SpecLens-Bench, a benchmark of 240
+reliably---remains unmeasured. We present SpecLens-Bench, a benchmark of \benchN
 cases spanning four real, open-licensed specifications (React 19, OpenAI Agents
 SDK, OWASP ASVS 5.0, Airbnb JavaScript Style Guide), with violation/compliant
 pairs anchored to verbatim specification quotes and a frozen rule-ID namespace
@@ -52,7 +53,7 @@ half is where general capability fails: a strong model asked to ``review this
 code'' flags plausible issues everywhere, because nothing anchors its standard
 to the specification.
 
-SpecLens makes this measurable. We contribute: (1) SpecLens-Bench, 240 cases
+SpecLens makes this measurable. We contribute: (1) SpecLens-Bench, \benchN{} cases
 across four specifications with verbatim-quote rule provenance and a frozen
 rule-ID namespace shared by annotation and engine; (2) a measurement study
 across two production models and six configurations; (3) a six-class error
@@ -62,32 +63,34 @@ review stays bounded---and that a compiled static checker matches the LLM
 baseline at zero marginal cost when the rule set is known.
 
 \section{Related Work}
-\textbf{Rule extraction from standards.} LintCFG compiles natural-language
-coding standards into linter configurations; RulePilot and GPTAid generate
-security rules with LLM agents. These works treat extracted rules as the
-artifact; we measure the end-to-end adherence outcome, including a failure mode
-they do not study: verification gates that remove the wrong rules.
+\textbf{Rule extraction from standards.} LintCFG~\cite{lintcfg2026} compiles
+natural-language coding standards into linter configurations; RulePilot~\cite{rulepilot2025}
+and GPTAid~\cite{gptaid2024} generate security rules with LLM agents. These works
+treat extracted rules as the artifact; we measure the end-to-end adherence outcome,
+including a failure mode they do not study: verification gates that remove the
+wrong rules.
 
-\textbf{LLM code review at scale.} AutoCommenter reports Google's industrial
-deployment; recent benchmarks evaluate review agents on general quality. None
-measure adherence to a specific unseen specification on balanced
-violation/compliant code---our unit of measurement.
+\textbf{LLM code review at scale.} AutoCommenter~\cite{autocommenter2024} reports
+Google's industrial deployment; recent benchmarks evaluate review agents on
+general quality~\cite{crabenchmark2026}. None measure adherence to a specific
+unseen specification on balanced violation/compliant code---our unit of measurement.
 
-\textbf{Grounded review.} Grounded Agentic Review studies conclusion
-faithfulness via adversarial protocols. Our evidence-chain requirement (each
-finding carries the verbatim specification quote) is a lighter-weight,
-benchmark-compatible form of grounding, and our taxonomy is the first to
-quantify where grounding fails.
+\textbf{Grounded review.} Grounded Agentic Review~\cite{groundedreview2026} studies
+conclusion faithfulness via adversarial protocols. Our evidence-chain requirement
+(each finding carries the verbatim specification quote) is a lighter-weight,
+benchmark-compatible form of grounding, and our taxonomy is the first to quantify
+where grounding fails.
 
 \section{The SpecLens-Bench Benchmark}
 \textbf{Specifications.} Four real, open-licensed documents, snapshotted with
-commit pins and licenses: React 19 documentation (CC-BY-4.0), OpenAI Agents SDK
-documentation, OWASP ASVS 5.0 (CC-BY-SA, machine-readable CSV), and the Airbnb
-JavaScript Style Guide (MIT, the ``seen specification'' control). Every rule in
+commit pins and licenses: React 19 documentation~\cite{reactdocs} (CC-BY-4.0),
+OpenAI Agents SDK documentation~\cite{openaisdk}, OWASP ASVS 5.0~\cite{asvs}
+(CC-BY-SA, machine-readable CSV), and the Airbnb JavaScript Style
+Guide~\cite{airbnbjs} (MIT, the ``seen specification'' control). Every rule in
 the frozen bank carries a verbatim quote validated against its snapshot
 (12/12, 8/8, 12/12, and 8/8 respectively).
 
-\textbf{Cases.} 240 cases in violation/compliant/borderline classes with
+\textbf{Cases.} \benchN{} cases in violation/compliant/borderline classes with
 difficulty tiers: 112 React/TSX (including 28 mined from real GitHub fix
 commits), 24 ASVS/Python, 16 Agents SDK/Python, 38 Airbnb/JS, plus a
 repository-gradient auxiliary set for cost experiments. Every case records
@@ -121,20 +124,50 @@ content-hashed, append-only directories.
 \section{Results}
 
 \subsection{RQ1: Specification Adherence (Measurement)}
-Without the specification (B0), the model detects 91.3\% of violations but flags
-6 of 13 compliant files (FP 0.539); with the full specification in context (B1),
-false positives drop to 0.077 (McNemar $p=0.031$) while detection is statistically
+Without the specification (B0), the model detects \dsBzeroDet{} of violations but flags
+6 of 13 compliant files (FP \dsBzeroFP); with the full specification in context (B1),
+false positives drop to \dsBoneFP{} (McNemar $p=\dsMcNemarP$) while detection is statistically
 unchanged. The mechanism, confirmed by our error taxonomy, is that zero-shot review
 substitutes plausible software-engineering standards (error handling, caching,
 concurrency hygiene) for the actual specification---a failure class we call
 \emph{hallucinated standard}, which disappears entirely once the specification is
 present. On the second model (MiniMax-M3.1-Flash) the same class reproduces
-(FP 0.615 $\rightarrow$ 0.231), but suppression is weaker, showing that the
+(FP \mxBzeroFP{} $\rightarrow$ \mxBoneFP), but suppression is weaker, showing that the
 adherence gap is heterogeneous across models.
+
+\begin{table}[t]
+\centering
+\caption{Cross-specification replication of the adherence gap (I6 full rerun:
+B0 vs.\ B1 per specification and model; detection on violations, FP on compliant
+code; $p$ = exact binomial McNemar on the compliant subset, B0 vs.\ B1).}
+\label{tab:rq1-crossspec}
+\input{tables/rq1-crossspec}
+\end{table}
+
+The rerun of the full benchmark (Table~\ref{tab:rq1-crossspec}) shows the FP-suppression
+mechanism replicates on three of four specifications, with a structured exception: on
+the two specifications the models know least deeply (OpenAI Agents SDK, OWASP ASVS),
+in-context specification suppresses false positives \emph{and} over-suppresses
+detection---B1 flags fewer real violations than zero-shot review. On the Airbnb
+control (the one specification whose style conventions are deeply ingrained in
+pretraining) the polarity reverses: B0 commits no false positives at all, and adding
+the specification increases flags on compliant code. Adherence behavior therefore
+depends on the interaction between what the model already believes and what the
+specification demands, not merely on specification presence.
 
 \subsection{RQ2: Does Rule Verification Help?}
 Our verification pipeline (grounding, executability self-review, conflict check)
-does not improve detection over M-lite: 0.870 vs 0.913 on the single-model pilot.
+does not improve detection over M-lite: \mverDetDS{} vs \mliteDetDS{} on the single-model pilot.
+
+\begin{table}[t]
+\centering
+\caption{Verification gates under the fail-open policy (40-case react19 suite;
+tokens = total LLM tokens for the run; $p$ = exact binomial McNemar on the
+violation subset, M-verified vs.\ M-lite).}
+\label{tab:rq2}
+\input{tables/rq2-verification}
+\end{table}
+
 Root-cause analysis over archived per-rule gate reports shows the executability
 gate falsely failed a MUST-level rule whose quote is verbatim from the snapshot
 (grounding 1.0), silently removing it and costing 13 detection points; the same
@@ -143,9 +176,20 @@ fail-open policy---LLM self-review marks rules for human review instead of
 removing them---and conclude that LLM self-review should serve as a review signal,
 not a filter.
 
+The full-benchmark rerun adds a generality limit: the M pipeline does not transfer
+across specifications for free. Under the leak-free \texttt{aligned} regime (the
+returned rule set contains only LLM-synthesized rules; canonical rules never enter),
+alignment coverage falls from \mlAlignReact{} on React 19 to \mlAlignAgents{} on
+Agents SDK, \mlAlignAirbnb{} on Airbnb, and \mlAlignAsvs{} on ASVS---whose
+requirement-style prose yields only two synthesized rules and zero review calls.
+Rule-routed detection collapses accordingly (from \mliteDetDS{} to
+\mliteDetAgents, \mliteDetAirbnb, and \mliteDetAsvs). Knowledge organization's
+advantage is thus bound to its supporting infrastructure (alignment and routing
+curation), which currently must be rebuilt per specification.
+
 \subsection{RQ3: Error Taxonomy}
 We classify every false positive and false negative of five configurations into
-six classes. Beyond hallucinated standards, the notable classes are
+six classes (Table~\ref{tab:rq3}). Beyond hallucinated standards, the notable classes are
 \emph{rule inversion} (a second model inverts a prohibition into a requirement),
 \emph{rule over-generalization} (per-rule review lacking document context flags
 mandated caching as a risk), and \emph{soft-wording misses} (SHOULD-level
@@ -155,17 +199,45 @@ consistently by all five configurations---was resolved by revising the case,
 illustrating how consistent cross-configuration disagreement localizes annotation
 granularity problems.
 
+\begin{table}[t]
+\centering
+\caption{Six-class error taxonomy: per-run counts of FP/FN cases in each class
+(react19 40-case suite, five configurations).}
+\label{tab:rq3}
+\input{tables/rq3-taxonomy}
+\end{table}
+
+
 \subsection{RQ4: Cost and Scale}
 Full-specification review is effective only while the specification fits in
 context: shrinking the budget from 236K to 30K characters collapses detection
-from 0.870 to 0.217 while false positives stay low. On real repository gradients
-(1k/10k/50k-line generated repositories with an embedded violation), B1 consumes
-4.21M tokens for the 18-case suite versus 68K for rule-routed review---a
-62$\times$ gap at identical effectiveness---because routing resolves which files
+from \budFullDet{} to \budThirtyKDet{} while false positives stay low
+(Table~\ref{tab:rq4-ladder}).
+
+\begin{table}[t]
+\centering
+\caption{Context budget ladder (react19 40-case suite): detection collapses as
+the specification is truncated.}
+\label{tab:rq4-ladder}
+\input{tables/rq4-ladder}
+\end{table}
+
+On real repository gradients
+(1k/10k/50k-line generated repositories with an embedded violation, Table~\ref{tab:rq4-repo}),
+B1 consumes 4.21M tokens for the 18-case suite versus 68K for rule-routed
+review---a \repoGap{} gap at identical effectiveness---because routing resolves which files
 a rule applies to and benign files cost nothing. A lexical-retrieval baseline
-reaches 0.478 detection at 1.3\% of B1's cost, and a compiled static checker
+reaches \bTwoDet{} detection at \bTwoCostPct{} of B1's cost, and a compiled static checker
 matches B1's detection and false-positive profile at zero marginal cost,
 delineating when knowledge organization beats context stuffing.
+
+\begin{table}[t]
+\centering
+\caption{Repository gradient (18 RP cases across 1k/10k/50k-line repositories):
+the static checker covers 9 of 12 rules without any LLM call.}
+\label{tab:rq4-repo}
+\input{tables/rq4-repo}
+\end{table}
 
 \section{Threats to Validity}
 \textbf{Construct.} Probe scores show both models are familiar with three of the

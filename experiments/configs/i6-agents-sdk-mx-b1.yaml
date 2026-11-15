@@ -1,0 +1,13 @@
+# I6 全量重跑（gen_i6_configs.py 生成）：agents-sdk × mx × b1
+# MiniMax 中国区端点；M 系列 thinking 常开（无开关），与 minimax 组一致。
+# 密钥：.env（不入配置）。控制变量：同模型组共用 model/temperature/endpoint。
+run_name: i6-agents-sdk-mx-b1
+baseline: b1_full_spec
+cases_dir: bench/cases/agents-sdk
+model: minimax/MiniMax-M3.1-Flash
+temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 180
+litellm_kwargs:
+  api_base: "https://api.minimaxi.com/v1"

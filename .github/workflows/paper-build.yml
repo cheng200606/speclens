@@ -1,0 +1,41 @@
+name: paper-build
+
+on:
+  push:
+    paths: ["paper/**", ".github/workflows/paper-build.yml"]
+  pull_request:
+    paths: ["paper/**"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      # 表格/宏必须由 run 产物再生成（勿信任手抄数字）。experiments/runs 不入库：
+      # CI 无 run 产物时保留仓内已提交的 tables 副本（含 DIGEST.md 溯源），仅验证编译。
+      - name: Regenerate paper tables from run products (if present)
+        run: |
+          if [ -d experiments/runs/litmus-b0-5f5dfcc1e01e ]; then
+            uv run python -m paper.tools.gen_tables
+          else
+            echo "run products not present; using committed tables"
+          fi
+
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: paper/main.tex
+          work_in_root_file_dir: true
+          latexmk_shell_escape: false
+          args: -pdf -interaction=nonstopmode -halt-on-error
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: speclens-paper
+          path: paper/main.pdf
+          if-no-files-found: error
