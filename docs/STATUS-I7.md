@@ -56,10 +56,11 @@ I7 = STATUS-I6 遗留队列：① 跨规范 M 管线改造（I6 D6-4 首项）�
 | agents-sdk-ds | 0.438 | 0.0 | 588 | 0.4375（=） |
 | asvs-ds | 0.0 | 0.05 | 1588 | 0.05（≈；门 0 排除/13 flag） |
 | airbnb-mx | 0.210 | 0.0 | 476 | 0.263（≈，-1 例） |
-| agents-sdk-mx | 重跑中 | | | |
+| agents-sdk-mx | D7-7 停止（verify 2.5h + review ≈13 min/调用，投影 4h+） | | | |
 | asvs-mx | D7-5 停止（351 规则 verify ≈6-12h） | | | |
 
-- 验证关开销：调用 ×1.5-3.5，检出无损——fail-open 政策在 v2 规则集上复现 I4 结论。
+- 验证关开销：调用 ×1.5-3.5，检出无损——fail-open 政策在 v2 规则集上复现 I4 结论
+  （5/6 格实证；两个停止格的补跑列 I8）。
 - asvs 门 1 修复实证：v2a（引句失真）排除 343/351 → v2b 0 排除（D7-6）。
 
 ## 5. I7③ 错误分类学 v1（结构化程序归类，16 个 B0/B1 run 全量）
@@ -87,6 +88,9 @@ I7 = STATUS-I6 遗留队列：① 跨规范 M 管线改造（I6 D6-4 首项）�
 - D7-5：asvs-mx-mverified 中途停止（351 规则 × MiniMax verify ≈ 6-12h，
   基建成本伪影非科学问题）；「验证关不损检出」由 asds/airbnb/agents 三对
   mlite↔mverified 同检出对照承担（DS 三规范 + MX airbnb/agents）。
+- D7-7：agents-sdk-mx-mverified 停止（verify 95 规则 2.5h 后 review 相位
+  ≈13 min/调用，投影 4h+ 只为补一格冗余确认；fail-open 不损检出已在
+  5/6 格成立）。agents-mx-mverified 补跑列 I8。
 - D7-6：CSV 章节文本必须逐字保留原始行（含 "(Lx)"）——首次实现重组行文本
   导致引句失真、门 1 全灭 343/351（det 0.0）；修正后 asvs grounding
   340/351=1.0（min 0.8），全规范 0 条低于门。教训：**溯源行是唯一真源，
