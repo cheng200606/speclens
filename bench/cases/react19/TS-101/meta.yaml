@@ -1,0 +1,14 @@
+case_id: TS-101
+verdict: violation
+difficulty: medium
+rule_ids: [R-011]
+origin: synthetic
+files: ["code/Inviter.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-011]
+    notes: "dispatch 在 promise 回调（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-011]

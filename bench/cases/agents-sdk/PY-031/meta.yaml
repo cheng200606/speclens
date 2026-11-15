@@ -1,0 +1,14 @@
+case_id: PY-031
+verdict: violation
+difficulty: medium
+rule_ids: [agents-008]
+origin: synthetic
+files: ["code/custom_input.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [agents-008]
+    notes: "回调返回 list 而非 ModelInputData（新语境），违反 agents-008。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [agents-008]

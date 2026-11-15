@@ -1,0 +1,14 @@
+case_id: JS-029
+verdict: compliant
+difficulty: easy
+rule_ids: [airbnb-005]
+origin: synthetic
+files: ["code/audit.js"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [airbnb-005]
+    notes: "内联回调用箭头函数（变体 3），符合 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [airbnb-005]

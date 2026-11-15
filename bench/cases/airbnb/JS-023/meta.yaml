@@ -1,0 +1,14 @@
+case_id: JS-023
+verdict: violation
+difficulty: easy
+rule_ids: [airbnb-005]
+origin: synthetic
+files: ["code/audit.js"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [airbnb-005]
+    notes: "匿名内联回调用 function 记法（变体 3），违反 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [airbnb-005]

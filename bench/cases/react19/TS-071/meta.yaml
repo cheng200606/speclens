@@ -1,0 +1,14 @@
+case_id: TS-071
+verdict: violation
+difficulty: easy
+rule_ids: [R-006]
+origin: synthetic
+files: ["code/prefs.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-006]
+    notes: "use() 在普通函数（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-006]

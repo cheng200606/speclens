@@ -1,0 +1,14 @@
+case_id: JS-018
+verdict: compliant
+difficulty: easy
+rule_ids: [airbnb-002]
+origin: synthetic
+files: ["code/catalog.js"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [airbnb-002]
+    notes: "对象解构取多属性（变体 2），符合 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [airbnb-002]

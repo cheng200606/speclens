@@ -1,96 +1,159 @@
-# SpecLens-Bench · asvs 冻结规则库（v1 草案，2026-11-15；I5 跨规范扩样）
-#
-# 来源 CSV 的 req_description 逐字原文；ID = asvs-<req_id>（annotation-guide §4）。
-# 首批 8 条均为代码可测（L2）：密码策略/输出编码/cookie/会话/OTP/上传。
-
 spec_id: asvs
-frozen: "2026-11-15"
-source: "bench/specs/asvs/snapshot/asvs-5.0.0-en.csv"
+frozen: '2026-11-15'
+source: bench/specs/asvs/snapshot/asvs-5.0.0-en.csv
 rules:
-  - id: asvs-V6.2.9
-    level: MUST
-    category: T4-security
-    trigger:
-      scenario: "ASVS V6.2.9：Verify that passwords of at least 64 characters are permitte…"
-      ast_cues: []
-    assertion: "ASVS V6.2.9: Verify that passwords of at least 64 characters are permitted."
-    source_span:
-      section: "req_id V6.2.9"
-      quote: "Verify that passwords of at least 64 characters are permitted."
-
-  - id: asvs-V6.2.12
-    level: MUST
-    category: T4-security
-    trigger:
-      scenario: "ASVS V6.2.12：Verify that passwords submitted during account registration …"
-      ast_cues: []
-    assertion: "ASVS V6.2.12: Verify that passwords submitted during account registration or password changes are checked against a set of breached passwords."
-    source_span:
-      section: "req_id V6.2.12"
-      quote: "Verify that passwords submitted during account registration or password changes are checked against a set of breached passwords."
-
-  - id: asvs-V1.1.2
-    level: MUST
-    category: T4-security
-    trigger:
-      scenario: "ASVS V1.1.2：Verify that the application performs output encoding and esc…"
-      ast_cues: []
-    assertion: "ASVS V1.1.2: Verify that the application performs output encoding and escaping either as a final step before being used by the interpreter for which it is intended or by the interpreter itself."
-    source_span:
-      section: "req_id V1.1.2"
-      quote: "Verify that the application performs output encoding and escaping either as a final step before being used by the interpreter for which it is intended or by the interpreter itself."
-
-  - id: asvs-V3.3.3
-    level: MUST
-    category: T4-security
-    trigger:
-      scenario: "ASVS V3.3.3：Verify that cookies have the '__Host-' prefix for the cookie…"
-      ast_cues: []
-    assertion: "ASVS V3.3.3: Verify that cookies have the '__Host-' prefix for the cookie name unless they are explicitly designed to be shared with other hosts."
-    source_span:
-      section: "req_id V3.3.3"
-      quote: "Verify that cookies have the '__Host-' prefix for the cookie name unless they are explicitly designed to be shared with other hosts."
-
-  - id: asvs-V7.3.1
-    level: MUST
-    category: T4-security
-    trigger:
-      scenario: "ASVS V7.3.1：Verify that there is an inactivity timeout such that re-auth…"
-      ast_cues: []
-    assertion: "ASVS V7.3.1: Verify that there is an inactivity timeout such that re-authentication is enforced according to risk analysis and documented security decisions."
-    source_span:
-      section: "req_id V7.3.1"
-      quote: "Verify that there is an inactivity timeout such that re-authentication is enforced according to risk analysis and documented security decisions."
-
-  - id: asvs-V7.4.5
-    level: MUST
-    category: T4-security
-    trigger:
-      scenario: "ASVS V7.4.5：Verify that application administrators are able to terminate…"
-      ast_cues: []
-    assertion: "ASVS V7.4.5: Verify that application administrators are able to terminate active sessions for an individual user or for all users."
-    source_span:
-      section: "req_id V7.4.5"
-      quote: "Verify that application administrators are able to terminate active sessions for an individual user or for all users."
-
-  - id: asvs-V6.5.1
-    level: MUST
-    category: T4-security
-    trigger:
-      scenario: "ASVS V6.5.1：Verify that lookup secrets, out-of-band authentication reque…"
-      ast_cues: []
-    assertion: "ASVS V6.5.1: Verify that lookup secrets, out-of-band authentication requests or codes, and time-based one-time passwords (TOTPs) are only successfully usable once."
-    source_span:
-      section: "req_id V6.5.1"
-      quote: "Verify that lookup secrets, out-of-band authentication requests or codes, and time-based one-time passwords (TOTPs) are only successfully usable once."
-
-  - id: asvs-V5.2.1
-    level: MUST
-    category: T4-security
-    trigger:
-      scenario: "ASVS V5.2.1：Verify that the application will only accept files of a size…"
-      ast_cues: []
-    assertion: "ASVS V5.2.1: Verify that the application will only accept files of a size which it can process without causing a loss of performance or a denial of service attack."
-    source_span:
-      section: "req_id V5.2.1"
-      quote: "Verify that the application will only accept files of a size which it can process without causing a loss of performance or a denial of service attack."
+- id: asvs-V6.2.9
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V6.2.9：Verify that passwords of at least 64 characters are permitte…
+    ast_cues: []
+  assertion: 'ASVS V6.2.9: Verify that passwords of at least 64 characters are permitted.'
+  source_span:
+    section: req_id V6.2.9
+    quote: Verify that passwords of at least 64 characters are permitted.
+- id: asvs-V6.2.12
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V6.2.12：Verify that passwords submitted during account registration
+      …
+    ast_cues: []
+  assertion: 'ASVS V6.2.12: Verify that passwords submitted during account registration
+    or password changes are checked against a set of breached passwords.'
+  source_span:
+    section: req_id V6.2.12
+    quote: Verify that passwords submitted during account registration or password
+      changes are checked against a set of breached passwords.
+- id: asvs-V1.1.2
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V1.1.2：Verify that the application performs output encoding and
+      esc…
+    ast_cues: []
+  assertion: 'ASVS V1.1.2: Verify that the application performs output encoding and
+    escaping either as a final step before being used by the interpreter for which
+    it is intended or by the interpreter itself.'
+  source_span:
+    section: req_id V1.1.2
+    quote: Verify that the application performs output encoding and escaping either
+      as a final step before being used by the interpreter for which it is intended
+      or by the interpreter itself.
+- id: asvs-V3.3.3
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V3.3.3：Verify that cookies have the '__Host-' prefix for the cookie…
+    ast_cues: []
+  assertion: 'ASVS V3.3.3: Verify that cookies have the ''__Host-'' prefix for the
+    cookie name unless they are explicitly designed to be shared with other hosts.'
+  source_span:
+    section: req_id V3.3.3
+    quote: Verify that cookies have the '__Host-' prefix for the cookie name unless
+      they are explicitly designed to be shared with other hosts.
+- id: asvs-V7.3.1
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V7.3.1：Verify that there is an inactivity timeout such that re-auth…
+    ast_cues: []
+  assertion: 'ASVS V7.3.1: Verify that there is an inactivity timeout such that re-authentication
+    is enforced according to risk analysis and documented security decisions.'
+  source_span:
+    section: req_id V7.3.1
+    quote: Verify that there is an inactivity timeout such that re-authentication
+      is enforced according to risk analysis and documented security decisions.
+- id: asvs-V7.4.5
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V7.4.5：Verify that application administrators are able to terminate…
+    ast_cues: []
+  assertion: 'ASVS V7.4.5: Verify that application administrators are able to terminate
+    active sessions for an individual user or for all users.'
+  source_span:
+    section: req_id V7.4.5
+    quote: Verify that application administrators are able to terminate active sessions
+      for an individual user or for all users.
+- id: asvs-V6.5.1
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V6.5.1：Verify that lookup secrets, out-of-band authentication reque…
+    ast_cues: []
+  assertion: 'ASVS V6.5.1: Verify that lookup secrets, out-of-band authentication
+    requests or codes, and time-based one-time passwords (TOTPs) are only successfully
+    usable once.'
+  source_span:
+    section: req_id V6.5.1
+    quote: Verify that lookup secrets, out-of-band authentication requests or codes,
+      and time-based one-time passwords (TOTPs) are only successfully usable once.
+- id: asvs-V5.2.1
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V5.2.1：Verify that the application will only accept files of a
+      size…
+    ast_cues: []
+  assertion: 'ASVS V5.2.1: Verify that the application will only accept files of a
+    size which it can process without causing a loss of performance or a denial of
+    service attack.'
+  source_span:
+    section: req_id V5.2.1
+    quote: Verify that the application will only accept files of a size which it can
+      process without causing a loss of performance or a denial of service attack.
+- id: asvs-V6.2.10
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V6.2.10：Verify that a user's password stays valid until it is discov…
+    ast_cues: []
+  assertion: 'ASVS V6.2.10: Verify that a user''s password stays valid until it is
+    discovered to be compromised or the user rotates it. The application must not
+    require periodic credential rotation.'
+  source_span:
+    section: req_id V6.2.10
+    quote: Verify that a user's password stays valid until it is discovered to be
+      compromised or the user rotates it. The application must not require periodic
+      credential rotation.
+- id: asvs-V6.4.3
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V6.4.3：Verify that a secure process for resetting a forgotten passw…
+    ast_cues: []
+  assertion: 'ASVS V6.4.3: Verify that a secure process for resetting a forgotten
+    password is implemented, that does not bypass any enabled multi-factor authentication
+    mechanisms.'
+  source_span:
+    section: req_id V6.4.3
+    quote: Verify that a secure process for resetting a forgotten password is implemented,
+      that does not bypass any enabled multi-factor authentication mechanisms.
+- id: asvs-V6.5.4
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V6.5.4：Verify that lookup secrets and out-of-band authentication
+      co…
+    ast_cues: []
+  assertion: 'ASVS V6.5.4: Verify that lookup secrets and out-of-band authentication
+    codes have a minimum of 20 bits of entropy (typically 4 random alphanumeric characters
+    or 6 random digits is sufficient).'
+  source_span:
+    section: req_id V6.5.4
+    quote: Verify that lookup secrets and out-of-band authentication codes have a
+      minimum of 20 bits of entropy (typically 4 random alphanumeric characters or
+      6 random digits is sufficient).
+- id: asvs-V7.5.2
+  level: MUST
+  category: T4-security
+  trigger:
+    scenario: ASVS V7.5.2：Verify that users are able to view and (having authenticated…
+    ast_cues: []
+  assertion: 'ASVS V7.5.2: Verify that users are able to view and (having authenticated
+    again with at least one factor) terminate any or all currently active sessions.'
+  source_span:
+    section: req_id V7.5.2
+    quote: Verify that users are able to view and (having authenticated again with
+      at least one factor) terminate any or all currently active sessions.

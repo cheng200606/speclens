@@ -1,0 +1,14 @@
+case_id: TS-112
+verdict: compliant
+difficulty: medium
+rule_ids: [R-011]
+origin: synthetic
+files: ["code/Forwarder.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-011]
+    notes: "dispatch 在 Action + interval 正确清理（新语境）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-011]

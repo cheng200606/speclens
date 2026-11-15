@@ -1,0 +1,14 @@
+case_id: PY-125
+verdict: violation
+difficulty: easy
+rule_ids: [asvs-V6.2.9]
+origin: synthetic
+files: ["code/signup.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [asvs-V6.2.9]
+    notes: "前端 maxlength=12（变体）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [asvs-V6.2.9]

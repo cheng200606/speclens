@@ -27,7 +27,7 @@ def test_mean_jaccard():
 
 def test_bench_health_reports_real_gaps_honestly():
     report = validate_bench(REPO)
-    assert report["n_cases_total"] == 130  # react19 62（含 2 mined）+ 仓库集 18 + airbnb 10 + agents-sdk 16 + asvs 24
+    assert report["n_cases_total"] == 240  # 目标线达成：4 规范 222 + 仓库集 18
     aux = report["per_spec"]["react19-repo"]
     assert aux["n_cases"] == 18  # RQ4 仓库梯度集（共享 react19 规则库）
     assert report["n_specs_total"] == 4
@@ -35,12 +35,11 @@ def test_bench_health_reports_real_gaps_honestly():
     assert report["kappa_available"] is False
     assert report["kappa_verdict_overall"] is None
     r19 = report["per_spec"]["react19"]
-    assert r19["hard_ratio"] == 0.1935  # 12/62（I5 两批扩充 + 2 mined 均为 medium）
+    assert r19["hard_ratio"] == 0.125  # 14/112（I5 四批）
     assert r19["n_dual_annotated"] == 0
     assert r19["quote_check"]["all_verbatim"] is True
     assert r19["unknown_referenced_rule_ids"] == []
     joined = " ".join(report["warnings"])
     # 40 已达生死实验最低线，故不再报该警告；仍如实报告 κ 缺失 / 全量集缺口 / 单规范
     assert "κ" in joined
-    assert "130 < 全量集最低线 240" in joined
     assert "生死实验最低线" not in joined

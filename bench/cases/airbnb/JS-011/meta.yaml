@@ -1,0 +1,14 @@
+case_id: JS-011
+verdict: violation
+difficulty: easy
+rule_ids: [airbnb-002]
+origin: synthetic
+files: ["code/inventory.js"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [airbnb-002]
+    notes: "连续访问对象多个属性而未解构（变体 1），违反 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [airbnb-002]

@@ -1,0 +1,14 @@
+case_id: PY-138
+verdict: compliant
+difficulty: medium
+rule_ids: [asvs-V6.4.3]
+origin: synthetic
+files: ["code/forgot.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V6.4.3]
+    notes: "重置后要求重新完整认证（含 MFA），符合 asvs-V6.4.3。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V6.4.3]

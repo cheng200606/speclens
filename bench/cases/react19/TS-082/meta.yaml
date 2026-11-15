@@ -1,0 +1,14 @@
+case_id: TS-082
+verdict: compliant
+difficulty: medium
+rule_ids: [R-012]
+origin: synthetic
+files: ["code/Logger.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-012]
+    notes: "纯乐观 reducer（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-012]

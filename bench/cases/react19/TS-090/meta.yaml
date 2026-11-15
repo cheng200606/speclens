@@ -1,0 +1,14 @@
+case_id: TS-090
+verdict: compliant
+difficulty: hard
+rule_ids: [R-008]
+origin: synthetic
+files: ["code/GeoHint.tsx"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-008]
+    notes: "SSR use(browser()) 有边界（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-008]

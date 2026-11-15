@@ -1,0 +1,14 @@
+case_id: JS-028
+verdict: compliant
+difficulty: easy
+rule_ids: [airbnb-005]
+origin: synthetic
+files: ["code/webhooks.js"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [airbnb-005]
+    notes: "内联回调用箭头函数（变体 2），符合 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [airbnb-005]

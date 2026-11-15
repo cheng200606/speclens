@@ -1,0 +1,14 @@
+case_id: TS-098
+verdict: compliant
+difficulty: easy
+rule_ids: [R-006]
+origin: synthetic
+files: ["code/cart.ts"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [R-006]
+    notes: "use() 在 useCartTotal Hook（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [R-006]

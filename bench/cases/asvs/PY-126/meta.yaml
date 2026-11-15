@@ -1,0 +1,14 @@
+case_id: PY-126
+verdict: compliant
+difficulty: easy
+rule_ids: [asvs-V6.2.9]
+origin: synthetic
+files: ["code/signup.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V6.2.9]
+    notes: "允许 72 字符（变体）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V6.2.9]

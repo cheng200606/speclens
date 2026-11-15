@@ -1,0 +1,14 @@
+case_id: PY-022
+verdict: compliant
+difficulty: medium
+rule_ids: [agents-003]
+origin: synthetic
+files: ["code/sentinel.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [agents-003]
+    notes: "input_guardrails（变体）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [agents-003]

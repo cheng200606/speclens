@@ -1,0 +1,14 @@
+case_id: TS-103
+verdict: violation
+difficulty: medium
+rule_ids: [R-012]
+origin: synthetic
+files: ["code/Undo.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-012]
+    notes: "乐观 updater 引用全局配置（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-012]

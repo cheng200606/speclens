@@ -1,0 +1,14 @@
+case_id: PY-027
+verdict: violation
+difficulty: medium
+rule_ids: [agents-006]
+origin: synthetic
+files: ["code/fetcher_tool.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [agents-006]
+    notes: "无错误处理（变体）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [agents-006]

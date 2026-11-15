@@ -1,0 +1,14 @@
+case_id: TS-087
+verdict: violation
+difficulty: medium
+rule_ids: [R-002]
+origin: synthetic
+files: ["code/VoteForm.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-002]
+    notes: "手动表单（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-002]

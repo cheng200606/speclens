@@ -1,0 +1,14 @@
+case_id: PY-136
+verdict: compliant
+difficulty: medium
+rule_ids: [asvs-V7.4.5]
+origin: synthetic
+files: ["code/org_admin.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [asvs-V7.4.5]
+    notes: "停用并吊销会话（变体）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [asvs-V7.4.5]

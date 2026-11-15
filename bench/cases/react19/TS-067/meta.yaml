@@ -1,0 +1,14 @@
+case_id: TS-067
+verdict: violation
+difficulty: medium
+rule_ids: [R-003]
+origin: synthetic
+files: ["code/Presence.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "WebSocket 订阅无清理（变体 A）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]

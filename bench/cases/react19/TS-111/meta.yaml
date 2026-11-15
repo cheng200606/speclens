@@ -1,0 +1,14 @@
+case_id: TS-111
+verdict: violation
+difficulty: medium
+rule_ids: [R-011]
+origin: synthetic
+files: ["code/Forwarder.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-011]
+    notes: "dispatch 在 interval 回调（新语境）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-011]

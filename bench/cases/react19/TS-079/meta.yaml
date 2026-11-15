@@ -1,0 +1,14 @@
+case_id: TS-079
+verdict: violation
+difficulty: medium
+rule_ids: [R-011]
+origin: synthetic
+files: ["code/Renamer.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-011]
+    notes: "dispatch 在 await 后的普通回调（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-011]

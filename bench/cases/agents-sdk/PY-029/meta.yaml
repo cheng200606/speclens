@@ -1,0 +1,14 @@
+case_id: PY-029
+verdict: violation
+difficulty: medium
+rule_ids: [agents-007]
+origin: synthetic
+files: ["code/escalation.py"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [agents-007]
+    notes: "三个目的地只注册一个 handoff（新语境），违反 agents-007。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [agents-007]

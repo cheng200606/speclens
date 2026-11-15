@@ -1,0 +1,14 @@
+case_id: PY-032
+verdict: compliant
+difficulty: medium
+rule_ids: [agents-008]
+origin: synthetic
+files: ["code/custom_input.py"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [agents-008]
+    notes: "回调返回 ModelInputData（新语境），符合 agents-008。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [agents-008]

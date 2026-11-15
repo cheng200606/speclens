@@ -1,0 +1,14 @@
+case_id: JS-039
+verdict: compliant
+difficulty: easy
+rule_ids: [airbnb-006]
+origin: synthetic
+files: ["code/report.js"]
+annotations:
+  - annotator: A
+    verdict: compliant
+    rule_ids: [airbnb-006]
+    notes: "字符串用单引号（变体 3），符合 airbnb-006。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: compliant
+  rule_ids: [airbnb-006]

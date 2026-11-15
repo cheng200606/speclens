@@ -1,0 +1,14 @@
+case_id: TS-075
+verdict: violation
+difficulty: medium
+rule_ids: [R-009]
+origin: synthetic
+files: ["code/DocMeta.tsx"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-009]
+    notes: "读 promise.status 分支（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-009]

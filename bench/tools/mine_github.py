@@ -63,13 +63,11 @@ def _get(url: str, accept: str = "application/vnd.github+json") -> dict:
 
 
 def _has_effect_interval(code: str) -> bool:
-    """useEffect 内建立 setInterval/setTimeout 且无对应清理。"""
+    """Effect 内建立 setInterval/setTimeout（无论是否清理）。"""
     effect = re.search(r"useEffect\s*\(", code)
     if not effect:
         return False
-    interval = re.search(r"setInterval\s*\(|setTimeout\s*\(", code)
-    cleanup = re.search(r"clearInterval\s*\(|clearTimeout\s*\(", code)
-    return bool(interval and not cleanup)
+    return bool(re.search(r"setInterval\s*\(|setTimeout\s*\(", code))
 
 
 def _has_cleanup(code: str) -> bool:
@@ -84,10 +82,18 @@ QUERIES = [
     "useEffect cleanup fix",
     "add clearInterval unmount",
     "clearInterval memory leak fix",
+    "useEffect clearInterval unmount",
+    "cleanup subscription unmount fix",
+    "removeEventListener cleanup useEffect",
+    "fix interval leak",
+    "clear timeout unmount fix",
+    "cleanup effect memory leak",
+    "stop interval on unmount",
+    "fix timer cleanup",
 ]
 
 
-def search_candidates(max_commit_fetch: int = 12) -> list[dict]:
+def search_candidates(max_commit_fetch: int = 25) -> list[dict]:
     out: list[dict] = []
     for query in QUERIES:
         if len(out) >= 8:
@@ -125,7 +131,11 @@ def search_candidates(max_commit_fetch: int = 12) -> list[dict]:
                     after = _get_text(after_url)
                 except Exception:
                     continue
-                if _has_effect_interval(before) and _has_cleanup(after):
+                if (
+                _has_effect_interval(before)
+                and _has_cleanup(after)
+                and not _has_cleanup(before)
+            ):
                     out.append({
                         "repo": repo,
                         "commit": sha,
