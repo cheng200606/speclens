@@ -4,15 +4,16 @@
 Specification & Model & Det.\ \% & FP \% & Det.\ \% & FP \% & $n$ & $p$ (FP) \\
 \midrule
 React 19 & DeepSeek-Flash & 91.0 & 59.2 & 70.2 & 8.2 & 120 & $<$0.001 \\
-React 19 & MiniMax-M3.1-Flash & -- & -- & -- & -- & -- & -- \\
+React 19 & MiniMax-M3.1-Flash & 94.0 & 73.5 & 83.6 & 22.4 & 120$^{e}$ & $<$0.001 \\
 \addlinespace
 Airbnb JS & DeepSeek-Flash & 63.2 & 0.0 & 100.0 & 21.1 & 38 & 0.125 \\
-Airbnb JS & MiniMax-M3.1-Flash & 94.7 & 10.5 & -- & -- & 38 & -- \\
+Airbnb JS & MiniMax-M3.1-Flash & 94.7 & 10.5 & 100.0 & 73.7 & 38 & $<$0.001 \\
 \addlinespace
 Agents SDK & DeepSeek-Flash & 56.2 & 31.2 & 31.2 & 6.2 & 32 & 0.219 \\
-Agents SDK & MiniMax-M3.1-Flash & -- & -- & 81.2 & 50.0 & -- & -- \\
+Agents SDK & MiniMax-M3.1-Flash & 93.8 & 93.8 & 81.2 & 50.0 & 32 & 0.039 \\
 \addlinespace
 OWASP ASVS & DeepSeek-Flash & 45.0 & 40.0 & 30.0 & 5.0 & 40 & 0.016 \\
-OWASP ASVS & MiniMax-M3.1-Flash & -- & -- & -- & -- & -- & -- \\
+OWASP ASVS & MiniMax-M3.1-Flash & 85.0 & 70.0 & 95.0 & 75.0 & 40 & 1.000 \\
+\multicolumn{8}{l}{\footnotesize $^{e}$ provider-failure cases (4 total) counted as failures per the error accounting} \\
 \bottomrule
 \end{tabular}

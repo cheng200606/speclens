@@ -27,7 +27,7 @@ def test_mean_jaccard():
 
 def test_bench_health_reports_real_gaps_honestly():
     report = validate_bench(REPO)
-    assert report["n_cases_total"] == 248  # 240 目标 + 8 mined 扩量
+    assert report["n_cases_total"] == 258  # 240 主套件 + 18 仓库辅助（I6 后含 20 mined）
     aux = report["per_spec"]["react19-repo"]
     assert aux["n_cases"] == 18  # RQ4 仓库梯度集（共享 react19 规则库）
     assert report["n_specs_total"] == 4
@@ -35,7 +35,7 @@ def test_bench_health_reports_real_gaps_honestly():
     assert report["kappa_available"] is False
     assert report["kappa_verdict_overall"] is None
     r19 = report["per_spec"]["react19"]
-    assert r19["hard_ratio"] == 0.1167  # 14/120（新增 mined 均 medium）
+    assert r19["hard_ratio"] == 0.1077  # 14/130（I6 miner v2 新增均 medium）
     assert r19["n_dual_annotated"] == 0
     assert r19["quote_check"]["all_verbatim"] is True
     assert r19["unknown_referenced_rule_ids"] == []

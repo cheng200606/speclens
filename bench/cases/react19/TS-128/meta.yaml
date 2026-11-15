@@ -1,0 +1,14 @@
+case_id: TS-128
+verdict: violation
+difficulty: medium
+rule_ids: [R-003]
+origin: mined
+files: ["code/hook.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "GitHub 修复对挖掘（Maxessien/MxAnimeV2@24d2f330，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Maxessien/MxAnimeV2/commit/24d2f33027299e700aa483051b605da6492a6594（AI 挖掘，待人工复核。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]

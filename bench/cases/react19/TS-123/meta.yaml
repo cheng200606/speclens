@@ -1,0 +1,14 @@
+case_id: TS-123
+verdict: violation
+difficulty: medium
+rule_ids: [R-003]
+origin: mined
+files: ["code/hook.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "GitHub 修复对挖掘（geek-beyond/trend_diary@1b02e1c0，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/geek-beyond/trend_diary/commit/1b02e1c052e7d39a15c41d208df6331d4c35ab33（AI 挖掘，待人工复核。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]

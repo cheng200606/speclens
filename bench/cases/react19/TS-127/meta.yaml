@@ -1,0 +1,14 @@
+case_id: TS-127
+verdict: violation
+difficulty: medium
+rule_ids: [R-003]
+origin: mined
+files: ["code/hook.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "GitHub 修复对挖掘（bhill78/Mentis@9e19e1c4，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/bhill78/Mentis/commit/9e19e1c430438ea8d4e9bf617465d79f2e752bd3（AI 挖掘，待人工复核。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]

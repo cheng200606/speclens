@@ -101,6 +101,15 @@ def cell(run: dict | None, key: str) -> str:
     return pct(run["summary"].get(key))
 
 
+def n_cell(run: dict | None) -> str:
+    """n 列：报告 provider 失败（case error）标记，错误按失败计入指标（I4 口径）。"""
+    if run is None:
+        return "--"
+    n = run["summary"]["n_cases"]
+    errs = run["summary"].get("n_case_errors", 0)
+    return f"{n}$^{{e}}$" if errs else str(n)
+
+
 def tokens(run: dict | None) -> str:
     if run is None:
         return "--"
@@ -124,12 +133,16 @@ def gen_rq1_crossspec(m: dict) -> str:
         "Specification & Model & Det.\\ \\% & FP \\% & Det.\\ \\% & FP \\% & $n$ & $p$ (FP) \\\\",
         "\\midrule",
     ]
+    total_errs = 0
     for spec in ("react19", "airbnb", "agents-sdk", "asvs"):
         for mk in ("ds", "mx"):
             b0 = find_i6(spec, mk, "b0") if m.get("i6", {}).get("discover", True) else None
             b1 = find_i6(spec, mk, "b1") if m.get("i6", {}).get("discover", True) else None
+            for r in (b0, b1):
+                if r:
+                    total_errs += r["summary"].get("n_case_errors", 0)
             s = b0["summary"] if b0 else None
-            n = s["n_cases"] if s else "--"
+            n = n_cell(b0) if s else "--"
             p = p_b0_b1_compliant(b0, b1)
             rows.append(
                 f"{SPEC_LABEL[spec]} & {MODEL_LABEL[mk]} & "
@@ -139,6 +152,11 @@ def gen_rq1_crossspec(m: dict) -> str:
             )
         if spec != "asvs":
             rows.append("\\addlinespace")
+    if total_errs:
+        rows.append(
+            "\\multicolumn{8}{l}{\\footnotesize $^{e}$ provider-failure cases "
+            f"({total_errs} total) counted as failures per the error accounting}} \\\\"
+        )
     rows += ["\\bottomrule", "\\end{tabular}", ""]
     return "\n".join(rows)
 
@@ -259,6 +277,23 @@ def gen_macros(m: dict) -> str:
         for d in spec_dir.iterdir()
         if d.is_dir()
     )
+    # origin 口径（react19 mined 计数入稿防手抄）
+    origin_counts = {"handcrafted": 0, "synthetic": 0, "mined": 0}
+    n_react_mined = 0
+    for spec_dir in (ROOT / "bench" / "cases").iterdir():
+        if not spec_dir.is_dir() or spec_dir.name.endswith("-repo"):
+            continue
+        for case_dir in spec_dir.iterdir():
+            meta = case_dir / "meta.yaml"
+            if not meta.exists():
+                continue
+            text = meta.read_text(encoding="utf-8")
+            for o in origin_counts:
+                if f"origin: {o}" in text:
+                    origin_counts[o] += 1
+                    if o == "mined" and spec_dir.name == "react19":
+                        n_react_mined += 1
+                    break
     p_ds = (
         pfmt(mcnemar_between_runs(ds_b0["dir"], ds_b1["dir"], subset="compliant")["p_mcnemar_exact"])
         if ds_b0 and ds_b1
@@ -290,9 +325,22 @@ def gen_macros(m: dict) -> str:
             return "\\textbf{TODO}"
         return f"{r['summary']['detection_rate']:.3f}"
 
+    def _spec_n(spec: str) -> int:
+        return sum(
+            1 for d in (ROOT / "bench" / "cases" / spec).iterdir() if d.is_dir()
+        )
+
     lines = [
         "% 由 paper/tools/gen_tables.py 生成；勿手改（重跑脚本即刷新）。",
         f"\\newcommand{{\\benchN}}{{{n_cases}}}",
+        f"\\newcommand{{\\nReact}}{{{_spec_n('react19')}}}",
+        f"\\newcommand{{\\nAirbnb}}{{{_spec_n('airbnb')}}}",
+        f"\\newcommand{{\\nAgents}}{{{_spec_n('agents-sdk')}}}",
+        f"\\newcommand{{\\nAsvs}}{{{_spec_n('asvs')}}}",
+        f"\\newcommand{{\\benchNHand}}{{{origin_counts['handcrafted']}}}",
+        f"\\newcommand{{\\benchNSyn}}{{{origin_counts['synthetic']}}}",
+        f"\\newcommand{{\\benchNMined}}{{{origin_counts['mined']}}}",
+        f"\\newcommand{{\\reactNMined}}{{{n_react_mined}}}",
         f"\\newcommand{{\\dsBzeroDet}}{{{_detpct(ds_b0)}}}",
         f"\\newcommand{{\\dsBzeroFP}}{{{_frac(ds_b0, 'false_positive_rate')}}}",
         f"\\newcommand{{\\dsBoneDet}}{{{_detpct(ds_b1)}}}",

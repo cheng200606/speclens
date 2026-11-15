@@ -1,0 +1,14 @@
+case_id: TS-121
+verdict: violation
+difficulty: medium
+rule_ids: [R-003]
+origin: mined
+files: ["code/hook.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "GitHub 修复对挖掘（gitload222-dev/meridian@c0129609，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/gitload222-dev/meridian/commit/c01296092da426cb4dd021346b0215ac0caf5953（AI 挖掘，待人工复核。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]

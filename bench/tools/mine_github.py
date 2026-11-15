@@ -45,6 +45,9 @@ def _token() -> str:
     return ""
 
 
+_BACKOFF_S = (2, 5, 10, 20, 40, 60)
+
+
 def _get(url: str, accept: str = "application/vnd.github+json") -> dict:
     key = _token()
     req = urllib.request.Request(url, headers={
@@ -52,14 +55,14 @@ def _get(url: str, accept: str = "application/vnd.github+json") -> dict:
         "Accept": accept,
         "User-Agent": "speclens-miner",
     })
-    for attempt in range(4):
+    for attempt, delay in enumerate(_BACKOFF_S):
         try:
             with urllib.request.urlopen(req, timeout=30) as r:
                 return json.load(r)
-        except Exception as exc:
-            if attempt == 3:
+        except Exception:
+            if attempt == len(_BACKOFF_S) - 1:
                 raise
-            time.sleep(2 ** attempt)
+            time.sleep(delay)
 
 
 def _has_effect_interval(code: str) -> bool:
@@ -211,8 +214,14 @@ def _get_text(url: str) -> str:
         "Authorization": f"Bearer {key}" if key else "",
         "User-Agent": "speclens-miner",
     })
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return r.read().decode("utf-8", errors="replace")
+    for attempt, delay in enumerate(_BACKOFF_S):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.read().decode("utf-8", errors="replace")
+        except Exception:
+            if attempt == len(_BACKOFF_S) - 1:
+                raise
+            time.sleep(delay)
 
 
 def emit(candidates: list[dict]) -> None:

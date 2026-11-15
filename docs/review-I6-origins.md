@@ -9,10 +9,10 @@
 2. rule_ids 是否是「最贴」的规则（不是沾边就挂）；
 3. 代码是否自洽可运行（无语法错/未定义符号）；
 4. 范围外真实模式不算违规（见 error taxonomy fp-off-scope-true-pattern 口径）。
-**待复核总数：190**（react19/airbnb/agents-sdk/asvs 分组见下）
+**待复核总数：200**（react19/airbnb/agents-sdk/asvs 分组见下）
 
 
-## React 19（R-xxx）（80 待复核）
+## React 19（R-xxx）（90 待复核）
 
 - [ ] **TS-041** · violation · `R-002` · medium · origin=synthetic · files: code/ContactForm.tsx
       - claim: 表单提交走 onSubmit+setState，未用 Actions。（AI 起草，待人工复核后可升 handcrafted。）
@@ -254,6 +254,36 @@
 - [ ] **TS-120** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
       - claim: GitHub 修复对挖掘（crimsonCarnival/lrc-studio-client@75db7cb5，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/crimsonCarnival/lrc-studio-client/commit/75db7cb5fd91529aa0d50d99acf0b066b41692ac（AI 挖掘，待人工复核。）
       - VS Code 打开 bench/cases/react19/TS-120/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-121** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（gitload222-dev/meridian@c0129609，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/gitload222-dev/meridian/commit/c01296092da426cb4dd021346b0215ac0caf5953（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-121/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-122** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（Viqto0r/matches-task@67421fc7，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Viqto0r/matches-task/commit/67421fc7a9587a7aafe23599728df9c4ab397148（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-122/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-123** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（geek-beyond/trend_diary@1b02e1c0，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/geek-beyond/trend_diary/commit/1b02e1c052e7d39a15c41d208df6331d4c35ab33（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-123/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-124** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（SirAntonySir/editor@94dbcf62，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/SirAntonySir/editor/commit/94dbcf622c978df9410cd65b0c5e3efc316498e4（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-124/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-125** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（Gel788/A-1-StroimDom2@9673f682，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Gel788/A-1-StroimDom2/commit/9673f682d12251a043881f2d0fb1be500dd69b38（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-125/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-126** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（hivecommons/docs@52812d5b，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/hivecommons/docs/commit/52812d5bcf5a4d683a745d6ccaad43513ef6474f（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-126/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-127** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（bhill78/Mentis@9e19e1c4，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/bhill78/Mentis/commit/9e19e1c430438ea8d4e9bf617465d79f2e752bd3（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-127/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-128** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（Maxessien/MxAnimeV2@24d2f330，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Maxessien/MxAnimeV2/commit/24d2f33027299e700aa483051b605da6492a6594（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-128/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-129** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（ChaJiYoung/ob-crash-game@f99f235e，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/ChaJiYoung/ob-crash-game/commit/f99f235ed21136694b73ddbca37ef06ea3360fa5（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-129/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
+- [ ] **TS-130** · violation · `R-003` · medium · origin=mined · files: code/hook.ts
+      - claim: GitHub 修复对挖掘（quittle/cpd@3b96fd8a，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/quittle/cpd/commit/3b96fd8ad0b82aa6e8ca40cc644264d84ffbf357（AI 挖掘，待人工复核。）
+      - VS Code 打开 bench/cases/react19/TS-130/：先读 meta.yaml 的 claim，再逐条对照 code/ 与规则库引句。
 
 ## Airbnb JS（airbnb-NNN）（38 待复核）
 

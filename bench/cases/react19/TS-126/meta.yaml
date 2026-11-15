@@ -1,0 +1,14 @@
+case_id: TS-126
+verdict: violation
+difficulty: medium
+rule_ids: [R-003]
+origin: mined
+files: ["code/hook.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "GitHub 修复对挖掘（hivecommons/docs@52812d5b，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/hivecommons/docs/commit/52812d5bcf5a4d683a745d6ccaad43513ef6474f（AI 挖掘，待人工复核。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]

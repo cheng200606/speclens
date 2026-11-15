@@ -91,10 +91,12 @@ the frozen bank carries a verbatim quote validated against its snapshot
 (12/12, 8/8, 12/12, and 8/8 respectively).
 
 \textbf{Cases.} \benchN{} cases in violation/compliant/borderline classes with
-difficulty tiers: 112 React/TSX (including 28 mined from real GitHub fix
-commits), 24 ASVS/Python, 16 Agents SDK/Python, 38 Airbnb/JS, plus a
+difficulty tiers: \nReact{} React/TSX (including \reactNMined{} mined from real
+GitHub fix commits), \nAsvs{} ASVS/Python, \nAgents{} Agents SDK/Python,
+\nAirbnb{} Airbnb/JS, plus a
 repository-gradient auxiliary set for cost experiments. Every case records
-\texttt{origin} (handcrafted/synthetic/mined); synthetic cases await independent
+\texttt{origin} (handcrafted \benchNHand / synthetic \benchNSyn / mined
+\benchNMined); synthetic and mined cases await independent
 human review before paper-grade inclusion.
 
 \textbf{Freshness probes.} Each specification ships a 20-question probe.
@@ -144,16 +146,20 @@ code; $p$ = exact binomial McNemar on the compliant subset, B0 vs.\ B1).}
 \input{tables/rq1-crossspec}
 \end{table}
 
-The rerun of the full benchmark (Table~\ref{tab:rq1-crossspec}) shows the FP-suppression
-mechanism replicates on three of four specifications, with a structured exception: on
-the two specifications the models know least deeply (OpenAI Agents SDK, OWASP ASVS),
-in-context specification suppresses false positives \emph{and} over-suppresses
-detection---B1 flags fewer real violations than zero-shot review. On the Airbnb
-control (the one specification whose style conventions are deeply ingrained in
-pretraining) the polarity reverses: B0 commits no false positives at all, and adding
-the specification increases flags on compliant code. Adherence behavior therefore
-depends on the interaction between what the model already believes and what the
-specification demands, not merely on specification presence.
+The rerun of the full benchmark (Table~\ref{tab:rq1-crossspec}) shows both
+mechanisms are model-dependent. On DeepSeek-Flash, specification presence
+suppresses false positives on every specification (e.g., ASVS FP 40.0\,$\rightarrow$\,5.0)
+but \emph{over-suppresses detection} on the two specifications it knows least
+deeply (Agents SDK detection 56.2\,$\rightarrow$\,31.2, ASVS 45.0\,$\rightarrow$\,30.0;
+we verified by hand that the missing detections are empty reviews, not
+truncation artifacts). On MiniMax-M3.1-Flash, zero-shot review starts far more
+flag-happy (FP 10.5--93.8\%), and the specification only partially tames it---on
+Airbnb, in-context specification significantly \emph{increases} false positives
+(10.5\,$\rightarrow$\,73.7, $p<0.001$), whose flags are mostly \emph{true} style
+violations outside each compliant case's annotated rule scope. Adherence
+behavior is therefore an interaction between what the model already believes,
+what the specification demands, and how aggressively the model flags by
+default---not a single directional effect of specification presence.
 
 \subsection{RQ2: Does Rule Verification Help?}
 Our verification pipeline (grounding, executability self-review, conflict check)
@@ -197,7 +203,12 @@ descriptive rules are systematically under-detected). One benchmark artifact---a
 compliant case containing an out-of-scope real violation pattern, flagged
 consistently by all five configurations---was resolved by revising the case,
 illustrating how consistent cross-configuration disagreement localizes annotation
-granularity problems.
+granularity problems. The full-benchmark rerun surfaces the mirror image at
+scale: on Airbnb, B1's residual ``false positives'' are mostly \emph{true}
+style violations outside each compliant case's annotated rule scope (e.g.,
+double-quoted strings in a file scoped to the references rule)---with the whole
+guide in context, a reviewer reviews everything it can, so single-rule case
+scoping systematically converts true findings into benchmark FPs.
 
 \begin{table}[t]
 \centering

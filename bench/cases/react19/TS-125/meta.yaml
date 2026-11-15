@@ -1,0 +1,14 @@
+case_id: TS-125
+verdict: violation
+difficulty: medium
+rule_ids: [R-003]
+origin: mined
+files: ["code/hook.ts"]
+annotations:
+  - annotator: A
+    verdict: violation
+    rule_ids: [R-003]
+    notes: "GitHub 修复对挖掘（Gel788/A-1-StroimDom2@9673f682，机械 vetting：before=Effect 内 interval 无清理）。来源 https://github.com/Gel788/A-1-StroimDom2/commit/9673f682d12251a043881f2d0fb1be500dd69b38（AI 挖掘，待人工复核。）"
+resolved:
+  verdict: violation
+  rule_ids: [R-003]
