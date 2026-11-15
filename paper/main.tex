@@ -54,7 +54,8 @@ substitutes plausible software-engineering standards (error handling, caching,
 concurrency hygiene) for the actual specification---a failure class we call
 \emph{hallucinated standard}, which disappears entirely once the specification is
 present. On the second model (MiniMax-M3.1-Flash) the same class reproduces
-(FP 0.615 $ightarrow$ 0.231), but suppression is weaker, showing that the
+(FP 0.615 $
+ightarrow$ 0.231), but suppression is weaker, showing that the
 adherence gap is heterogeneous across models.
 
 \subsection{RQ2: Does Rule Verification Help?}
@@ -86,7 +87,7 @@ context: shrinking the budget from 236K to 30K characters collapses detection
 from 0.870 to 0.217 while false positives stay low. On real repository gradients
 (1k/10k/50k-line generated repositories with an embedded violation), B1 consumes
 4.21M tokens for the 18-case suite versus 68K for rule-routed review---a
-62$	imes$ gap at identical effectiveness---because routing resolves which files
+62$\times$ gap at identical effectiveness---because routing resolves which files
 a rule applies to and benign files cost nothing. A lexical-retrieval baseline
 reaches 0.478 detection at 1.3\% of B1's cost, and a compiled static checker
 matches B1's detection and false-positive profile at zero marginal cost,
