@@ -1,0 +1,27 @@
+{
+  "version": "v1-manual-1",
+  "date": "2026-11-16",
+  "method": "人工判读 fp-flagged-non-annotated（B1 run 抽样 14 条：每 spec×模型至多 2 条，seed 42）；每条读 finding message + evidence 引句 + 案例源码/标注",
+  "classes": {
+    "true-out-of-scope": "范围外真实违规：findings 描述的模式在案例代码中真实存在且确有规范条文支撑（引句逐字）——单规则案例口径下的系统性『假 FP』",
+    "dubious-hallucinated": "存疑/幻觉：断言无引句支撑、或对 API 的过度推断（如断言 SDK 无某方法）、或与代码事实不符"
+  },
+  "sample": [
+    {"run": "agents-sdk-ds-b1", "case": "PY-008", "verdict": "true-out-of-scope", "note": "on_invoke_tool 同步 vs 文档要求 async（引句逐字）；PY-008 标注 agents-006 合规仅指错误处理"},
+    {"run": "agents-sdk-mx-b1", "case": "PY-002", "verdict": "dubious-hallucinated", "note": "断言 RunResult 无 final_output_as 方法——超出文档引句的否定性断言，无法从规范文本证实"},
+    {"run": "agents-sdk-mx-b1", "case": "PY-022", "verdict": "dubious-hallucinated", "note": "guardrail 函数契约——案例用 agent 形态 guardrail（SDK 另一合法形态），模型把函数形态引句过度推广"},
+    {"run": "airbnb-ds-b1", "case": "JS-008", "verdict": "true-out-of-scope", "note": "代码确用 for 循环遍历数组（已读源码），违反 11.1『不用 iterators』"},
+    {"run": "airbnb-ds-b1", "case": "JS-002", "verdict": "true-out-of-scope", "note": "代码确用双引号字符串（已读源码），违反 6.1 单引号"},
+    {"run": "airbnb-mx-b1", "case": "JS-008", "verdict": "true-out-of-scope", "note": "7.1 具名函数表达式优先于函数声明——声明式写法真实存在"},
+    {"run": "airbnb-mx-b1", "case": "JS-006", "verdict": "true-out-of-scope", "note": "同 7.1，声明式函数"},
+    {"run": "asvs-ds-b1", "case": "PY-116", "verdict": "true-out-of-scope", "note": "已读源码：save(request.headers['x-filename'], body) 路径未消毒——真实路径穿越级违规（V5.3.2 族）"},
+    {"run": "asvs-mx-b1", "case": "PY-128", "verdict": "true-out-of-scope", "note": "改密流程无 8 字符下限（V6.2.1）——新密码参数直接落库"},
+    {"run": "asvs-mx-b1", "case": "PY-134", "verdict": "true-out-of-scope", "note": "会话令牌未验签即使用（V9.1.1）——代码模式相符"},
+    {"run": "react19-ds-b1", "case": "TS-050", "verdict": "dubious-hallucinated", "note": "useOptimistic 以纯 state 形态使用合法（无需 reducer）；模型误读 API"},
+    {"run": "react19-ds-b1", "case": "TS-090", "verdict": "dubious-hallucinated", "note": "合规变体含键控缓存，模型声称『render 期间内联创建 Promise』与代码不符"},
+    {"run": "react19-mx-b1", "case": "TS-078", "verdict": "dubious-hallucinated", "note": "乐观 setter 以计算值设置合法，『应加不应设』为过度推断"},
+    {"run": "react19-mx-b1", "case": "TS-011", "verdict": "dubious-hallucinated", "note": "Promise 类型一致性挑剔，TS-011 已于 2026-11-15 改代码决议"}
+  ],
+  "tally": {"true-out-of-scope": 8, "dubious-hallucinated": 6},
+  "conclusion": "fp-flagged-non-annotated ≈ 57% 范围外真实违规 + 43% 幻觉/过度推断。含义：B0/B1 的『误报』里过半实为真实发现——单规则案例口径系统性把真发现计为 FP；论文 FP 指标应加此口径注"
+}

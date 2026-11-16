@@ -1,0 +1,42 @@
+{
+ "synth": {
+  "spec_id": "airbnb",
+  "model": "deepseek/deepseek-flash",
+  "n_sections_prompted": 12,
+  "n_rules_raw": 46,
+  "n_quotes_verbatim": 44,
+  "n_quotes_invalid": 2,
+  "invalid_examples": [
+   "If for whatever reason you are doing something wild and `parseInt` is your bottleneck and need to use Bitshift for [perf",
+   "Strings: eslint: [`no-new-wrappers`]"
+  ]
+ },
+ "llm_alignment": {
+  "n_canonical": 8,
+  "n_matched": 4,
+  "coverage": 0.5,
+  "unmatched_canonical_ids": [
+   "airbnb-002",
+   "airbnb-003",
+   "airbnb-004",
+   "airbnb-008"
+  ],
+  "n_content_words_llm": 339
+ },
+ "deterministic_alignment": {
+  "n_matched": 7,
+  "n_canonical": 8,
+  "coverage": 0.875
+ },
+ "n_llm_rules": 44,
+ "sample_assertions": [
+  "Avoid single-letter names and use descriptive naming.",
+  "Use camelCase when naming objects, functions, and instances.",
+  "Use PascalCase only when naming constructors or classes.",
+  "Do not use trailing or leading underscores in names.",
+  "Use named function expressions instead of function declarations.",
+  "Wrap immediately invoked function expressions in parentheses.",
+  "Never declare a function in a non-function block such as if or while; assign the function to a variable instea",
+  "Never use the arguments object; opt to use rest syntax instead."
+ ]
+}
