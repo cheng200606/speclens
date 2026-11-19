@@ -720,6 +720,29 @@ def gen_i9_macros() -> list[str]:
             ni = v.get("n_quotes_invalid", 0)
             if nv + ni:
                 out.append(f"\\newcommand{{\\llmVerbatim{key}}}{{{100 * nv / (nv + ni):.0f}\\%}}")
+
+    # I9① scoped-v2 三格（p2 run vs mlite-v3 对照，按 ID 固定配对）
+    m = manifest()
+    p2 = m.get("i9", {}).get("p2", {})
+    v3 = m.get("mlite-v3", {})
+    for key, mk, spec, label in (
+        ("asvs-mx", "asvs-mx", "asvs", "AsvsMx"),
+        ("agents-sdk-mx", "agents-sdk-mx", "agents-sdk", "AgentsMx"),
+        ("asvs-ds", "asvs", "asvs", "AsvsDs"),
+    ):
+        r2 = load(p2.get(key, "")) if p2.get(key) else None
+        r1 = load(v3.get(mk, "")) if v3.get(mk) else None
+        if r2 is None:
+            continue
+        out.append(f"\\newcommand{{\\pTwoDet{label}}}{{{_frac(r2, 'detection_rate')}}}")
+        out.append(f"\\newcommand{{\\pTwoFp{label}}}{{{_frac(r2, 'false_positive_rate')}}}")
+        if r1 is not None:
+            out.append(f"\\newcommand{{\\vThreeFp{label}}}{{{_frac(r1, 'false_positive_rate')}}}")
+            out.append(f"\\newcommand{{\\vThreeDet{label}}}{{{_frac(r1, 'detection_rate')}}}")
+            p = mcnemar_between_runs(r2["dir"], r1["dir"], subset="compliant")
+            out.append(f"\\newcommand{{\\pTwoFpP{label}}}{{{pfmt(p['p_mcnemar_exact'])}}}")
+            pv = mcnemar_between_runs(r2["dir"], r1["dir"], subset="violation")
+            out.append(f"\\newcommand{{\\pTwoDetP{label}}}{{{pfmt(pv['p_mcnemar_exact'])}}}")
     return out
 
 

@@ -32,10 +32,13 @@
 - ✅ I7：M 管线跨规范重构（确定性提取器 v2、CSV 逐字章节化、mverified fail-open 跨格复现）。
 - ✅ I8：routing v3 关闭转移鸿沟（需求 ID 词元过滤 / 复数折叠 / snake_case 词元集 /
   不对称全局配对）；M2 LLM 规则合成原型（引句逐字率 95.7%）；分类学人工抽检。
-- 🔄 I9（进行中）：标注来源分档（`origin: ai-reviewed` 新增，真人签核口径收紧）——
-  见 `docs/LIMITATIONS.md` §2；参考文献逐条 arXiv API 核验（`paper/tools/verify_refs.py`）；
-  实验产物打包（`bench/tools/pack_runs.py`）；matched 全局 FP 削减与 M2 入管线在队列。
-- 测试：`uv run pytest` 全绿（98 passed）。
+- ✅ I9（2026-11-20）：论文完整性收口（引用逐条 arXiv API 核验 / origin 分档
+  `ai-reviewed` / 数字口径统一 / `docs/LIMITATIONS.md`）；matched 全局 FP 的
+  路由层削减被量化否定（三政策×4 规范，缺控制型违规词法不可分），审查层
+  scoped-v2 提示把 agents-mx FP 0.875→0.375（McNemar p=0.008）检出不变；
+  M2 LLM 合成入管线落败于确定性提取器（对齐覆盖是瓶颈）；分类学全量判读
+  84 例（32/84 真实，强烈规范依赖）；PY-004/PY-020 基准缺陷修复。
+- 测试：`uv run pytest` 全绿（99 passed）。
 
 ## 快速开始
 

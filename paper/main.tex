@@ -288,7 +288,20 @@ too), a file-level gate cuts Airbnb coverage by \routAirbnbGateLoss{}, and a
 per-file budget that preserves full coverage retains the entire fallback pool.
 The FP cost of matched-global routing is therefore irreducible at the routing
 layer; the lever moves to the review prompt, which we evaluate as a scoped
-variant below. Second, we wired an LLM rule-synthesis prototype end-to-end
+variant (scope discipline, verbatim rule ids, and a soft calibration nudge---%
+deliberately \emph{without} any absence-suppression instruction, which would
+remove the blind-spot detections the global policy exists to reach). The
+scoped variant moves the over-flagging cells where the cost concentrates:
+Agents SDK FP \vThreeFpAgentsMx{} $\rightarrow$ \pTwoFpAgentsMx{}
+(McNemar $p=\pTwoFpPAgentsMx$ on the compliant subset) with detection
+statistically unchanged (\vThreeDetAgentsMx{} $\rightarrow$ \pTwoDetAgentsMx,
+$p=\pTwoDetPAgentsMx$), and ASVS FP \vThreeFpAsvsMx{} $\rightarrow$
+\pTwoFpAsvsMx{} while detection \emph{gains} a case
+(\vThreeDetAsvsMx{} $\rightarrow$ \pTwoDetAsvsMx; both $p>0.2$). The
+counterweight is honest: under DeepSeek on ASVS the same nudge costs two
+detections (0.900 $\rightarrow$ \pTwoDetAsvsDs, $p=\pTwoDetPAsvsDs$) for a
+negligible FP gain (\pTwoFpAsvsDs). Second, we wired an LLM rule-synthesis
+prototype end-to-end
 (synthesis with constructively-enforced verbatim quotes,
 \llmVerbatimAirbnb{}/\llmVerbatimAgents{} verbatim rate, then the same
 alignment and routing): at equal synthesis budget it \emph{underperforms} the
