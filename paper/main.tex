@@ -278,6 +278,25 @@ reasons---351-rule and 95-rule verification at that model's latency projected
 to multi-hour runs---so the fail-open conclusion there rests on the DeepSeek
 cells and the second model's pilot cell.
 
+We also tested whether the FP cost of the matched-global routing policy can be
+reduced by relevance-budgeting the fallback pairs. Offline, no policy
+survives: gating fallback pairs on rule--code content overlap ($\geq 1$ word)
+collapses annotated-rule routing coverage on ASVS from 40/40 to \routAsvsPoneCov{}
+(absence-type violations---a required control that is missing---share no
+vocabulary with the code, so the blind spot exists at the content-word level
+too), a file-level gate cuts Airbnb coverage by \routAirbnbGateLoss{}, and a
+per-file budget that preserves full coverage retains the entire fallback pool.
+The FP cost of matched-global routing is therefore irreducible at the routing
+layer; the lever moves to the review prompt, which we evaluate as a scoped
+variant below. Second, we wired an LLM rule-synthesis prototype end-to-end
+(synthesis with constructively-enforced verbatim quotes,
+\llmVerbatimAirbnb{}/\llmVerbatimAgents{} verbatim rate, then the same
+alignment and routing): at equal synthesis budget it \emph{underperforms} the
+deterministic extractor on both specs it was tried on (detection
+\llmDetAirbnb{} vs.\ \mliteDetAirbnb{} on Airbnb,
+\llmDetAgents{} vs.\ \mliteDetAgents{} on Agents SDK)---alignment coverage,
+not quote verbatimness, is the bottleneck for synthesis-based rule banks.
+
 \subsection{RQ3: Error Taxonomy}
 On the react19 pilot we classify every false positive and false negative of five
 configurations into seven semantic classes (Table~\ref{tab:rq3-pilot}). Beyond
@@ -313,16 +332,23 @@ Airbnb, B1's residual ``false positives'' are mostly \emph{true}
 style violations outside each compliant case's annotated rule scope (e.g.,
 double-quoted strings in a file scoped to the references rule)---with the whole
 guide in context, a reviewer reviews everything it can, so single-rule case
-scoping systematically converts true findings into benchmark FPs. Manual
-adjudication of a 14-case sample of the
-\emph{flagged-non-annotated} class shows its composition is split: eight of
-fourteen flags are \emph{true} findings outside each case's annotated rule
-scope---including an unsanitized file path built from a user-controlled header
-and a password change without a minimum-length check---while six are
-hallucinated or over-inferred (e.g., asserting an SDK method does not exist,
-or misreading an API's optional form). Benchmark false positives on
-single-rule-scoped cases are therefore roughly half real findings; adherence
-metrics should be read with this scope granularity in mind.
+scoping systematically converts true findings into benchmark FPs.
+Source-verified adjudication of \emph{all} \taxFullN{} distinct
+flagged-non-annotated cases (each load-bearing claim checked against the
+specification snapshot) shows \taxFullTrue{} of them (\taxFullShare{}) carry at
+least one \emph{real, specification-backed} finding outside the annotated
+scope---and the split is heavily specification-dependent:
+\taxFullAirbnb{} on Airbnb (every cited guide section is real),
+\taxFullAsvs{} on ASVS (missing authorization, rate limiting, and
+anti-caching flags map to real requirement text),
+but only \taxFullReact{} on React 19 and \taxFullAgents{} on the Agents SDK,
+where most flags are hallucinated API beliefs (e.g.\ asserting that
+\texttt{startTransition} does not accept async callbacks when the
+documentation's own examples pass them, or that \texttt{useOptimistic}
+requires a reducer that the reference marks optional). Adherence metrics on
+single-rule-scoped cases therefore mix real findings with hallucinated ones at
+a ratio that depends on the specification's subject matter---one more reason
+the benchmark records \texttt{origin} and rule scope per case.
 
 \begin{table}[t]
 \centering

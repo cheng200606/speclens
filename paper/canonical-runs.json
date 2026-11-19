@@ -51,5 +51,17 @@
   },
   "i6": {
     "discover": true
+  },
+  "i9": {
+    "_comment": "I9 实验固定 run（routing 定界对照 / scoped-v2 / llm-aligned）",
+    "llm-synth": {
+      "airbnb": "i9-airbnb-ds-mlite-llm-633243f2fda0",
+      "agents-sdk": "i9-agents-sdk-ds-mlite-llm-efee9edd4710"
+    },
+    "p2": {
+      "asvs-mx": "i9-asvs-mx-mlite-p2-44ef92e94bb1",
+      "agents-sdk-mx": null,
+      "asvs-ds": null
+    }
   }
 }

@@ -1,0 +1,550 @@
+{
+ "version": "v1-full",
+ "date": "2026-11-20",
+ "scope": "all 84 distinct fp-flagged-non-annotated (spec, case) pairs across the 16 B0/B1 rerun runs (I6), supersedes the 14-case seed-42 sample",
+ "method": "case-level source-verified reading; every load-bearing claim checked against the spec snapshot (airbnb readme line anchors, asvs CSV requirement rows, react19/agents-sdk doc text); TRUE = at least one flagged claim is real AND backed by spec text; HALLUCINATED = all claims hallucinated, over-inferred, or outside the specification's subject matter",
+ "summary": {
+  "n_cases": 84,
+  "n_true": 32,
+  "n_hallucinated": 52,
+  "true_share": 0.381,
+  "per_spec": {
+   "airbnb": {
+    "TRUE": 14,
+    "HALLUCINATED": 0
+   },
+   "asvs": {
+    "TRUE": 13,
+    "HALLUCINATED": 3
+   },
+   "agents-sdk": {
+    "TRUE": 2,
+    "HALLUCINATED": 14
+   },
+   "react19": {
+    "TRUE": 3,
+    "HALLUCINATED": 35
+   }
+  }
+ },
+ "verdicts": [
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-002",
+   "verdict": "HALLUCINATED",
+   "evidence": "final_output_as exists in the real SDK; AttributeError claim false (docs-snapshot omits it, but the factual claim about the runtime is wrong)"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-004",
+   "verdict": "TRUE",
+   "evidence": "callback params REVERSED vs docs (agents.md:252 context-first) — real documented-contract violation; ALSO a benchmark defect: the compliant case itself violates the signature (queued for case fix)"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-006",
+   "verdict": "HALLUCINATED",
+   "evidence": "hardcoded stub is a toy pattern, not a spec rule"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-008",
+   "verdict": "TRUE",
+   "evidence": "on_invoke_tool must be async (tools.md:516) — code is sync"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-010",
+   "verdict": "HALLUCINATED",
+   "evidence": "'can bypass handoff' is behavioral speculation, no spec text"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-012",
+   "verdict": "HALLUCINATED",
+   "evidence": "ModelInputData input-only is documented valid (running_agents.md:447 'Its input field is required' — only input required)"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-014",
+   "verdict": "HALLUCINATED",
+   "evidence": "guardrail_agent= pattern documented (guardrails.md:114)"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-016",
+   "verdict": "HALLUCINATED",
+   "evidence": "same guardrail over-generalization"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-018",
+   "verdict": "HALLUCINATED",
+   "evidence": "strict-mode dict claim not verifiable in snapshot — over-inferred"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-020",
+   "verdict": "HALLUCINATED",
+   "evidence": "prompt-injection claim is security speculation (note: callback params reversed — same defect as PY-004, different claim)"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-022",
+   "verdict": "HALLUCINATED",
+   "evidence": "guardrail over-generalization"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-024",
+   "verdict": "HALLUCINATED",
+   "evidence": "F821 real NameError but out-of-spec domain; guardrail claim hallucinated"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-026",
+   "verdict": "HALLUCINATED",
+   "evidence": "F821 real NameError, out-of-spec domain"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-028",
+   "verdict": "HALLUCINATED",
+   "evidence": "NameError real, rest out-of-spec"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-030",
+   "verdict": "HALLUCINATED",
+   "evidence": "instructions optional per agents.md param table ('instructions | no')"
+  },
+  {
+   "spec": "agents-sdk",
+   "case_id": "PY-032",
+   "verdict": "HALLUCINATED",
+   "evidence": "input-only ModelInputData documented valid"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-002",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-004",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-006",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-008",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-010",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-017",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-018",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-019",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-020",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-027",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-029",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-030",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-042",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "airbnb",
+   "case_id": "JS-044",
+   "verdict": "TRUE",
+   "evidence": "airbnb guide"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-102",
+   "verdict": "TRUE",
+   "evidence": "min-length: V6.2.1 real (CSV)"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-104",
+   "verdict": "TRUE",
+   "evidence": "min-length: V6.2.1 real"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-108",
+   "verdict": "TRUE",
+   "evidence": "no rate limiting / brute-force controls: V6.3.1+V2.4.1 real"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-110",
+   "verdict": "HALLUCINATED",
+   "evidence": "None-deref robustness + middleware 500/401 — engineering, no spec text"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-112",
+   "verdict": "TRUE",
+   "evidence": "admin endpoint no authz: V8.2.1 real (function-level access)"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-114",
+   "verdict": "TRUE",
+   "evidence": "no rate limiting on OTP: V2.4.1/V6.3.1 real"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-116",
+   "verdict": "TRUE",
+   "evidence": "path traversal via x-filename: V1.3.3 sanitization real"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-120",
+   "verdict": "TRUE",
+   "evidence": "no password validation on reset: V6.2.1 real"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-122",
+   "verdict": "HALLUCINATED",
+   "evidence": "V11.5.1 128-bit misapplied — specific rule V6.5.4 (20-bit OTP) governs and is satisfied"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-124",
+   "verdict": "TRUE",
+   "evidence": "no Cache-Control on session data: V14.3.2 real; reauth not logged: V16.3.1 real"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-126",
+   "verdict": "TRUE",
+   "evidence": "min-length: V6.2.1 real"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-128",
+   "verdict": "TRUE",
+   "evidence": "min-length: V6.2.1 real"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-134",
+   "verdict": "HALLUCINATED",
+   "evidence": "signature IS verified (verify_signature called); naming=N802 not spec; order claim over-inferred. CORRECTS I8 sample which called this TRUE"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-136",
+   "verdict": "TRUE",
+   "evidence": "admin disable no authz: V8.2.1 real"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-138",
+   "verdict": "TRUE",
+   "evidence": "no rate limiting: V2.4.1/V6.3.1; no password validation: V6.2.1"
+  },
+  {
+   "spec": "asvs",
+   "case_id": "PY-140",
+   "verdict": "TRUE",
+   "evidence": "rate limiting V2.4.1 + auth logging V16.3.1 + anti-caching V14.3.2 all real"
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-002",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-008",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-011",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-013",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-018",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-019",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-024",
+   "verdict": "TRUE",
+   "evidence": "Error Boundary for rejected use() promise: docs line ~1209 'Wrap the component that calls use in an Error Boundary'"
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-025",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-026",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-042",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-048",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-050",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-052",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-054",
+   "verdict": "TRUE",
+   "evidence": "use(browserLocales()) uncached → real R-007 violation ('Promises passed to use must be cached')"
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-055",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-059",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-064",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-066",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-068",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-070",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-074",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-078",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-080",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-082",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-086",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-088",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-090",
+   "verdict": "TRUE",
+   "evidence": "same uncached-promise R-007 violation"
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-092",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-094",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-096",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-098",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-100",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-102",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-104",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-106",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-108",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-110",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  },
+  {
+   "spec": "react19",
+   "case_id": "TS-112",
+   "verdict": "HALLUCINATED",
+   "evidence": ""
+  }
+ ],
+ "notes": {
+  "i8_sample_corrections": [
+   "asvs/PY-134: I8 sample called TRUE; full reading shows verify_signature IS called — over-inferred ordering claim"
+  ],
+  "benchmark_defects_found": [
+   "agents-sdk/PY-004: compliant case's dynamic-instructions callback has (agent, context) reversed vs documented (context, agent) — case fix queued (origin=synthetic, in review queue)"
+  ],
+  "key_snapshot_evidence": {
+   "TS-013/TS-052/TS-078/TS-082/TS-094/TS-100/TS-050/TS-070": "startTransition(async) IS documented (useActionState.md:675, useOptimistic.md:61); useOptimistic reducer OPTIONAL (useOptimistic.md:10 'reducer?')",
+   "TS-008/TS-011/TS-018/TS-055/TS-092/TS-096/TS-110/TS-064/TS-074/TS-059": "cache invalidation/eviction claims — docs' own canonical cache never invalidates (reference-react-use.md:665-684)",
+   "TS-002/TS-019/TS-042/TS-066/TS-068/TS-088/TS-102/TS-106/TS-080/TS-025": "res.ok/error-handling/a11y/button-type — engineering standards outside react19 spec; TS-025 'wrapping redundant' contradicts docs line 1546 which instructs startTransition",
+   "TS-098": "use() in custom Hook IS valid (R-006 quote) — claim contradicts spec"
+  }
+ }
+}

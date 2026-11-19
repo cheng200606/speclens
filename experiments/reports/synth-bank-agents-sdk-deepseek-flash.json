@@ -1,0 +1,23 @@
+{
+ "spec_id": "agents-sdk",
+ "model": "deepseek/deepseek-flash",
+ "n_sections_prompted": 12,
+ "n_rules_raw": 48,
+ "n_quotes_verbatim": 48,
+ "n_quotes_invalid": 0,
+ "invalid_examples": [],
+ "llm_alignment": {
+  "n_canonical": 8,
+  "n_matched": 3,
+  "coverage": 0.375,
+  "unmatched_canonical_ids": [
+   "agents-001",
+   "agents-002",
+   "agents-003",
+   "agents-005",
+   "agents-006"
+  ],
+  "n_content_words_llm": 549
+ },
+ "n_rules": 48
+}

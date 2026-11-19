@@ -1,0 +1,2282 @@
+{
+ "asvs": {
+  "spec": "asvs",
+  "n_cases": 40,
+  "policies": {
+   "P0": {
+    "target_rule_coverage": 1.0,
+    "coverage_misses": 0,
+    "compliant_case_routed_pairs": 587,
+    "observed_fp_flags": 46,
+    "fp_flags_no_longer_paired": 28
+   },
+   "P1": {
+    "target_rule_coverage": 0.45,
+    "coverage_misses": 11,
+    "compliant_case_routed_pairs": 406,
+    "observed_fp_flags": 46,
+    "fp_flags_no_longer_paired": 31
+   },
+   "P2": {
+    "target_rule_coverage": 0.2,
+    "coverage_misses": 16,
+    "compliant_case_routed_pairs": 371,
+    "observed_fp_flags": 46,
+    "fp_flags_no_longer_paired": 31
+   },
+   "P3": {
+    "target_rule_coverage": 0.4,
+    "coverage_misses": 12,
+    "compliant_case_routed_pairs": 396,
+    "observed_fp_flags": 46,
+    "fp_flags_no_longer_paired": 31
+   },
+   "P4": {
+    "target_rule_coverage": 0.2,
+    "coverage_misses": 16,
+    "compliant_case_routed_pairs": 371,
+    "observed_fp_flags": 46,
+    "fp_flags_no_longer_paired": 31
+   },
+   "P5": {
+    "target_rule_coverage": 0.8,
+    "coverage_misses": 4,
+    "compliant_case_routed_pairs": 495,
+    "observed_fp_flags": 46,
+    "fp_flags_no_longer_paired": 30
+   }
+  },
+  "detail": [
+   {
+    "case_id": "PY-101",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.2.9"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-102",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.2.9"
+    ],
+    "observed_fp_flags": [
+     "V6.2.1",
+     "V6.2.12",
+     "V6.2.4",
+     "X-106",
+     "X-109",
+     "asvs-V6.2.12"
+    ]
+   },
+   {
+    "case_id": "PY-103",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.2.12"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-104",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.2.12"
+    ],
+    "observed_fp_flags": [
+     "V6.2.1",
+     "V6.2.4",
+     "X-106",
+     "X-109"
+    ]
+   },
+   {
+    "case_id": "PY-105",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V1.1.2"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-106",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V1.1.2"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-107",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V3.3.3"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-108",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V3.3.3"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-109",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V7.3.1"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-110",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V7.3.1"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-111",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V7.4.5"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-112",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V7.4.5"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-113",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.5.1"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-114",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.5.1"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-115",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V5.2.1"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-116",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V5.2.1"
+    ],
+    "observed_fp_flags": [
+     "V16.5.4",
+     "V3.4.4",
+     "X-055",
+     "X-331"
+    ]
+   },
+   {
+    "case_id": "PY-117",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.2.10"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-118",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.2.10"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-119",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.4.3"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-120",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.4.3"
+    ],
+    "observed_fp_flags": [
+     "V6.2.1",
+     "V6.2.12",
+     "V6.2.4",
+     "V6.5.1",
+     "X-106",
+     "X-109",
+     "asvs-V6.2.12",
+     "asvs-V6.5.1"
+    ]
+   },
+   {
+    "case_id": "PY-121",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.5.4"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-122",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.5.4"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-123",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V7.5.2"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-124",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V7.5.2"
+    ],
+    "observed_fp_flags": [
+     "V16.5.4",
+     "V7.4.5",
+     "X-331",
+     "asvs-V7.4.5"
+    ]
+   },
+   {
+    "case_id": "PY-125",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.2.9"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-126",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.2.9"
+    ],
+    "observed_fp_flags": [
+     "V6.2.1",
+     "V6.2.12",
+     "V6.2.4",
+     "V6.2.9",
+     "X-106",
+     "X-109",
+     "asvs-V6.2.12",
+     "asvs-V6.2.9"
+    ]
+   },
+   {
+    "case_id": "PY-127",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.2.12"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-128",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.2.12"
+    ],
+    "observed_fp_flags": [
+     "V6.2.1",
+     "V6.2.3",
+     "V6.2.4",
+     "X-106",
+     "X-108",
+     "X-109"
+    ]
+   },
+   {
+    "case_id": "PY-129",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V1.1.2"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-130",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V1.1.2"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-131",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V3.3.3"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-132",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V3.3.3"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-133",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V7.3.1"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-134",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V7.3.1"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-135",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V7.4.5"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-136",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V7.4.5"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-137",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.4.3"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-138",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.4.3"
+    ],
+    "observed_fp_flags": [
+     "V6.2.12",
+     "V6.5.1",
+     "V7.4.3",
+     "X-161",
+     "asvs-V6.2.12",
+     "asvs-V6.5.1"
+    ]
+   },
+   {
+    "case_id": "PY-139",
+    "verdict": "violation",
+    "targets": [
+     "asvs-V6.5.1"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-140",
+    "verdict": "compliant",
+    "targets": [
+     "asvs-V6.5.1"
+    ],
+    "observed_fp_flags": []
+   }
+  ]
+ },
+ "agents-sdk": {
+  "spec": "agents-sdk",
+  "n_cases": 32,
+  "policies": {
+   "P0": {
+    "target_rule_coverage": 0.625,
+    "coverage_misses": 6,
+    "compliant_case_routed_pairs": 129,
+    "observed_fp_flags": 2,
+    "fp_flags_no_longer_paired": 1
+   },
+   "P1": {
+    "target_rule_coverage": 0.5625,
+    "coverage_misses": 7,
+    "compliant_case_routed_pairs": 110,
+    "observed_fp_flags": 2,
+    "fp_flags_no_longer_paired": 1
+   },
+   "P2": {
+    "target_rule_coverage": 0.5,
+    "coverage_misses": 8,
+    "compliant_case_routed_pairs": 81,
+    "observed_fp_flags": 2,
+    "fp_flags_no_longer_paired": 2
+   },
+   "P3": {
+    "target_rule_coverage": 0.5625,
+    "coverage_misses": 7,
+    "compliant_case_routed_pairs": 110,
+    "observed_fp_flags": 2,
+    "fp_flags_no_longer_paired": 1
+   },
+   "P4": {
+    "target_rule_coverage": 0.5,
+    "coverage_misses": 8,
+    "compliant_case_routed_pairs": 81,
+    "observed_fp_flags": 2,
+    "fp_flags_no_longer_paired": 2
+   },
+   "P5": {
+    "target_rule_coverage": 0.5625,
+    "coverage_misses": 7,
+    "compliant_case_routed_pairs": 88,
+    "observed_fp_flags": 2,
+    "fp_flags_no_longer_paired": 1
+   }
+  },
+  "detail": [
+   {
+    "case_id": "PY-001",
+    "verdict": "violation",
+    "targets": [
+     "agents-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-002",
+    "verdict": "compliant",
+    "targets": [
+     "agents-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-003",
+    "verdict": "violation",
+    "targets": [
+     "agents-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-004",
+    "verdict": "compliant",
+    "targets": [
+     "agents-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-005",
+    "verdict": "violation",
+    "targets": [
+     "agents-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-006",
+    "verdict": "compliant",
+    "targets": [
+     "agents-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-007",
+    "verdict": "violation",
+    "targets": [
+     "agents-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-008",
+    "verdict": "compliant",
+    "targets": [
+     "agents-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-009",
+    "verdict": "violation",
+    "targets": [
+     "agents-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-010",
+    "verdict": "compliant",
+    "targets": [
+     "agents-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-011",
+    "verdict": "violation",
+    "targets": [
+     "agents-008"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-012",
+    "verdict": "compliant",
+    "targets": [
+     "agents-008"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-013",
+    "verdict": "violation",
+    "targets": [
+     "agents-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-014",
+    "verdict": "compliant",
+    "targets": [
+     "agents-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-015",
+    "verdict": "violation",
+    "targets": [
+     "agents-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-016",
+    "verdict": "compliant",
+    "targets": [
+     "agents-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-017",
+    "verdict": "violation",
+    "targets": [
+     "agents-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-018",
+    "verdict": "compliant",
+    "targets": [
+     "agents-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-019",
+    "verdict": "violation",
+    "targets": [
+     "agents-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-020",
+    "verdict": "compliant",
+    "targets": [
+     "agents-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-021",
+    "verdict": "violation",
+    "targets": [
+     "agents-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-022",
+    "verdict": "compliant",
+    "targets": [
+     "agents-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-023",
+    "verdict": "violation",
+    "targets": [
+     "agents-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-024",
+    "verdict": "compliant",
+    "targets": [
+     "agents-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-025",
+    "verdict": "violation",
+    "targets": [
+     "agents-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-026",
+    "verdict": "compliant",
+    "targets": [
+     "agents-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-027",
+    "verdict": "violation",
+    "targets": [
+     "agents-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-028",
+    "verdict": "compliant",
+    "targets": [
+     "agents-006"
+    ],
+    "observed_fp_flags": [
+     "agents-002",
+     "dynamic-instructions-prompt-return"
+    ]
+   },
+   {
+    "case_id": "PY-029",
+    "verdict": "violation",
+    "targets": [
+     "agents-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-030",
+    "verdict": "compliant",
+    "targets": [
+     "agents-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-031",
+    "verdict": "violation",
+    "targets": [
+     "agents-008"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "PY-032",
+    "verdict": "compliant",
+    "targets": [
+     "agents-008"
+    ],
+    "observed_fp_flags": []
+   }
+  ]
+ },
+ "airbnb": {
+  "spec": "airbnb",
+  "n_cases": 38,
+  "policies": {
+   "P0": {
+    "target_rule_coverage": 0.9474,
+    "coverage_misses": 1,
+    "compliant_case_routed_pairs": 211,
+    "observed_fp_flags": 4,
+    "fp_flags_no_longer_paired": 2
+   },
+   "P1": {
+    "target_rule_coverage": 0.5789,
+    "coverage_misses": 8,
+    "compliant_case_routed_pairs": 129,
+    "observed_fp_flags": 4,
+    "fp_flags_no_longer_paired": 4
+   },
+   "P2": {
+    "target_rule_coverage": 0.5263,
+    "coverage_misses": 9,
+    "compliant_case_routed_pairs": 110,
+    "observed_fp_flags": 4,
+    "fp_flags_no_longer_paired": 4
+   },
+   "P3": {
+    "target_rule_coverage": 0.5789,
+    "coverage_misses": 8,
+    "compliant_case_routed_pairs": 126,
+    "observed_fp_flags": 4,
+    "fp_flags_no_longer_paired": 4
+   },
+   "P4": {
+    "target_rule_coverage": 0.5263,
+    "coverage_misses": 9,
+    "compliant_case_routed_pairs": 110,
+    "observed_fp_flags": 4,
+    "fp_flags_no_longer_paired": 4
+   },
+   "P5": {
+    "target_rule_coverage": 0.5263,
+    "coverage_misses": 9,
+    "compliant_case_routed_pairs": 131,
+    "observed_fp_flags": 4,
+    "fp_flags_no_longer_paired": 4
+   }
+  },
+  "detail": [
+   {
+    "case_id": "JS-001",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-002",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-001"
+    ],
+    "observed_fp_flags": [
+     "airbnb-006",
+     "quotes"
+    ]
+   },
+   {
+    "case_id": "JS-003",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-004",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-005",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-006",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-004"
+    ],
+    "observed_fp_flags": [
+     "airbnb-006",
+     "quotes"
+    ]
+   },
+   {
+    "case_id": "JS-007",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-008",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-009",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-008"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-010",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-008"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-011",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-012",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-013",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-014",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-017",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-018",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-019",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-020",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-021",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-022",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-023",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-024",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-027",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-028",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-029",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-030",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-031",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-032",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-033",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-034",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-037",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-038",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-039",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-040",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-041",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-042",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-043",
+    "verdict": "violation",
+    "targets": [
+     "airbnb-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "JS-044",
+    "verdict": "compliant",
+    "targets": [
+     "airbnb-003"
+    ],
+    "observed_fp_flags": []
+   }
+  ]
+ },
+ "react19": {
+  "spec": "react19",
+  "n_cases": 130,
+  "policies": {
+   "P0": {
+    "target_rule_coverage": 0.8101,
+    "coverage_misses": 15,
+    "compliant_case_routed_pairs": 1193,
+    "observed_fp_flags": 77,
+    "fp_flags_no_longer_paired": 38
+   },
+   "P1": {
+    "target_rule_coverage": 0.8101,
+    "coverage_misses": 15,
+    "compliant_case_routed_pairs": 1148,
+    "observed_fp_flags": 77,
+    "fp_flags_no_longer_paired": 38
+   },
+   "P2": {
+    "target_rule_coverage": 0.6835,
+    "coverage_misses": 25,
+    "compliant_case_routed_pairs": 1034,
+    "observed_fp_flags": 77,
+    "fp_flags_no_longer_paired": 39
+   },
+   "P3": {
+    "target_rule_coverage": 0.5443,
+    "coverage_misses": 36,
+    "compliant_case_routed_pairs": 1059,
+    "observed_fp_flags": 77,
+    "fp_flags_no_longer_paired": 39
+   },
+   "P4": {
+    "target_rule_coverage": 0.5443,
+    "coverage_misses": 36,
+    "compliant_case_routed_pairs": 1019,
+    "observed_fp_flags": 77,
+    "fp_flags_no_longer_paired": 39
+   },
+   "P5": {
+    "target_rule_coverage": 0.3924,
+    "coverage_misses": 48,
+    "compliant_case_routed_pairs": 949,
+    "observed_fp_flags": 77,
+    "fp_flags_no_longer_paired": 40
+   }
+  },
+  "detail": [
+   {
+    "case_id": "TS-001",
+    "verdict": "violation",
+    "targets": [
+     "R-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-002",
+    "verdict": "compliant",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-003",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-004",
+    "verdict": "violation",
+    "targets": [
+     "R-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-005",
+    "verdict": "borderline",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-006",
+    "verdict": "violation",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-007",
+    "verdict": "violation",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-008",
+    "verdict": "compliant",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": [
+     "X-006",
+     "X-007",
+     "X-013",
+     "error-boundary-for-use",
+     "reading-promise-from-context-suspense",
+     "suspense-boundary-for-use"
+    ]
+   },
+   {
+    "case_id": "TS-009",
+    "verdict": "violation",
+    "targets": [
+     "R-009"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-010",
+    "verdict": "violation",
+    "targets": [
+     "R-008"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-011",
+    "verdict": "compliant",
+    "targets": [
+     "R-008"
+    ],
+    "observed_fp_flags": [
+     "X-011",
+     "frameworks-suspense-caching"
+    ]
+   },
+   {
+    "case_id": "TS-012",
+    "verdict": "violation",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-013",
+    "verdict": "compliant",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-014",
+    "verdict": "violation",
+    "targets": [
+     "R-011"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-015",
+    "verdict": "violation",
+    "targets": [
+     "R-012"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-016",
+    "verdict": "violation",
+    "targets": [
+     "R-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-017",
+    "verdict": "borderline",
+    "targets": [
+     "R-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-018",
+    "verdict": "compliant",
+    "targets": [
+     "R-001"
+    ],
+    "observed_fp_flags": [
+     "X-011",
+     "prefer-framework-data-fetching"
+    ]
+   },
+   {
+    "case_id": "TS-019",
+    "verdict": "compliant",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-020",
+    "verdict": "compliant",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-021",
+    "verdict": "compliant",
+    "targets": [
+     "R-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-022",
+    "verdict": "compliant",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-023",
+    "verdict": "compliant",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": [
+     "X-006",
+     "reading-promise-from-context-suspense"
+    ]
+   },
+   {
+    "case_id": "TS-024",
+    "verdict": "compliant",
+    "targets": [
+     "R-009"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-025",
+    "verdict": "compliant",
+    "targets": [
+     "R-011"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-026",
+    "verdict": "compliant",
+    "targets": [
+     "R-012"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-027",
+    "verdict": "violation",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-028",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-029",
+    "verdict": "violation",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-030",
+    "verdict": "violation",
+    "targets": [
+     "R-009"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-031",
+    "verdict": "violation",
+    "targets": [
+     "R-011"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-032",
+    "verdict": "violation",
+    "targets": [
+     "R-012"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-033",
+    "verdict": "violation",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-034",
+    "verdict": "violation",
+    "targets": [
+     "R-001",
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-035",
+    "verdict": "borderline",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-036",
+    "verdict": "borderline",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-037",
+    "verdict": "violation",
+    "targets": [
+     "R-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-038",
+    "verdict": "violation",
+    "targets": [
+     "R-008"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-039",
+    "verdict": "violation",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-040",
+    "verdict": "violation",
+    "targets": [
+     "R-002",
+     "R-011"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-041",
+    "verdict": "violation",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-042",
+    "verdict": "compliant",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-043",
+    "verdict": "violation",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-044",
+    "verdict": "compliant",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-045",
+    "verdict": "violation",
+    "targets": [
+     "R-009"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-046",
+    "verdict": "compliant",
+    "targets": [
+     "R-009"
+    ],
+    "observed_fp_flags": [
+     "X-013",
+     "wrap-use-in-error-boundary"
+    ]
+   },
+   {
+    "case_id": "TS-047",
+    "verdict": "violation",
+    "targets": [
+     "R-012"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-048",
+    "verdict": "compliant",
+    "targets": [
+     "R-012"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-049",
+    "verdict": "violation",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-050",
+    "verdict": "compliant",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": [
+     "Parameters",
+     "X-042"
+    ]
+   },
+   {
+    "case_id": "TS-051",
+    "verdict": "violation",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-052",
+    "verdict": "compliant",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-053",
+    "verdict": "violation",
+    "targets": [
+     "R-008"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-054",
+    "verdict": "compliant",
+    "targets": [
+     "R-008"
+    ],
+    "observed_fp_flags": [
+     "R-007",
+     "The Promise must be cached so that the same instance is reused across re-renders.",
+     "X-002",
+     "X-013",
+     "X-049",
+     "X-054",
+     "caching-promises-client-components",
+     "caching-promises-suspense",
+     "promise",
+     "wrap-use-in-error-boundary"
+    ]
+   },
+   {
+    "case_id": "TS-055",
+    "verdict": "compliant",
+    "targets": [
+     "R-001"
+    ],
+    "observed_fp_flags": [
+     "X-011",
+     "frameworks-provide-own-caching"
+    ]
+   },
+   {
+    "case_id": "TS-056",
+    "verdict": "violation",
+    "targets": [
+     "R-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-057",
+    "verdict": "violation",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-058",
+    "verdict": "compliant",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-059",
+    "verdict": "compliant",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": [
+     "X-006",
+     "X-007",
+     "X-013",
+     "error-boundary-for-use",
+     "reading-promise-from-context-suspense-boundary",
+     "use-suspense-boundary"
+    ]
+   },
+   {
+    "case_id": "TS-060",
+    "verdict": "compliant",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-061",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-062",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-063",
+    "verdict": "violation",
+    "targets": [
+     "R-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-064",
+    "verdict": "compliant",
+    "targets": [
+     "R-001"
+    ],
+    "observed_fp_flags": [
+     "R-008",
+     "X-006",
+     "X-007",
+     "X-013",
+     "suspense-boundary-for-use-browser",
+     "use-suspense-boundary",
+     "wrap-promise-readers-in-suspense",
+     "wrap-use-in-error-boundary"
+    ]
+   },
+   {
+    "case_id": "TS-065",
+    "verdict": "violation",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-066",
+    "verdict": "compliant",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-067",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-068",
+    "verdict": "compliant",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-069",
+    "verdict": "violation",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-070",
+    "verdict": "compliant",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-071",
+    "verdict": "violation",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-072",
+    "verdict": "compliant",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-073",
+    "verdict": "violation",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-074",
+    "verdict": "compliant",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": [
+     "X-006",
+     "X-007",
+     "X-013",
+     "error-boundary-use",
+     "suspense-boundary-for-promise",
+     "suspense-boundary-for-use"
+    ]
+   },
+   {
+    "case_id": "TS-075",
+    "verdict": "violation",
+    "targets": [
+     "R-009"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-076",
+    "verdict": "compliant",
+    "targets": [
+     "R-009"
+    ],
+    "observed_fp_flags": [
+     "X-013",
+     "wrap-use-in-error-boundary"
+    ]
+   },
+   {
+    "case_id": "TS-077",
+    "verdict": "violation",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-078",
+    "verdict": "compliant",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-079",
+    "verdict": "violation",
+    "targets": [
+     "R-011"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-080",
+    "verdict": "compliant",
+    "targets": [
+     "R-011"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-081",
+    "verdict": "violation",
+    "targets": [
+     "R-012"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-082",
+    "verdict": "compliant",
+    "targets": [
+     "R-012"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-083",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-084",
+    "verdict": "compliant",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-085",
+    "verdict": "violation",
+    "targets": [
+     "R-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-086",
+    "verdict": "compliant",
+    "targets": [
+     "R-004"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-087",
+    "verdict": "violation",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-088",
+    "verdict": "compliant",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-089",
+    "verdict": "violation",
+    "targets": [
+     "R-008"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-090",
+    "verdict": "compliant",
+    "targets": [
+     "R-008"
+    ],
+    "observed_fp_flags": [
+     "R-007",
+     "The Promise must be cached so that the same instance is reused across re-renders.",
+     "X-002",
+     "X-013",
+     "X-049",
+     "X-054",
+     "caching-promises-client-components",
+     "error-boundary-for-use",
+     "promise"
+    ]
+   },
+   {
+    "case_id": "TS-091",
+    "verdict": "violation",
+    "targets": [
+     "R-001"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-092",
+    "verdict": "compliant",
+    "targets": [
+     "R-001"
+    ],
+    "observed_fp_flags": [
+     "X-011",
+     "frameworks-provide-own-caching"
+    ]
+   },
+   {
+    "case_id": "TS-093",
+    "verdict": "violation",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-094",
+    "verdict": "compliant",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-095",
+    "verdict": "violation",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-096",
+    "verdict": "compliant",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": [
+     "X-006",
+     "X-007",
+     "X-013",
+     "error-boundary-use",
+     "use-suspense-boundary",
+     "wrap-promise-readers-in-suspense"
+    ]
+   },
+   {
+    "case_id": "TS-097",
+    "verdict": "violation",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-098",
+    "verdict": "compliant",
+    "targets": [
+     "R-006"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-099",
+    "verdict": "violation",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-100",
+    "verdict": "compliant",
+    "targets": [
+     "R-010"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-101",
+    "verdict": "violation",
+    "targets": [
+     "R-011"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-102",
+    "verdict": "compliant",
+    "targets": [
+     "R-011"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-103",
+    "verdict": "violation",
+    "targets": [
+     "R-012"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-104",
+    "verdict": "compliant",
+    "targets": [
+     "R-012"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-105",
+    "verdict": "violation",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-106",
+    "verdict": "compliant",
+    "targets": [
+     "R-002"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-107",
+    "verdict": "violation",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-108",
+    "verdict": "compliant",
+    "targets": [
+     "R-005"
+    ],
+    "observed_fp_flags": [
+     "Parameters",
+     "R-012"
+    ]
+   },
+   {
+    "case_id": "TS-109",
+    "verdict": "violation",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-110",
+    "verdict": "compliant",
+    "targets": [
+     "R-007"
+    ],
+    "observed_fp_flags": [
+     "X-006",
+     "X-007",
+     "X-013",
+     "error-boundary-use",
+     "reading-promise-from-context-suspense-boundary",
+     "wrap-use-in-suspense"
+    ]
+   },
+   {
+    "case_id": "TS-111",
+    "verdict": "violation",
+    "targets": [
+     "R-011"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-112",
+    "verdict": "compliant",
+    "targets": [
+     "R-011"
+    ],
+    "observed_fp_flags": [
+     "R-011",
+     "dispatchAction must be called from an Action"
+    ]
+   },
+   {
+    "case_id": "TS-113",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-114",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-115",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-116",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-117",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-118",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-119",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-120",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-121",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-122",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-123",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-124",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-125",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-126",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-127",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-128",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-129",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   },
+   {
+    "case_id": "TS-130",
+    "verdict": "violation",
+    "targets": [
+     "R-003"
+    ],
+    "observed_fp_flags": []
+   }
+  ]
+ }
+}

@@ -56,7 +56,8 @@
         "n_verbatim": 8,
         "missing_quote_rule_ids": [],
         "all_verbatim": true
-      }
+      },
+      "unsigned_handcrafted": []
     },
     "airbnb": {
       "n_cases": 38,
@@ -92,7 +93,8 @@
         "n_verbatim": 8,
         "missing_quote_rule_ids": [],
         "all_verbatim": true
-      }
+      },
+      "unsigned_handcrafted": []
     },
     "asvs": {
       "n_cases": 40,
@@ -134,7 +136,8 @@
         "n_verbatim": 12,
         "missing_quote_rule_ids": [],
         "all_verbatim": true
-      }
+      },
+      "unsigned_handcrafted": []
     },
     "react19": {
       "n_cases": 130,
@@ -180,7 +183,26 @@
         "n_verbatim": 12,
         "missing_quote_rule_ids": [],
         "all_verbatim": true
-      }
+      },
+      "unsigned_handcrafted": [
+        "TS-001",
+        "TS-002",
+        "TS-003",
+        "TS-004",
+        "TS-005",
+        "TS-006",
+        "TS-007",
+        "TS-008",
+        "TS-009",
+        "TS-010",
+        "TS-011",
+        "TS-012",
+        "TS-013",
+        "TS-014",
+        "TS-015",
+        "TS-016",
+        "TS-017"
+      ]
     },
     "react19-repo": {
       "n_cases": 18,
@@ -220,13 +242,15 @@
         "n_verbatim": 12,
         "missing_quote_rule_ids": [],
         "all_verbatim": true
-      }
+      },
+      "unsigned_handcrafted": []
     }
   },
   "warnings": [
     "agents-sdk: hard 样本占比 12.5% < 20%",
     "airbnb: hard 样本占比 0.0% < 20%",
     "asvs: hard 样本占比 10.0% < 20%",
+    "react19: origin=handcrafted 缺 reviewed_by 签核 17 条（TS-001, TS-002, TS-003, TS-004, TS-005, TS-006, TS-007, TS-008…）",
     "react19: hard 样本占比 10.8% < 20%",
     "react19-repo: hard 样本占比 0.0% < 20%",
     "Cohen's κ 无法计算：全量集双标样本为 0（plan.md §2.3.3 降级预案尚未执行）",

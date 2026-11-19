@@ -1,0 +1,2284 @@
+[
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-002",
+  "annotated_scope": [
+   "agents-001"
+  ],
+  "claim": "设置 output_type 为 Pydantic 模型，得到结构化输出，符合 agents-001。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "RESULTS_FINAL_OUTPUT"
+  ],
+  "flag_messages": [
+   "`RunResult` does not expose the referenced `final_output_as` method in the specified result API, so this call raises `AttributeError`. Use the documented `result.final_output` property, validating it as `Summary` if a ru"
+  ],
+  "files": [
+   {
+    "file": "code/summarizer.py",
+    "code": "from pydantic import BaseModel\nfrom agents import Agent, Runner\n\n\nclass Summary(BaseModel):\n    title: str\n    points: list[str]\n\n\nsummarizer = Agent(\n    name=\"Summarizer\",\n    instructions=\"Summarize the article.\",\n    output_type=Summary,\n)\n\nasync def summarize(article: str) -> Summary:\n    result = await Runner.run(summarizer, article)\n    return result.final_output_as(Summary)\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-004",
+  "annotated_scope": [
+   "agents-002"
+  ],
+  "claim": "动态 instructions 函数返回 prompt 字符串，符合 agents-002。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "DYNAMIC_INSTRUCTIONS_CALLBACK_SIGNATURE",
+   "PY-004",
+   "RUN_CONTEXT_WRAPPER_ACCESS"
+  ],
+  "flag_messages": [
+   "The dynamic-instructions callback has the wrong parameter order and accesses the context incorrectly.",
+   "The dynamic-instructions callback has its parameters reversed and reads application state from the wrong object. The documented callback receives a RunContextWrapper first and the Agent second, with application data acce"
+  ],
+  "files": [
+   {
+    "file": "code/support.py",
+    "code": "from agents import Agent\n\ndef build_instructions(agent, context) -> str:\n    return f\"You are helping {context.user_name}. Policy: {context.policy}\"\n\nsupport = Agent(\n    name=\"Support\",\n    instructions=build_instructions,\n)\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-006",
+  "annotated_scope": [
+   "agents-005"
+  ],
+  "claim": "@function_tool 函数带 docstring 描述，符合 agents-005。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "functional-correctness",
+   "no-hardcoded-results"
+  ],
+  "flag_messages": [
+   "The weather tool returns a hardcoded forecast for every city, so it does not provide current weather as documented."
+  ],
+  "files": [
+   {
+    "file": "code/weather.py",
+    "code": "from agents import function_tool\n\n@function_tool\ndef get_weather(city: str) -> str:\n    \"\"\"Get the current weather for a city.\"\"\"\n\n    return f\"Weather in {city}: sunny, 24C\"\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-008",
+  "annotated_scope": [
+   "agents-006"
+  ],
+  "claim": "on_invoke_tool 内 try/except 处理错误并返回错误信息，符合 agents-006。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "ERROR-HANDLING",
+   "FUNCTIONAL-CORRECTNESS",
+   "SCHEMA-CONTRACT",
+   "SCHEMA-VALIDATION",
+   "custom-function-tools-on_invoke_tool-async",
+   "tools-custom-function-tool-async-callback"
+  ],
+  "flag_messages": [
+   "The custom FunctionTool's on_invoke_tool handler is a synchronous function, but the specification requires it to be an async function.",
+   "The apply_patch tool reports success without applying a patch.",
+   "The function schema does not require the path argument that the callback assumes is present.",
+   "Broad exception handling converts tool failures into ordinary successful outputs.",
+   "The custom FunctionTool's on_invoke_tool callback is synchronous, but the SDK requires an async callback."
+  ],
+  "files": [
+   {
+    "file": "code/patcher.py",
+    "code": "import json\nfrom agents import Agent, FunctionTool\n\n\ndef run_function(ctx, arguments: str) -> str:\n    try:\n        args = json.loads(arguments)\n        return f\"patched {args['path']}\"\n    except Exception as e:\n        return f\"error: {e}\"\n\n\ntool = FunctionTool(\n    name=\"apply_patch\",\n    description=\"Apply a patch to a file.\",\n    params_json_schema={\"type\": \"object\", \"properties\": {\"path\": {\"type\": \"string\"}}},\n    on_invoke_tool=run_function,\n    is_enabled=True,\n)\n\npatcher = Agent(name=\"Patcher\", tools=[tool])\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-010",
+  "annotated_scope": [
+   "agents-007"
+  ],
+  "claim": "每个目的地各注册一个 handoff()，模型在两者间选择，符合 agents-007。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "PY-010"
+  ],
+  "flag_messages": [
+   "The triage agent does not require a handoff tool call, so it can bypass the specialist agents."
+  ],
+  "files": [
+   {
+    "file": "code/router.py",
+    "code": "from agents import Agent, handoff\n\nbilling = Agent(name=\"Billing\", instructions=\"Handle billing questions.\")\nrefunds = Agent(name=\"Refunds\", instructions=\"Handle refund requests.\")\n\ntriage = Agent(\n    name=\"Triage\",\n    instructions=\"Route billing or refunds questions to the right agent.\",\n    handoffs=[handoff(billing), handoff(refunds)],\n)\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-012",
+  "annotated_scope": [
+   "agents-008"
+  ],
+  "claim": "回调返回 ModelInputData 且 input 为输入项列表，符合 agents-008。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "PY-012"
+  ],
+  "flag_messages": [
+   "`ModelInputData` is constructed with only `input`, omitting required fields such as `instructions`, `tools`, `output_schema`, `handoffs`, and `tracing`. This causes model-input preparation to raise `TypeError`; it also d"
+  ],
+  "files": [
+   {
+    "file": "code/rewrite.py",
+    "code": "from agents import Agent\nfrom agents.run import ModelInputData\n\ndef prepare_input(agent, input_items) -> ModelInputData:\n    return ModelInputData(input=input_items)\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-014",
+  "annotated_scope": [
+   "agents-004"
+  ],
+  "claim": "阻塞式 guardrail（run_in_parallel=False），tripwire 触发时昂贵模型不启动，符合 agents-004。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "AGENT-GUARDRAIL-STRUCTURED-OUTPUT",
+   "SECURITY-GUARDRAIL-POLICY-DEFINED",
+   "guardrails.implementation"
+  ],
+  "flag_messages": [
+   "The guardrail agent does not return the structured `GuardrailOutput` required for a selective input-guardrail decision. Configure it with `output_type=GuardrailOutput` and require it to set `tripwire_triggered` appropria",
+   "The guardrail is not given any actual policy or classification criteria, so \"policy-violating input\" is undefined and cannot be evaluated reliably.",
+   "The input guardrail is not constructed with the required guardrail function."
+  ],
+  "files": [
+   {
+    "file": "code/gatekeeper.py",
+    "code": "from agents import Agent, InputGuardrail\n\ngatekeeper = Agent(name=\"Gatekeeper\", instructions=\"Block policy-violating input.\")\n\nguardrail = InputGuardrail(guardrail_agent=gatekeeper, run_in_parallel=False)\n\nassistant = Agent(\n    name=\"Assistant\",\n    instructions=\"Expensive assistant model.\",\n    input_guardrails=[guardrail],\n)\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-016",
+  "annotated_scope": [
+   "agents-003"
+  ],
+  "claim": "用 input_guardrails 在 agent 运行的同时对用户输入做校验，符合 agents-003。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "PY-016",
+   "guardrails.require_guardrail_function",
+   "input-guardrail-output-type"
+  ],
+  "flag_messages": [
+   "InputGuardrail is constructed without a guardrail_function, and the guardrail agent's output is never converted into a GuardrailFunctionOutput. An InputGuardrail requires a callable that returns a GuardrailFunctionOutput",
+   "The agent-backed input guardrail has no structured tripwire output, so policy violations cannot be signaled reliably.",
+   "The input guardrail is not configured according to the documented guardrail-function contract. `InputGuardrail(guardrail_agent=screen)` supplies an ordinary agent instead of a function that returns `GuardrailFunctionOutp"
+  ],
+  "files": [
+   {
+    "file": "code/moderator.py",
+    "code": "from agents import Agent, InputGuardrail\n\nscreen = Agent(name=\"Screen\", instructions=\"Screen input for policy violations.\")\n\nguardrail = InputGuardrail(guardrail_agent=screen)\n\nassistant = Agent(\n    name=\"Assistant\",\n    instructions=\"Answer user questions.\",\n    input_guardrails=[guardrail],\n)\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-018",
+  "annotated_scope": [
+   "agents-001"
+  ],
+  "claim": "output_type 设置（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "strict-structured-output",
+   "unvalidated-output-schema"
+  ],
+  "flag_messages": [
+   "The agent output uses an unconstrained `dict` for each entity, producing an open object schema with no required or validated properties. This is incompatible with strict structured-output schemas and may cause the API to"
+  ],
+  "files": [
+   {
+    "file": "code/extractor.py",
+    "code": "from pydantic import BaseModel\nfrom agents import Agent\n\n\nclass Entities(BaseModel):\n    entities: list[dict]\n\n\nextractor = Agent(\n    name=\"Extractor\",\n    instructions=\"Extract entities from the text.\",\n    output_type=Entities,\n)\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-020",
+  "annotated_scope": [
+   "agents-002"
+  ],
+  "claim": "返回 prompt（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "PY-020"
+  ],
+  "flag_messages": [
+   "Untrusted context is interpolated directly into the dynamic prompt, allowing prompt injection."
+  ],
+  "files": [
+   {
+    "file": "code/planner.py",
+    "code": "from agents import Agent\n\ndef dynamic_prompt(agent, context) -> str:\n    return f\"Plan for {context.goal}. Budget: {context.budget}\"\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-022",
+  "annotated_scope": [
+   "agents-003"
+  ],
+  "claim": "input_guardrails（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "AGENT-GUARDRAIL-OUTPUT-TYPE",
+   "guardrail-function-contract",
+   "guardrail-output-type"
+  ],
+  "flag_messages": [
+   "InputGuardrail is constructed without an output_type, so the guardrail agent's output is not validated against the expected GuardrailFunctionOutput schema. The guardrail agent must return a GuardrailFunctionOutput (with ",
+   "The guardrail agent does not produce the structured output required for an input guardrail, so it cannot reliably trigger the tripwire. Configure `screen` with `output_type=GuardrailOutput` and explicit instructions for ",
+   "The input guardrail is not defined as a function that returns GuardrailFunctionOutput."
+  ],
+  "files": [
+   {
+    "file": "code/sentinel.py",
+    "code": "from agents import Agent, InputGuardrail\n\nscreen = Agent(name=\"Screen\", instructions=\"Screen the input.\")\nguardrail = InputGuardrail(guardrail_agent=screen)\n\nagent = Agent(name=\"Helper\", instructions=\"Answer questions.\", input_guardrails=[guardrail])\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-024",
+  "annotated_scope": [
+   "agents-004"
+  ],
+  "claim": "阻塞模式（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "F821",
+   "guardrails.execution_modes.blocking",
+   "guardrails.implementation.input_guardrail_function",
+   "undefined-name"
+  ],
+  "flag_messages": [
+   "make_gatekeeper() is called but never defined or imported in this module, so the guardrail construction will raise a NameError at import time.",
+   "`make_gatekeeper` is neither defined nor imported, so module initialization raises `NameError`.",
+   "The input guardrail is configured as an `InputGuardrail(guardrail_agent=...)` object rather than implemented as the required guardrail function."
+  ],
+  "files": [
+   {
+    "file": "code/cost_guard.py",
+    "code": "from agents import Agent, InputGuardrail\n\nguardrail = InputGuardrail(guardrail_agent=make_gatekeeper(), run_in_parallel=False)\n\nexpensive = Agent(name=\"Expensive\", instructions=\"...\", input_guardrails=[guardrail])\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-026",
+  "annotated_scope": [
+   "agents-005"
+  ],
+  "claim": "带 docstring（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "F821"
+  ],
+  "flag_messages": [
+   "Undefined name `translate_api` will raise `NameError` when the tool is called."
+  ],
+  "files": [
+   {
+    "file": "code/translate.py",
+    "code": "from agents import function_tool\n\n@function_tool\ndef translate(text: str, target: str) -> str:\n    \"\"\"Translate text into the target language.\"\"\"\n\n    return translate_api(text, target)\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-028",
+  "annotated_scope": [
+   "agents-006"
+  ],
+  "claim": "错误处理（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "PY-028",
+   "broad-exception-caught",
+   "undefined-name",
+   "untrusted-input"
+  ],
+  "flag_messages": [
+   "The function references `json` and `fetch` but neither is imported or defined in this module, so calling `invoke` will raise NameError (caught by the broad except and returned as a misleading 'fetch failed' message).",
+   "Catching bare `Exception` swallows all errors (including programming errors like NameError/KeyError) and converts them into a generic string, hiding bugs and making failures hard to diagnose.",
+   "The `url` from parsed arguments is passed directly to `fetch` without validation, allowing arbitrary/unsafe URLs (e.g., internal addresses) to be fetched.",
+   "The catch-all handler masks unexpected programming and operational failures, while returning the raw exception text can disclose internal URLs, hostnames, or other sensitive diagnostics to the caller."
+  ],
+  "files": [
+   {
+    "file": "code/fetcher_tool.py",
+    "code": "def invoke(ctx, arguments: str) -> str:\n    try:\n        return fetch(json.loads(arguments)[\"url\"])\n    except Exception as e:\n        return f\"fetch failed: {e}\"\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-030",
+  "annotated_scope": [
+   "agents-007"
+  ],
+  "claim": "每个目的地各一 handoff（新语境），符合 agents-007。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "PY-030"
+  ],
+  "flag_messages": [
+   "The Support agent is created without instructions, leaving its handoff behavior undefined."
+  ],
+  "files": [
+   {
+    "file": "code/escalation.py",
+    "code": "from agents import Agent, handoff\n\ngeneral = Agent(name=\"General\", instructions=\"General support.\")\nbilling = Agent(name=\"Billing\", instructions=\"Billing.\")\ntechnical = Agent(name=\"Technical\", instructions=\"Technical issues.\")\n\nsupport = Agent(\n    name=\"Support\",\n    handoffs=[handoff(general), handoff(billing), handoff(technical)],\n)\n"
+   }
+  ]
+ },
+ {
+  "spec": "agents-sdk",
+  "case_id": "PY-032",
+  "annotated_scope": [
+   "agents-008"
+  ],
+  "claim": "回调返回 ModelInputData（新语境），符合 agents-008。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "API-MISUSE",
+   "PY-032",
+   "UNUSED-IMPORT",
+   "UNUSED-PARAM",
+   "running_agents.call_model_input_filter.preserve_instructions"
+  ],
+  "flag_messages": [
+   "ModelInputData is constructed with only the 'input' argument, but it requires additional fields (e.g., new_items, last_response_id, or similar required parameters). This will raise a TypeError at runtime.",
+   "Imported names 'RunConfig' and 'ModelInputData' are not used consistently; 'RunConfig' is imported but never used, and 'ModelInputData' is imported from a private/internal module path.",
+   "The 'agent' parameter is accepted but never used, indicating the function signature does not match its behavior.",
+   "The custom ModelInputData omits the original input items.",
+   "The custom input-filter result omits the prepared instructions, which can remove the agent's system guidance from the model call."
+  ],
+  "files": [
+   {
+    "file": "code/custom_input.py",
+    "code": "from agents import RunConfig\nfrom agents.run import ModelInputData\n\ndef make_input(agent, items):\n    return ModelInputData(input=items)\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-002",
+  "annotated_scope": [
+   "airbnb-001"
+  ],
+  "claim": "全部引用使用 const，无 var。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.1",
+   "13.8",
+   "2.1",
+   "6.1",
+   "7.1",
+   "correctness",
+   "prefer-const",
+   "retry-logic"
+  ],
+  "flag_messages": [
+   "String uses double quotes instead of single quotes.",
+   "Uses CommonJS `module.exports` instead of ES modules.",
+   "`attempt` is never reassigned and should use `const` as written.",
+   "The retry limit is ineffective because the attempt counter is never incremented.",
+   "Use single quotes for the string literal.",
+   "Remove or export the unused `apiKey` variable.",
+   "Use a named function expression instead of a function declaration.",
+   "Declare `attempt` with `const` because it is never reassigned.",
+   "Use the standard module system instead of `module.exports`."
+  ],
+  "files": [
+   {
+    "file": "code/reference.js",
+    "code": "// good: const declarations\nconst apiKey = \"sk-test\";\nconst retries = 3;\n\nfunction withRetry(fn) {\n  let attempt = 0;\n  return () => (attempt <= retries ? fn() : null);\n}\n\nmodule.exports = { withRetry };\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-004",
+  "annotated_scope": [
+   "airbnb-002"
+  ],
+  "claim": "使用对象解构取多个属性，符合 5.1。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.6",
+   "7.1"
+  ],
+  "flag_messages": [
+   "Use a named function expression instead of a function declaration.",
+   "Prefer a default export because this module has only one export."
+  ],
+  "files": [
+   {
+    "file": "code/profile.js",
+    "code": "// good: object destructuring\nexport function renderProfile(user) {\n  const { name, email, city } = user;\n\n  return `${name} <${email}> (${city})`;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-006",
+  "annotated_scope": [
+   "airbnb-004"
+  ],
+  "claim": "使用默认参数语法，符合 7.7。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.6",
+   "6.1",
+   "7.1",
+   "JS-006"
+  ],
+  "flag_messages": [
+   "String literal uses double quotes instead of single quotes.",
+   "Module has a single export but uses a named export instead of a default export.",
+   "`greet()` throws when called without an argument because `options` itself has no default value. The default for `greeting` only applies after `options` is successfully destructured.",
+   "Use a named function expression rather than a function declaration.",
+   "Prefer a default export because this module has only one export.",
+   "Use single quotes for strings."
+  ],
+  "files": [
+   {
+    "file": "code/greet.js",
+    "code": "// good: default parameter syntax\nexport function greet(options) {\n  const { greeting = \"Hello\", name } = options;\n  return `${greeting}, ${name}!`;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-008",
+  "annotated_scope": [
+   "airbnb-007"
+  ],
+  "claim": "使用 === / !== 严格比较，符合 15.1。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.6",
+   "11.1",
+   "19.7",
+   "7.1"
+  ],
+  "flag_messages": [
+   "The function uses a `for` loop to iterate over an array instead of higher-order functions.",
+   "Use a named function expression instead of a function declaration.",
+   "Prefer a default export for this module's single export.",
+   "Replace the indexed `for` loop with a higher-order array method.",
+   "Leave a blank line between the loop block and the following statement."
+  ],
+  "files": [
+   {
+    "file": "code/compare.js",
+    "code": "// good: strict equality\nexport function isFirst(items, candidate) {\n  for (let i = 0; i < items.length; i += 1) {\n    if (items[i] === candidate) {\n      return true;\n    }\n  }\n  return false;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-010",
+  "annotated_scope": [
+   "airbnb-008"
+  ],
+  "claim": "多行块均加大括号，符合 16.1。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "11.1",
+   "functions--declarations",
+   "functions--mutate-params",
+   "iterators--nope",
+   "modules--prefer-default-export",
+   "whitespace--after-blocks"
+  ],
+  "flag_messages": [
+   "The code uses a `for-of` loop to iterate over the `rules` array. The style guide says not to use iterators and to prefer higher-order functions like `forEach`/`map` instead of `for-of`.",
+   "The exported function uses a function declaration instead of a named function expression.",
+   "The module's only export is named rather than default.",
+   "The implementation uses a `for...of` iterator instead of a higher-order array method.",
+   "The function mutates an object supplied through a parameter.",
+   "There is no blank line between the closing brace of the `if` block and the following statement."
+  ],
+  "files": [
+   {
+    "file": "code/policy.js",
+    "code": "// good: braces on all multiline blocks\nexport function applyPolicy(user, rules) {\n  if (user.isAdmin) {\n    for (const rule of rules) {\n      user.policies.push(rule.id);\n    }\n  }\n  return user;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-017",
+  "annotated_scope": [
+   "airbnb-002"
+  ],
+  "claim": "对象解构取多属性（变体 1），符合 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.6",
+   "3.5",
+   "7.1"
+  ],
+  "flag_messages": [
+   "The exported function is declared with function-declaration syntax rather than as a named function expression.",
+   "The module's only export is named, but a module with a single export should prefer a default export.",
+   "The shorthand property `amount` is not grouped at the beginning of the object literal."
+  ],
+  "files": [
+   {
+    "file": "code/inventory.js",
+    "code": "// good: object destructuring (variant 1)\nexport function listItems(order) {\n  const { symbol, quote, amount } = order;\n  return { pair: `${symbol}/${quote}`, amount };\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-018",
+  "annotated_scope": [
+   "airbnb-002"
+  ],
+  "claim": "对象解构取多属性（变体 2），符合 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.6",
+   "3.5",
+   "7.1"
+  ],
+  "flag_messages": [
+   "Use a named function expression instead of a function declaration.",
+   "Prefer a default export because this module has only one export.",
+   "Place the shorthand property before the regular property in the returned object."
+  ],
+  "files": [
+   {
+    "file": "code/catalog.js",
+    "code": "// good: object destructuring (variant 2)\nexport function findItems(order) {\n  const { symbol, quote, amount } = order;\n  return { pair: `${symbol}/${quote}`, amount };\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-019",
+  "annotated_scope": [
+   "airbnb-002"
+  ],
+  "claim": "对象解构取多属性（变体 3），符合 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.6",
+   "7.1"
+  ],
+  "flag_messages": [
+   "Use a named function expression instead of a function declaration.",
+   "Prefer a default export because this module has only one export."
+  ],
+  "files": [
+   {
+    "file": "code/audit.js",
+    "code": "// good: object destructuring (variant 3)\nexport function logItems(order) {\n  const { symbol, quote, amount } = order;\n  return { pair: `${symbol}/${quote}`, amount };\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-020",
+  "annotated_scope": [
+   "airbnb-002"
+  ],
+  "claim": "对象解构取多属性（变体 4），符合 airbnb-002。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.6",
+   "3.5",
+   "7.1"
+  ],
+  "flag_messages": [
+   "Use a named function expression rather than a function declaration.",
+   "Prefer a default export for a module with a single export.",
+   "Place the shorthand property before non-shorthand properties in the object literal."
+  ],
+  "files": [
+   {
+    "file": "code/orderbook.js",
+    "code": "// good: object destructuring (variant 4)\nexport function matchOrders(order) {\n  const { symbol, quote, amount } = order;\n  return { pair: `${symbol}/${quote}`, amount };\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-027",
+  "annotated_scope": [
+   "airbnb-005"
+  ],
+  "claim": "内联回调用箭头函数（变体 1），符合 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "5.1"
+  ],
+  "flag_messages": [
+   "Use object destructuring when accessing multiple properties of the same object."
+  ],
+  "files": [
+   {
+    "file": "code/telemetry.js",
+    "code": "// good: arrow function callback (variant 1)\nqueue.subscribe((event) => {\n  emit(event.type, event.payload);\n});\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-029",
+  "annotated_scope": [
+   "airbnb-005"
+  ],
+  "claim": "内联回调用箭头函数（变体 3），符合 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "5.1"
+  ],
+  "flag_messages": [
+   "Destructure the multiple properties accessed from `event`."
+  ],
+  "files": [
+   {
+    "file": "code/audit.js",
+    "code": "// good: arrow function callback (variant 3)\nqueue.subscribe((event) => {\n  record(event.type, event.payload);\n});\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-030",
+  "annotated_scope": [
+   "airbnb-005"
+  ],
+  "claim": "内联回调用箭头函数（变体 4），符合 airbnb-005。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "5.1"
+  ],
+  "flag_messages": [
+   "The callback directly accesses multiple properties of the same object. Destructure `event` before using its properties."
+  ],
+  "files": [
+   {
+    "file": "code/sync.js",
+    "code": "// good: arrow function callback (variant 4)\nqueue.subscribe((event) => {\n  push(event.type, event.payload);\n});\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-042",
+  "annotated_scope": [
+   "airbnb-003"
+  ],
+  "claim": "数组解构，符合 airbnb-003。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.6",
+   "7.1"
+  ],
+  "flag_messages": [
+   "The exported function uses a function declaration instead of a named function expression.",
+   "The module's sole export is a named export rather than a default export."
+  ],
+  "files": [
+   {
+    "file": "code/coordinates.js",
+    "code": "// good: array destructuring\nexport function useCoordinates(pair) {\n  const [x, y] = pair;\n  return { x, y };\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "airbnb",
+  "case_id": "JS-044",
+  "annotated_scope": [
+   "airbnb-003"
+  ],
+  "claim": "数组解构（变体），符合 airbnb-003。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "10.6",
+   "7.1"
+  ],
+  "flag_messages": [
+   "The function is declared with function-declaration syntax instead of a named function expression.",
+   "The module's sole export is named rather than default."
+  ],
+  "files": [
+   {
+    "file": "code/rgb.js",
+    "code": "// good: array destructuring (variant)\nexport function toRGBTriplet(hex) {\n  const [r, g, b] = hexToParts(hex);\n  return { r, g, b };\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-102",
+  "annotated_scope": [
+   "asvs-V6.2.9"
+  ],
+  "claim": "密码长度上限 128，允许至少 64 字符，符合 asvs-V6.2.9。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-521",
+   "F821",
+   "V6.2.1",
+   "error-handling",
+   "input-validation",
+   "missing-required-field",
+   "password-policy",
+   "undefined-name",
+   "username-validation"
+  ],
+  "flag_messages": [
+   "The `password` parameter is not required (no `...` default), so a request omitting the password will pass `None` into `save_user`, potentially creating a user with no password or causing a runtime error. It should be dec",
+   "The password field only enforces a maximum length; there is no minimum length or complexity validation, allowing empty or trivially weak passwords.",
+   "The username field has no validation constraints (length, allowed characters), so arbitrary or empty usernames can be submitted.",
+   "`save_user` is called but never imported or defined in this module, causing a NameError at runtime. Additionally, the return value is passed through without handling duplicate-user or persistence errors.",
+   "The password field has no minimum-length validation, so an empty password passes request validation. Enforce a policy-appropriate minimum length before creating the account.",
+   "save_user is undefined or not imported in the provided module, causing every valid registration request to fail with NameError.",
+   "The registration endpoint does not enforce a minimum password length of 8 characters."
+  ],
+  "files": [
+   {
+    "file": "code/register.py",
+    "code": "from fastapi import FastAPI, Form\n\napp = FastAPI()\n\n@app.post(\"/register\")\ndef register(username: str = Form(...), password: str = Form(max_length=128)):\n    return save_user(username, password)\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-104",
+  "annotated_scope": [
+   "asvs-V6.2.12"
+  ],
+  "claim": "注册时对照泄露密码库校验，符合 asvs-V6.2.12。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-256",
+   "PY-104",
+   "V2.2.1",
+   "V6.2.1",
+   "V6.2.4"
+  ],
+  "flag_messages": [
+   "The password parameter is not required: Form(max_length=128) lacks the ellipsis default, so a request without a password is accepted and an empty/None password may be passed to is_breached and save_user.",
+   "The raw password is passed directly to the persistence layer without visible hashing.",
+   "No minimum password length is enforced on registration. The password parameter only sets an upper bound (max_length=128); a user can register with an empty or one-character password, violating the requirement that user-s",
+   "Passwords are only checked against a breach corpus; there is no check against the top 3000 most common passwords that satisfy the application's password policy, which is a separate required control at registration.",
+   "The username is accepted with only a presence constraint (`Form(...)`) and is passed straight to `save_user()` without any validation of its format, length, or allowed values, so untrusted input is stored without being v"
+  ],
+  "files": [
+   {
+    "file": "code/register.py",
+    "code": "@app.post(\"/register2\")\ndef register(username: str = Form(...), password: str = Form(max_length=128)):\n    if is_breached(password):\n        raise HTTPException(status_code=400, detail=\"password appears in breach corpus\")\n    save_user(username, password)\n    return {\"ok\": True}\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-108",
+  "annotated_scope": [
+   "asvs-V3.3.3"
+  ],
+  "claim": "会话 cookie 使用 __Host- 前缀，符合 asvs-V3.3.3。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "PY-108",
+   "V16.3.1",
+   "V2.2.1",
+   "V2.4.1",
+   "V6.2.8",
+   "V6.3.1",
+   "V6.3.3"
+  ],
+  "flag_messages": [
+   "Login does not validate the supplied password and therefore allows authentication bypass.",
+   "The login handler ignores the submitted password and grants a session for arbitrary credentials.",
+   "The login flow issues a session using only the single knowledge factor of a password, without requiring MFA or a combination of authentication mechanisms.",
+   "The login endpoint has no rate limiting or other anti-automation control against repeated authentication attempts.",
+   "Authentication attempts are not logged."
+  ],
+  "files": [
+   {
+    "file": "code/session.py",
+    "code": "@app.post(\"/login\")\ndef login(user: str = Form(...), password: str = Form(...)):\n    resp = JSONResponse({\"ok\": True})\n    resp.set_cookie(\"__Host-session\", make_session(user), secure=True, httponly=True, path=\"/\")\n    return resp\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-110",
+  "annotated_scope": [
+   "asvs-V7.3.1"
+  ],
+  "claim": "中间件校验会话不活动超时与绝对寿命，符合 asvs-V7.3.1。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "PY-110",
+   "V7.4.1"
+  ],
+  "flag_messages": [
+   "Session lookup is performed without validating that a token exists; a missing cookie yields a None token and lookup_session(None) will fail or match an anonymous session.",
+   "The session object is dereferenced (session.idle_seconds) before confirming lookup_session returned a valid session, risking an AttributeError or bypass on invalid/expired tokens.",
+   "Expiry is enforced by raising HTTPException inside middleware rather than returning a 401 response, which can surface as a 500 depending on the framework version.",
+   "Raising HTTPException in this middleware bypasses FastAPI's HTTPException handler, so an expired session may produce a 500 instead of a 401 response.",
+   "Expired sessions are rejected but are not invalidated in the backend."
+  ],
+  "files": [
+   {
+    "file": "code/session.py",
+    "code": "@app.middleware(\"http\")\nasync def check_session(request, call_next):\n    token = request.cookies.get(\"__Host-session\")\n    session = lookup_session(token)\n    if session.idle_seconds > 900 or session.age_seconds > 36000:\n        raise HTTPException(status_code=401, detail=\"session expired\")\n    request.state.user = session.user\n    return await call_next(request)\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-112",
+  "annotated_scope": [
+   "asvs-V7.4.5"
+  ],
+  "claim": "锁定用户同时吊销其全部活动会话，符合 asvs-V7.4.5。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "SEC-AUTHORIZATION",
+   "V8.2.1"
+  ],
+  "flag_messages": [
+   "The administrative lockout endpoint does not require authentication or verify that the caller has an administrative role.",
+   "The administrative lockout endpoint does not enforce function-level authorization before disabling an account and revoking its sessions."
+  ],
+  "files": [
+   {
+    "file": "code/admin.py",
+    "code": "@app.post(\"/admin/lockout/{user_id}\")\ndef lockout(user_id: str):\n    db.update_user(user_id, disabled=True)\n    db.revoke_sessions(user_id)\n    return {\"ok\": True}\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-114",
+  "annotated_scope": [
+   "asvs-V6.5.1"
+  ],
+  "claim": "OTP 校验成功即删除（一次性），符合 asvs-V6.5.1。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-208",
+   "CWE-294",
+   "CWE-307",
+   "CWE-362",
+   "OTP-ATTEMPTS",
+   "OTP-COMPARE",
+   "OTP-EXPIRY",
+   "OTP-NULL",
+   "OTP-SINGLE-USE",
+   "V15.4.2",
+   "V16.3.1",
+   "V6.5.1",
+   "V6.6.3"
+  ],
+  "flag_messages": [
+   "OTP is compared with the == operator, which is not constant-time and is vulnerable to timing attacks that can leak the code digit by digit.",
+   "If no OTP exists for the user, get_otp(user) may return None; a submitted code of None/empty could then match and bypass verification.",
+   "There is no check that the OTP has not expired before accepting it.",
+   "No rate limiting or attempt counter is enforced, allowing unlimited brute-force guesses of the OTP.",
+   "The OTP is only consumed on success; failed attempts do not invalidate it, and there is no atomic consume-before-verify.",
+   "A valid one-time OTP can be replayed by concurrent requests.",
+   "The OTP is compared with a non-constant-time string equality operation.",
+   "The OTP verification endpoint has no brute-force protection.",
+   "OTP validation and consumption are not atomic, allowing concurrent requests to authenticate more than once with the same OTP.",
+   "The OTP verification endpoint has no rate limiting to protect the code-based authentication factor against brute-force guessing.",
+   "Successful and unsuccessful OTP authentication attempts are not logged."
+  ],
+  "files": [
+   {
+    "file": "code/otp.py",
+    "code": "@app.post(\"/verify-otp\")\ndef verify_otp(user: str = Form(...), code: str = Form(...)):\n    if get_otp(user) == code:\n        consume_otp(user)\n        start_session(user)\n        return {\"ok\": True}\n    raise HTTPException(status_code=401)\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-116",
+  "annotated_scope": [
+   "asvs-V5.2.1"
+  ],
+  "claim": "上传前校验 Content-Length 上限，符合 asvs-V5.2.1。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-20",
+   "CWE-22",
+   "CWE-248",
+   "CWE-400",
+   "V1.3.3",
+   "V5.2.1",
+   "V5.2.2",
+   "V5.2.4",
+   "V5.3.2",
+   "V5.4.3",
+   "missing-header-handling",
+   "path-traversal",
+   "size-limit-bypass",
+   "unsafe-int-parse",
+   "unvalidated-filename"
+  ],
+  "flag_messages": [
+   "The upload size limit is enforced only via the client-supplied Content-Length header, which can be omitted or understated, allowing oversized bodies to bypass the check and be fully read into memory.",
+   "The x-filename header is passed directly to save() without sanitization, allowing path traversal or arbitrary file writes.",
+   "Accessing request.headers['x-filename'] raises KeyError (500) when the header is absent instead of returning a proper 4xx error.",
+   "int() on the content-length header can raise ValueError for non-numeric values, causing an unhandled 500.",
+   "The file path is built directly from the user-supplied 'x-filename' header without validation or sanitization, allowing path traversal / LFI / RFI.",
+   "The uploaded file's extension and content (magic bytes / actual type) are never validated against an expected file type.",
+   "The size limit relies solely on the client-supplied Content-Length header; the actual body size is not enforced, so an oversized upload can still be processed.",
+   "The upload-size limit is not enforced while consuming the request body and can be bypassed.",
+   "An invalid Content-Length header causes an unhandled exception.",
+   "A client-controlled filename is passed to save without path sanitization.",
+   "A missing x-filename header raises KeyError and produces a server error.",
+   "The upload-size limit relies on a client-controlled Content-Length header and is not enforced against the actual received body.",
+   "The uploaded file's extension and actual contents are not validated before it is accepted and stored.",
+   "A user-controlled filename is passed directly to the file-saving operation without trusted-name generation or strict validation and sanitization.",
+   "Untrusted uploaded files are accepted without antivirus scanning.",
+   "The upload endpoint enforces no per-user cumulative storage quota or maximum number of files."
+  ],
+  "files": [
+   {
+    "file": "code/upload.py",
+    "code": "MAX_UPLOAD = 10 * 1024 * 1024\n\n@app.post(\"/upload\")\nasync def upload(request: Request):\n    if int(request.headers.get(\"content-length\", 0)) > MAX_UPLOAD:\n        raise HTTPException(status_code=413, detail=\"file too large\")\n    body = await request.body()\n    save(request.headers[\"x-filename\"], body)\n    return {\"ok\": True}\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-120",
+  "annotated_scope": [
+   "asvs-V6.4.3"
+  ],
+  "claim": "重置流程要求先通过 MFA 再建立会话，符合 asvs-V6.4.3。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "AUTH-MFA-RATE-LIMITING",
+   "AUTH-OTP-SINGLE-USE",
+   "AUTH-PASSWORD-POLICY",
+   "AUTH-PRINCIPAL-CONSISTENCY",
+   "AUTH-RESET-TOKEN-SINGLE-USE",
+   "AUTH-SESSION-REVOCATION",
+   "AUTH-TOCTOU",
+   "CWE-307",
+   "CWE-521",
+   "CWE-613",
+   "PY-120",
+   "V16.3.1",
+   "V2.4.1",
+   "V3.5.1",
+   "V6.2.1",
+   "V6.2.11",
+   "V6.2.12",
+   "V6.2.4",
+   "V6.5.1",
+   "V6.6.2",
+   "V6.6.3",
+   "V7.2.4",
+   "V7.4.3"
+  ],
+  "flag_messages": [
+   "The reset token is validated and then reused to look up the user, but the token is never invalidated/consumed after a successful password reset. A reset token should be single-use; otherwise it remains valid and can be r",
+   "user_from_token(token) is called multiple times (in the condition and again in the body). This is redundant and, if the lookup has side effects or the token is consumed on first use, can lead to inconsistent behavior. Re",
+   "The password parameter is passed directly to set_password without any validation of password strength/complexity. Weak passwords should be rejected before being set.",
+   "The failure path raises a generic 400 without distinguishing invalid token vs. invalid OTP, and there is no rate limiting or lockout on OTP verification, which could allow brute-forcing the OTP.",
+   "A successful reset does not explicitly consume the reset token or mark the MFA code as used.",
+   "The token is resolved separately for MFA verification and for the password mutation, so authorization is not guaranteed to apply to the same principal.",
+   "The reset endpoint has no visible throttling or MFA attempt limit.",
+   "The route does not enforce a password length or blocklist policy.",
+   "The password reset does not visibly revoke sessions or refresh tokens established before the reset.",
+   "The password-reset endpoint accepts a normal form POST without validating the Origin, requiring an anti-forgery token, or requiring a non-CORS-safelisted header.",
+   "The reset flow does not enforce the minimum password length before setting the new password.",
+   "The new password is set without checking it against the application's common-password list.",
+   "The reset flow does not check the new password against context-specific prohibited words.",
+   "The reset flow does not check the new password against a set of breached passwords.",
+   "The reset token is only validated and is not explicitly consumed or revoked, so single-use semantics are not enforced.",
+   "The MFA code is not visibly bound to the specific password-reset request or reset token.",
+   "The reset and OTP verification endpoint has no visible rate limiting or anti-automation control.",
+   "A new session is started after the reset without visibly terminating the session token that was current before re-authentication.",
+   "After a successful password reset, the application does not offer the user an option to terminate all other active sessions.",
+   "Successful and failed reset/MFA authentication attempts are not logged."
+  ],
+  "files": [
+   {
+    "file": "code/reset.py",
+    "code": "@app.post(\"/reset-password\")\ndef reset_password(token: str = Form(...), password: str = Form(...), otp: str = Form(...)):\n    if validate_reset_token(token) and verify_mfa(user_from_token(token), otp):\n        user = user_from_token(token)\n        set_password(user, password)\n        start_session(user)\n        return {\"ok\": True}\n    raise HTTPException(status_code=400)\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-122",
+  "annotated_scope": [
+   "asvs-V6.5.4"
+  ],
+  "claim": "OTP 为 6 位 base32 字母数字（约 28 bits），符合 asvs-V6.5.4。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "V11.5.1"
+  ],
+  "flag_messages": [
+   "The generated OTP contains only 30 bits of entropy, below the required 128-bit minimum for a random value intended to be non-guessable."
+  ],
+  "files": [
+   {
+    "file": "code/otp.py",
+    "code": "import secrets\n\nALPHABET = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ234567\"\n\ndef generate_otp() -> str:\n    return \"\".join(secrets.choice(ALPHABET) for _ in range(6))\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-124",
+  "annotated_scope": [
+   "asvs-V7.5.2"
+  ],
+  "claim": "提供查看并二次认证后终止自己全部会话的端点，符合 asvs-V7.5.2。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-352",
+   "V14.3.2",
+   "V16.3.1",
+   "V3.5.1"
+  ],
+  "flag_messages": [
+   "The cookie-authenticated session-revocation endpoint lacks CSRF protection.",
+   "The session-revocation endpoint does not enforce CSRF protection. It accepts a CORS-safelisted form POST but requires neither an anti-forgery token nor a non-safelisted request header whose value is validated.",
+   "The endpoint returning active session information does not set an anti-caching response header such as `Cache-Control: no-store`.",
+   "The password reauthentication operation is not logged for either successful or unsuccessful outcomes."
+  ],
+  "files": [
+   {
+    "file": "code/sessions.py",
+    "code": "@app.get(\"/me/sessions\")\ndef list_sessions(user=Depends(current_user)):\n    return db.active_sessions(user)\n\n@app.post(\"/me/sessions/revoke\")\ndef revoke_sessions(password: str = Form(...), user=Depends(current_user)):\n    if not verify_password(user, password):\n        raise HTTPException(status_code=403)\n    db.revoke_sessions(user)\n    return {\"ok\": True}\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-126",
+  "annotated_scope": [
+   "asvs-V6.2.9"
+  ],
+  "claim": "允许 72 字符（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-521",
+   "PY-126",
+   "input-validation",
+   "password-security"
+  ],
+  "flag_messages": [
+   "The password field has no minimum length or complexity validation, and the email field is not validated at all. A user could sign up with an empty or one-character password, and any arbitrary string (including non-email ",
+   "The signup endpoint does not enforce a minimum password length."
+  ],
+  "files": [
+   {
+    "file": "code/signup.py",
+    "code": "@app.post(\"/signup\")\ndef signup(email: str = Form(...), password: str = Form(max_length=72)):\n    return create_account(email, password)\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-128",
+  "annotated_scope": [
+   "asvs-V6.2.12"
+  ],
+  "claim": "改密对照泄露库（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-620",
+   "PY-128",
+   "V6.2.1",
+   "V6.2.3",
+   "V7.5.1"
+  ],
+  "flag_messages": [
+   "The password-change endpoint does not require or verify the current password.",
+   "The password-change flow does not enforce a minimum password length of 8 characters. The `new` parameter is an unrestricted string, and the only explicit validation before `set_password` is the breached-password check.",
+   "The endpoint does not require the user's current password when changing a password. It requires only an existing authenticated session and accepts only the new password.",
+   "The password is changed without full re-authentication. The endpoint relies solely on the existing `current_user` session and performs no fresh credential, factor, or step-up verification before modifying the user's auth"
+  ],
+  "files": [
+   {
+    "file": "code/changepw.py",
+    "code": "@app.post(\"/change-password\")\ndef change_password(user=Depends(current_user), new: str = Form(...)):\n    if is_breached(new):\n        raise HTTPException(status_code=400, detail=\"breached password\")\n    set_password(user, new)\n    return {\"ok\": True}\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-134",
+  "annotated_scope": [
+   "asvs-V7.3.1"
+  ],
+  "claim": "签名 + 时效（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "N802",
+   "V9.1.1"
+  ],
+  "flag_messages": [
+   "The callable `Auth_signature` does not follow Python's lowercase snake_case convention for function names. Rename it to `auth_signature`; if it is intended to be a class, use a CapWords name such as `AuthSignature` and i",
+   "Validate the session token's signature before loading or processing token-derived session data."
+  ],
+  "files": [
+   {
+    "file": "code/api_session.py",
+    "code": "def authorize(request) -> bool:\n    session = load_session(request.cookies.get(\"sid\"))\n    if session is None or session.expired():\n        return False\n    return verify_signature(request.cookies.get(\"sid\"))\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-136",
+  "annotated_scope": [
+   "asvs-V7.4.5"
+  ],
+  "claim": "停用并吊销会话（变体）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-862",
+   "PY-136",
+   "V8.2.1",
+   "V8.2.2"
+  ],
+  "flag_messages": [
+   "The administrative member-disable operation does not authenticate or authorize the caller.",
+   "The endpoint performs a privileged member-disabling operation without verifying that the caller has explicit permission to invoke this function.",
+   "The endpoint does not verify that the caller is authorized to access the specific member identified by member_id."
+  ],
+  "files": [
+   {
+    "file": "code/org_admin.py",
+    "code": "@app.post(\"/org/members/{member_id}/disable\")\ndef disable_member(member_id: str):\n    db.set_member_state(member_id, active=False)\n    db.revoke_sessions(member_id)\n    return {\"ok\": True}\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-138",
+  "annotated_scope": [
+   "asvs-V6.4.3"
+  ],
+  "claim": "重置后要求重新完整认证（含 MFA），符合 asvs-V6.4.3。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-20",
+   "CWE-209",
+   "CWE-307",
+   "CWE-362",
+   "CWE-384",
+   "CWE-521",
+   "CWE-799",
+   "V16.3.1",
+   "V3.5.1",
+   "V6.2.1",
+   "V6.2.12",
+   "V6.2.4",
+   "V6.3.7",
+   "V6.5.1",
+   "V6.6.3",
+   "V7.4.3"
+  ],
+  "flag_messages": [
+   "The forgot-password confirmation endpoint has no rate limiting or attempt throttling on the email code or MFA verification, allowing brute-force attacks against both factors.",
+   "The new password is accepted without any validation of strength, length, or complexity before being set.",
+   "The email code and MFA are not invalidated/consumed after successful use, so a captured code could be replayed to reset the password again.",
+   "A generic 400 is returned for all failure cases, which is acceptable, but the endpoint does not distinguish or log failures; ensure failures are logged for monitoring without leaking details to the client.",
+   "The password-reset endpoint does not enforce rate limiting, allowing repeated attempts against the email code and MFA values.",
+   "The password-reset endpoint accepts cross-origin form requests without an anti-forgery or request-origin check.",
+   "The reset path does not enforce the required password-strength and compromised-password checks before changing the password.",
+   "A successfully used password-reset code is not shown to be consumed or invalidated, so one-time use is not established.",
+   "Successful and failed password-reset authentication attempts are not logged.",
+   "A successful password reset does not offer the user a way to terminate other active sessions.",
+   "A successful credential reset does not notify the affected user."
+  ],
+  "files": [
+   {
+    "file": "code/forgot.py",
+    "code": "@app.post(\"/forgot/confirm\")\ndef forgot_confirm(email: str = Form(...), code: str = Form(...), new: str = Form(...), mfa: str = Form(...)):\n    if check_email_code(email, code) and verify_mfa(email, mfa):\n        set_password(email, new)\n        return {\"ok\": True, \"next\": \"login\"}\n    raise HTTPException(status_code=400)\n"
+   }
+  ]
+ },
+ {
+  "spec": "asvs",
+  "case_id": "PY-140",
+  "annotated_scope": [
+   "asvs-V6.5.1"
+  ],
+  "claim": "登录 OTP 一次性消费（新语境），符合 asvs-V6.5.1。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "CWE-307",
+   "OWASP-A07-2021",
+   "V14.3.2",
+   "V16.3.1",
+   "V2.4.1",
+   "V6.6.3"
+  ],
+  "flag_messages": [
+   "The OTP verification endpoint does not restrict repeated authentication attempts, enabling online brute-force attacks.",
+   "The OTP authentication endpoint has no visible rate-limiting or anti-automation control, allowing repeated guesses of one-time codes.",
+   "Successful and failed OTP authentication attempts are not logged by the supplied implementation.",
+   "The response containing a newly issued authentication token does not set an anti-caching header such as Cache-Control: no-store."
+  ],
+  "files": [
+   {
+    "file": "code/login_otp.py",
+    "code": "@app.post(\"/login/otp\")\ndef login_otp(user: str = Form(...), code: str = Form(...)):\n    if consume_otp(user, code):\n        return {\"token\": issue_token(user)}\n    raise HTTPException(status_code=401)\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-002",
+  "annotated_scope": [
+   "R-002"
+  ],
+  "claim": "useActionState 处理表单动作，符合 React 19 Actions 用法。",
+  "flagged_raw": [
+   "error-handling",
+   "http-json-content-type",
+   "input-validation",
+   "react-action-error-handling",
+   "react-controlled-inputs",
+   "wcag-4.1.2"
+  ],
+  "flag_messages": [
+   "On a failed request the action returns null, silently discarding the error. The user gets no feedback that the update failed, and the returned state is indistinguishable from the initial state. Surface an error message i",
+   "The fetch call is not wrapped in try/catch, so network errors or JSON serialization failures will reject the action and propagate as an unhandled error rather than being handled gracefully.",
+   "The submitted name is not validated (e.g., empty or whitespace-only values) before being sent to the server.",
+   "The input uses defaultValue with a value derived from action state. After a successful update the field will not reflect the new state because defaultValue only applies on mount; consider a key or controlled value to kee",
+   "The JSON request body is sent without an application/json Content-Type header.",
+   "Failed updates are silently converted into successful action completions.",
+   "The name input has no accessible label."
+  ],
+  "files": [
+   {
+    "file": "code/NameForm.tsx",
+    "code": "import { useActionState } from \"react\";\n\nasync function updateName(\n  _prev: string | null,\n  formData: FormData,\n): Promise<string | null> {\n  const name = String(formData.get(\"name\") ?? \"\");\n  const res = await fetch(\"/api/name\", {\n    method: \"POST\",\n    body: JSON.stringify({ name }),\n  });\n  if (!res.ok) return null;\n  return name;\n}\n\nexport function NameForm() {\n  const [name, formAction, isPending] = useActionState(updateName, null);\n\n  return (\n    <form action={formAction}>\n      <input name=\"name\" defaultValue={name ?? \"\"} />\n      <button type=\"submit\" disabled={isPending}>\n        Update\n      </button>\n    </form>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-008",
+  "annotated_scope": [
+   "R-007"
+  ],
+  "claim": "模块级缓存保证同一 URL 复用同一 Promise 实例，符合 R-007。",
+  "flagged_raw": [
+   "fetch-error-handling",
+   "fetch/check-response-status",
+   "module-level-mutable-state",
+   "promise-cache/remove-rejected-promises",
+   "react-use-cache-scope"
+  ],
+  "flag_messages": [
+   "The cache is a module-level Map that is never invalidated or cleared. Cached promises (including rejected ones) persist for the lifetime of the module, so stale data is served indefinitely and a failed fetch is permanent",
+   "The fetch result is not checked for HTTP errors (res.ok) before calling res.json(), and there is no error handling. Non-2xx responses or network failures produce a rejected promise that is cached and surfaced as an unhan",
+   "Module-level mutable state (`const cache = new Map()`) shared across all component instances and requests is a cross-request data-leak risk in SSR and makes behavior non-deterministic between renders.",
+   "Non-2xx HTTP responses are parsed and rendered as successful status data.",
+   "Rejected requests permanently poison the URL cache."
+  ],
+  "files": [
+   {
+    "file": "code/CachedStatus.tsx",
+    "code": "import { use } from \"react\";\n\nconst cache = new Map<string, Promise<unknown>>();\n\nfunction getCachedJson(url: string): Promise<unknown> {\n  let p = cache.get(url);\n  if (!p) {\n    p = fetch(url).then((res) => res.json());\n    cache.set(url, p);\n  }\n  return p;\n}\n\nexport function CachedStatus({ url }: { url: string }) {\n  const data = use(getCachedJson(url));\n  return <pre>{JSON.stringify(data)}</pre>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-011",
+  "annotated_scope": [
+   "R-008"
+  ],
+  "claim": "use() 读取缓存 Promise 且组件在 Suspense 边界内（R-008 合规）。2026-11-15 修订：原代码含内联未缓存 promise（顺带违反 R-007），致全部方法一致误报（error-taxonomy-v0.json）；经人工定夺改为模块级缓存实现，消除范围外模式，verdict/rule_ids 不变。",
+  "flagged_raw": [
+   "R-007",
+   "TS-011",
+   "use-promise-resolved-value"
+  ],
+  "flag_messages": [
+   "The module-level cache is never invalidated and stores rejected promises. A failed fetch stays cached forever, so every subsequent render of the same URL re-throws the same error and the component can never recover. The ",
+   "fetch() does not check res.ok, so HTTP error responses (404/500) are treated as success and passed to res.json(), which may throw a parse error or yield unexpected data. The response body is also assumed to be JSON witho",
+   "The component renders String(data.ok), which is a weak/opaque representation of the fetched status and assumes the JSON payload has an `ok` field. If the API shape differs, this silently renders 'undefined'.",
+   "`data.ok` is accessed even though `getCachedStatus` returns `Promise<string>`, so `use` infers `data` as `string` and this fails TypeScript type checking. The JSON payload should be represented by an object type such as ",
+   "The Promise's declared resolved type is inconsistent with its consumption. `getCachedStatus` returns `Promise<string>`, so `use` returns a `string`, but line 15 accesses `data.ok`; this causes a TypeScript error because "
+  ],
+  "files": [
+   {
+    "file": "code/SuspenseStatus.tsx",
+    "code": "import { Suspense, use } from \"react\";\n\n// 模块级缓存：同一 Promise 实例跨重渲染复用（R-007 要求）\nconst cache = new Map<string, Promise<string>>();\n\nfunction getCachedStatus(url: string): Promise<string> {\n  if (!cache.has(url)) {\n    cache.set(url, fetch(url).then((res) => res.json()));\n  }\n  return cache.get(url)!;\n}\n\nfunction Status({ url }: { url: string }) {\n  const data = use(getCachedStatus(url));\n  return <p>{String(data.ok)}</p>;\n}\n\nexport function Page({ url }: { url: string }) {\n  return (\n    <Suspense fallback=\"loading\">\n      <Status url={url} />\n    </Suspense>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-013",
+  "annotated_scope": [
+   "R-010"
+  ],
+  "claim": "乐观更新在 startTransition 内执行，符合 R-010。",
+  "flagged_raw": [
+   "TS-013",
+   "optimistic-update-hardcoded-value",
+   "react-async-transition-error-handling",
+   "react-useoptimistic-transition-scope",
+   "useTransition.state-update-after-await"
+  ],
+  "flag_messages": [
+   "useOptimistic updates must be applied inside a transition, but the optimistic update here is performed inside an async callback passed to startTransition. React's useOptimistic requires addOptimistic to be called synchro",
+   "The async transition has no error handling. If fetch rejects or returns a non-OK status, setFollowing(true) is never called and the optimistic state silently reverts with no user feedback; unhandled rejections may also s",
+   "The optimistic reducer ignores the current state and the update always sets true, so the component cannot represent an unfollow action and the optimistic value is hardcoded rather than derived from intent.",
+   "The follow state is committed without verifying that the request succeeded.",
+   "The state update following the asynchronous request is not wrapped in another startTransition."
+  ],
+  "files": [
+   {
+    "file": "code/OptimisticFollow.tsx",
+    "code": "import { useOptimistic, useState, useTransition } from \"react\";\n\nexport function OptimisticFollow() {\n  const [following, setFollowing] = useState(false);\n  const [isPending, startTransition] = useTransition();\n  const [optimisticFollowing, addOptimistic] = useOptimistic(\n    following,\n    (current, delta: boolean) => delta\n  );\n\n  function handleClick() {\n    startTransition(async () => {\n      addOptimistic(true);\n      await fetch(\"/api/follow\", { method: \"POST\" });\n      setFollowing(true);\n    });\n  }\n\n  return (\n    <button onClick={handleClick} disabled={isPending}>\n      {optimisticFollowing ? \"Following\" : \"Follow\"}\n    </button>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-018",
+  "annotated_scope": [
+   "R-001"
+  ],
+  "claim": "use() 读取 Map 缓存的 Promise，Suspense 兜底加载态；无 useEffect 手动取数。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：use+Map 缓存+上层 Suspense 构成 R-001 的正确取数，非回避场景。）",
+  "flagged_raw": [
+   "react-suspense-cache-invalidation",
+   "react-suspense-error-handling",
+   "react-suspense-fetch-response-check"
+  ],
+  "flag_messages": [
+   "The module-level `cache` Map is never invalidated or cleared. Once a URL's Promise is cached, subsequent renders (including after a refetch or when the URL's data changes) will always reuse the stale Promise, so the pane",
+   "A rejected fetch Promise is cached permanently. If `fetch` or `res.json()` rejects, the rejected Promise stays in the cache, so every future render of that URL throws the same error and there is no error boundary or retr",
+   "The response status is not checked before calling `res.json()`. Non-2xx responses (e.g., 404/500 HTML error pages) will either throw a JSON parse error or be rendered as if they were valid status data."
+  ],
+  "files": [
+   {
+    "file": "code/StatusPanel.tsx",
+    "code": "import { use, Suspense } from \"react\";\n\nconst cache = new Map<string, Promise<unknown>>();\n\nfunction fetchStatus(url: string): Promise<unknown> {\n  if (!cache.has(url)) {\n    cache.set(url, fetch(url).then((res) => res.json()));\n  }\n  return cache.get(url)!;\n}\n\nfunction Status({ url }: { url: string }) {\n  // use() 读取缓存 Promise，加载态交给上层 Suspense，而非 useEffect+setState 手动取数\n  const data = use(fetchStatus(url));\n  return <pre>{JSON.stringify(data)}</pre>;\n}\n\nexport function StatusPanel({ url }: { url: string }) {\n  return (\n    <Suspense fallback=\"loading\">\n      <Status url={url} />\n    </Suspense>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-019",
+  "annotated_scope": [
+   "R-002"
+  ],
+  "claim": "提交交给 form 的 action prop（useActionState），React 自动包 Transition。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：action prop 用法正确，reducerAction 收 (prevState, FormData)。）",
+  "flagged_raw": [
+   "handle-http-errors",
+   "handle-network-errors",
+   "useActionState.validation-preserve-form-values"
+  ],
+  "flag_messages": [
+   "The action reports success for HTTP error responses.",
+   "Network failures are not converted into the form's error state.",
+   "The validation response does not preserve the submitted form value. On an invalid submission, `submitAction` returns only an error and discards `formData`; because the form action resets after submission and the input ha"
+  ],
+  "files": [
+   {
+    "file": "code/NameForm.tsx",
+    "code": "import { useActionState } from \"react\";\n\ntype FormState = { error: string | null };\n\nasync function submitAction(_prev: FormState, formData: FormData): Promise<FormState> {\n  const name = String(formData.get(\"name\") ?? \"\");\n  if (name.trim().length < 2) {\n    return { error: \"name too short\" };\n  }\n  await fetch(\"/api/name\", { method: \"POST\", body: formData });\n  return { error: null };\n}\n\nexport function NameForm() {\n  const [state, submitFormAction, isPending] = useActionState(submitAction, { error: null });\n  // 提交交给 form 的 action prop：React 自动包 Transition 并传 FormData\n  return (\n    <form action={submitFormAction}>\n      <input name=\"name\" disabled={isPending} />\n      <button type=\"submit\" disabled={isPending}>Save</button>\n      {state.error && <p role=\"alert\">{state.error}</p>}\n    </form>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-024",
+  "annotated_scope": [
+   "R-009"
+  ],
+  "claim": "Promise 直接交给 use，不读 promise.status/value；Suspense 边界在父级。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：Promise 直交 use，Suspense 边界在会 suspend 的 Profile 父级。）",
+  "flagged_raw": [
+   "reference-react-use.md#displaying-an-error-with-an-error-boundary"
+  ],
+  "flag_messages": [
+   "The Promise consumer is wrapped in Suspense but not in an Error Boundary, so a rejected `userPromise` has no error fallback in this component tree. Suspense handles pending Promises; errors require an Error Boundary."
+  ],
+  "files": [
+   {
+    "file": "code/ProfilePage.tsx",
+    "code": "import { use, Suspense } from \"react\";\n\ntype User = { name: string };\n\nfunction Profile({ userPromise }: { userPromise: Promise<User> }) {\n  // Promise 直接交给 use，pending 与错误都由 React/Suspense 处理，\n  // 不读取 promise.status / promise.value\n  const user = use(userPromise);\n  return <p>{user.name}</p>;\n}\n\nexport function ProfilePage({ userPromise }: { userPromise: Promise<User> }) {\n  return (\n    <Suspense fallback=\"loading profile\">\n      <Profile userPromise={userPromise} />\n    </Suspense>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-025",
+  "annotated_scope": [
+   "R-011"
+  ],
+  "claim": "dispatchAction 包在 startTransition（Action）内调用。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：dispatchAction 包在 startTransition 内。）",
+  "flagged_raw": [
+   "error-handling",
+   "react-action-state",
+   "react/use-action-state-dispatch-in-transition"
+  ],
+  "flag_messages": [
+   "dispatchAction returned by useActionState is already an Action and manages its own transition; wrapping it in startTransition is redundant and can cause the pending state (isPending) to not reflect correctly or to be del",
+   "A failed save is silently presented as a completed action."
+  ],
+  "files": [
+   {
+    "file": "code/DraftBox.tsx",
+    "code": "import { useActionState, startTransition } from \"react\";\n\nasync function saveDraft(_prev: string | null, payload: string): Promise<string | null> {\n  const res = await fetch(\"/api/draft\", { method: \"POST\", body: payload });\n  return res.ok ? payload : _prev;\n}\n\nexport function DraftBox() {\n  const [saved, dispatchAction, isPending] = useActionState(saveDraft, null);\n\n  function handleSave() {\n    // dispatchAction 包在 startTransition（Action）内调用\n    startTransition(() => {\n      dispatchAction(\"auto-save\");\n    });\n  }\n\n  return (\n    <div>\n      <button onClick={handleSave} disabled={isPending}>Save</button>\n      {saved && <p>saved: {saved}</p>}\n    </div>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-026",
+  "annotated_scope": [
+   "R-012"
+  ],
+  "claim": "useOptimistic 的 reducer 为纯函数：只依据入参计算新状态。（AI 起草，待人工复核后可升 handcrafted。）（2026-11-14 AI 代人工复核通过：reducer 纯；Date.now 在按钮调用侧而非 reducer 内。）",
+  "flagged_raw": [
+   "http-check-response-status",
+   "http-json-content-type",
+   "no-side-effects-in-render",
+   "no-unhandled-promise",
+   "react-hooks/use-optimistic-async-action",
+   "react-unique-list-key",
+   "react-use-optimistic-canonical-state",
+   "react/no-array-index-key",
+   "reliable-error-handling"
+  ],
+  "flag_messages": [
+   "useOptimistic's dispatch must be called inside an async transition/action; here dispatch is called synchronously before the await, so the optimistic update is not tied to the async action lifecycle and will be reverted i",
+   "The fetch response is not checked and errors are not handled; a failed POST leaves the UI inconsistent with the server with no rollback or error feedback.",
+   "Using Date.now() as the todo id can produce duplicate keys if two adds occur within the same millisecond, and generating ids in the click handler is acceptable but the id should ideally come from the server.",
+   "The optimistic todo is never committed to the canonical todo state.",
+   "Non-2xx API responses are silently treated as successful additions.",
+   "The JSON request body is sent without an application/json Content-Type header.",
+   "Date.now() is not a collision-safe identifier for todos."
+  ],
+  "files": [
+   {
+    "file": "code/TodoList.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\ntype Todo = { id: number; text: string };\ntype Action = { type: \"add\"; todo: Todo } | { type: \"remove\"; id: number };\n\nfunction todosReducer(current: Todo[], action: Action): Todo[] {\n  // 纯函数：只依据入参计算新状态，不改外部变量、不依赖时间\n  switch (action.type) {\n    case \"add\":\n      return [...current, action.todo];\n    case \"remove\":\n      return current.filter((t) => t.id !== action.id);\n  }\n}\n\nexport function TodoList({ todos }: { todos: Todo[] }) {\n  const [optimisticTodos, dispatch] = useOptimistic(todos, todosReducer);\n\n  function handleAdd(todo: Todo) {\n    startTransition(async () => {\n      dispatch({ type: \"add\", todo });\n      await fetch(\"/api/todos\", { method: \"POST\", body: JSON.stringify(todo) });\n    });\n  }\n\n  return (\n    <div>\n      <button onClick={() => handleAdd({ id: Date.now(), text: \"new todo\" })}>Add</button>\n      <ul>\n        {optimisticTodos.map((t) => (\n          <li key={t.id}>{t.text}</li>\n        ))}\n      </ul>\n    </div>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-042",
+  "annotated_scope": [
+   "R-002"
+  ],
+  "claim": "提交交由 form action（useActionState），符合 R-002。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "error-handling",
+   "http-response-validation"
+  ],
+  "flag_messages": [
+   "The action reports success even when the contact request fails with an HTTP error status."
+  ],
+  "files": [
+   {
+    "file": "code/ContactForm.tsx",
+    "code": "import { useActionState } from \"react\";\n\nasync function send(_prev: boolean, formData: FormData): Promise<boolean> {\n  await fetch(\"/api/contact\", { method: \"POST\", body: formData });\n  return true;\n}\n\nexport function ContactForm() {\n  const [sent, formAction, isPending] = useActionState(send, false);\n\n  return (\n    <form action={formAction}>\n      <input name=\"message\" disabled={isPending} />\n      <button type=\"submit\" disabled={isPending}>Send</button>\n      {sent && <p>sent</p>}\n    </form>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-048",
+  "annotated_scope": [
+   "R-012"
+  ],
+  "claim": "乐观 reducer 纯函数，符合 R-012。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "react-hooks/use-optimistic-source-of-truth"
+  ],
+  "flag_messages": [
+   "The optimistic cart update has no corresponding durable state update, so the added item is reverted when the transition completes."
+  ],
+  "files": [
+   {
+    "file": "code/cart.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\nexport function Cart({ items }: { items: string[] }) {\n  const [cart, addToCart] = useOptimistic(items, (current, item: string) => [\n    ...current,\n    item,\n  ]);\n\n  return (\n    <button onClick={() => startTransition(() => addToCart(\"apple\"))}>\n      Add ({cart.length})\n    </button>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-050",
+  "annotated_scope": [
+   "R-010"
+  ],
+  "claim": "乐观 setter 在 startTransition 内调用，符合 R-010。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "TS-050",
+   "react-hooks/use-optimistic-action",
+   "react-hooks/use-optimistic-reducer",
+   "react/optimistic-update-rollback",
+   "react/use-optimistic-reducer",
+   "useOptimistic-set-must-be-in-action",
+   "useOptimistic.set.next-state",
+   "useOptimistic.set.updater"
+  ],
+  "flag_messages": [
+   "useOptimistic is called with only the initial state and no reducer function. The second element returned is a dispatch function that requires a reducer to compute the optimistic state; calling bump(1) without a reducer i",
+   "The optimistic action bump(1) is invoked inside startTransition without any async action that actually performs the update and settles the optimistic state. useOptimistic must be used within an action (e.g., an async tra",
+   "The optimistic setter `bump` is called with a plain value `1` inside `startTransition`, but no reducer was provided to `useOptimistic`. Per the spec, without a reducer the set function sets the optimistic state to the pa",
+   "`useOptimistic` is missing the reducer needed to implement an increment.",
+   "The optimistic reaction is never committed to a source of truth and will be rolled back.",
+   "`bump(1)` sets the optimistic reaction count to the literal value `1` rather than incrementing the current count. Because no reducer is supplied, pass an updater such as `bump(current => current + 1)` to bump the existin"
+  ],
+  "files": [
+   {
+    "file": "code/Reactions.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\nexport function Reactions({ likes }: { likes: number }) {\n  const [optimistic, bump] = useOptimistic(likes);\n\n  return (\n    <button\n      onClick={() =>\n        startTransition(() => {\n          bump(1);\n        })\n      }\n    >\n      {optimistic} reactions\n    </button>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-052",
+  "annotated_scope": [
+   "R-005"
+  ],
+  "claim": "乐观反馈用 useOptimistic 实现并在 Action 中调用 setter。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "react/optimistic-update-outside-action",
+   "react/start-transition-async",
+   "react/use-optimistic-misuse",
+   "react/use-optimistic-requires-canonical-state",
+   "web/check-fetch-response-status"
+  ],
+  "flag_messages": [
+   "useOptimistic is misused: it is meant to derive an optimistic value from a base state plus a pending action, not to hold a standalone mutable label. The reducer/update is applied only during a transition and reverts when",
+   "Passing an async function to startTransition is not supported; startTransition expects a synchronous callback. The async work (await fetch) escapes the transition scope, so pending state tracking and optimistic updates m",
+   "The optimistic update setLabel('Saved!') is invoked before the async operation completes and is not conditioned on success. If the fetch fails, the optimistic value is shown without any error handling or rollback path, a",
+   "The optimistic label has no canonical state to commit, so it reverts to \"Save\" when the transition completes.",
+   "The save response is ignored, so HTTP error responses are treated as successful saves."
+  ],
+  "files": [
+   {
+    "file": "code/SubmitButton.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\nexport function SubmitButton() {\n  const [label, setLabel] = useOptimistic(\"Save\");\n\n  async function handleSave() {\n    startTransition(async () => {\n      setLabel(\"Saved!\");\n      await fetch(\"/api/save\", { method: \"POST\" });\n    });\n  }\n\n  return <button onClick={handleSave}>{label}</button>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-054",
+  "annotated_scope": [
+   "R-008"
+  ],
+  "claim": "调用 use(browserLocales()) 的组件被 Suspense 边界包裹，SSR 可用。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "react-use-promise-created-in-render",
+   "react/use-stable-promise",
+   "use-promise-cached",
+   "use.promise-cache"
+  ],
+  "flag_messages": [
+   "browserLocales() is called during render on every render, creating a new Promise each time. `use` requires a stable, cached promise (e.g., created outside the component or memoized); otherwise each render suspends indefi",
+   "The Promise passed to `use` is created during render by calling `browserLocales()` directly, so a new Promise instance is created on every render. The specification requires that Promises passed to `use` be cached so the",
+   "Do not create the promise passed to `use` inside the component body. `browserLocales()` is invoked again on every render attempt and may return a new pending promise, preventing React from observing the original promise'",
+   "The Promise passed to `use` is not cached. `browserLocales()` is invoked during every render, so React may receive a different Promise instance after a re-render or suspension retry, causing the Suspense fallback to appe"
+  ],
+  "files": [
+   {
+    "file": "code/LocaleBar.tsx",
+    "code": "import { use, Suspense } from \"react\";\n\ndeclare function browserLocales(): Promise<string[]>;\n\nfunction LocaleTag() {\n  const locales = use(browserLocales());\n  return <span>{locales[0]}</span>;\n}\n\nexport function LocaleBar() {\n  return (\n    <Suspense fallback=\"...\">\n      <LocaleTag />\n    </Suspense>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-055",
+  "annotated_scope": [
+   "R-001"
+  ],
+  "claim": "取数走 use() 与缓存 fetcher，无 Effect 手动取数。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "bounded-cache-growth",
+   "evict-rejected-cache-entries",
+   "fetch-check-http-status",
+   "no-non-null-assertion",
+   "no-unhandled-promise-rejection",
+   "react-hooks/rules-of-hooks",
+   "react-hooks/use-cache-scope",
+   "react/no-string-fallback"
+  ],
+  "flag_messages": [
+   "The promise cache is a module-level Map that is never invalidated or cleared. Entries persist for the lifetime of the module, so stale data is served forever and memory grows unbounded as new URLs are requested. A cache ",
+   "The fetch promise is cached before it settles. If the request rejects, the rejected promise stays in the cache, so every subsequent render of that URL re-throws the same error and can never recover. Rejected promises sho",
+   "Non-null assertion `cache.get(url)!` is used after a `has` check. This is safe here but fragile; prefer storing the promise in a local variable and returning it directly to avoid the assertion.",
+   "`use()` is called inside `Feed`, which is rendered within `<Suspense>`, but the component does not handle the case where `url` changes: the hook is called conditionally on the argument only, which is fine, however `use` ",
+   "The Suspense `fallback` is a bare string `\"loading\"`. While valid, a string fallback renders as raw text without any element wrapper; prefer an element (e.g. `<span>loading</span>`) for consistent styling and accessibili",
+   "HTTP error responses are treated as successful activity data.",
+   "A failed request permanently poisons the URL's cache entry.",
+   "The module-level cache can grow without bound."
+  ],
+  "files": [
+   {
+    "file": "code/Activity.tsx",
+    "code": "import { use, Suspense } from \"react\";\n\nconst cache = new Map<string, Promise<unknown>>();\n\nfunction getActivity(url: string): Promise<unknown> {\n  if (!cache.has(url)) {\n    cache.set(url, fetch(url).then((res) => res.json()));\n  }\n  return cache.get(url)!;\n}\n\nfunction Feed({ url }: { url: string }) {\n  const data = use(getActivity(url));\n  return <pre>{JSON.stringify(data)}</pre>;\n}\n\nexport function Activity({ url }: { url: string }) {\n  return (\n    <Suspense fallback=\"loading\">\n      <Feed url={url} />\n    </Suspense>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-059",
+  "annotated_scope": [
+   "R-007"
+  ],
+  "claim": "按参数键控的缓存 Promise 交给 use，重渲染复用同一实例。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "TS-059",
+   "react-hooks/use-suspense-cache",
+   "security/url-injection",
+   "typescript/no-non-null-assertion"
+  ],
+  "flag_messages": [
+   "The promise cache is keyed only by query and never invalidated or cleared, so stale data is served indefinitely and the cache grows without bound. Additionally, a rejected promise is cached permanently, meaning a transie",
+   "The query string is interpolated directly into the request URL without encoding, allowing query-parameter injection or malformed URLs when the value contains reserved characters like &, #, or spaces.",
+   "The non-null assertion `cache.get(query)!` bypasses type checking; the value is guaranteed only by the preceding set, which is fragile if the logic changes.",
+   "Encode the query value before interpolating it into the URL.",
+   "Reject unsuccessful HTTP responses and validate the decoded payload before treating it as `Row[]`.",
+   "Do not permanently cache rejected fetch promises.",
+   "Bound and invalidate the module-level promise cache."
+  ],
+  "files": [
+   {
+    "file": "code/Query.tsx",
+    "code": "import { use } from \"react\";\n\ntype Row = { id: number };\nconst cache = new Map<string, Promise<Row[]>>();\n\nfunction getRows(query: string): Promise<Row[]> {\n  if (!cache.has(query)) {\n    cache.set(query, fetch(`/api/rows?q=${query}`).then((r) => r.json()));\n  }\n  return cache.get(query)!;\n}\n\nexport function Query({ query }: { query: string }) {\n  const rows = use(getRows(query));\n  return <ul>{rows.map((row) => <li key={row.id}>{row.id}</li>)}</ul>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-064",
+  "annotated_scope": [
+   "R-001"
+  ],
+  "claim": "use() + 键控缓存（变体 A）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "correctness/http-response-status",
+   "correctness/input-encoding",
+   "error-handling/fetch-status",
+   "error-handling/promise-rejection",
+   "react-hooks/use-cache-scope",
+   "react-hooks/use-promise-identity",
+   "reliability/cache-eviction",
+   "security/unvalidated-input-in-url",
+   "security/url-encoding"
+  ],
+  "flag_messages": [
+   "The promise cache is a module-level Map that is never invalidated or cleared. Cached promises (and their resolved data) live for the lifetime of the module, so stale prices are served indefinitely and memory grows unboun",
+   "getPrices returns a cached promise keyed only by symbol, but the cache is not keyed by any request parameters or user context. If the same symbol is requested with different auth/headers or after data changes, the stale ",
+   "The symbol prop is interpolated directly into the fetch URL without encoding or validation. A symbol containing '/', '?', '#', or path traversal sequences can alter the request path or query, potentially hitting unintend",
+   "The fetch response status is not checked before calling r.json(). Non-2xx responses (e.g., 404/500) will be parsed and rendered as if they were valid price data, and non-JSON error bodies will throw inside the cached pro",
+   "A failed request permanently poisons the symbol cache.",
+   "Non-success HTTP responses are treated as valid price payloads.",
+   "The symbol is interpolated into the request path without URL encoding."
+  ],
+  "files": [
+   {
+    "file": "code/Prices.tsx",
+    "code": "import { use } from \"react\";\n\nconst cache = new Map<string, Promise<unknown>>();\n\nfunction getPrices(symbol: string): Promise<unknown> {\n  if (!cache.has(symbol)) cache.set(symbol, fetch(`/api/prices/${symbol}`).then((r) => r.json()));\n  return cache.get(symbol)!;\n}\n\nexport function Prices({ symbol }: { symbol: string }) {\n  const prices = use(getPrices(symbol));\n  return <pre>{JSON.stringify(prices)}</pre>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-066",
+  "annotated_scope": [
+   "R-002"
+  ],
+  "claim": "action prop（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "WCAG-4.1.2",
+   "WCAG-4.1.3",
+   "accessibility-label",
+   "aria-live-region",
+   "form-validation",
+   "html-input-validation",
+   "http-error-handling",
+   "nextjs-client-boundary"
+  ],
+  "flag_messages": [
+   "The component uses a client-only React hook without declaring a client boundary.",
+   "Failed HTTP responses are incorrectly reported as successful signups.",
+   "The email field permits empty and malformed email addresses.",
+   "The email input has no accessible name.",
+   "The asynchronous signup result is not exposed as a status message to assistive technology."
+  ],
+  "files": [
+   {
+    "file": "code/SignupCard.tsx",
+    "code": "import { useActionState } from \"react\";\n\nasync function join(_prev: boolean, formData: FormData): Promise<boolean> {\n  await fetch(\"/api/signup\", { method: \"POST\", body: formData });\n  return true;\n}\n\nexport function SignupCard() {\n  const [done, formAction, isPending] = useActionState(join, false);\n\n  return (\n    <form action={formAction}>\n      <input name=\"email\" disabled={isPending} />\n      <button type=\"submit\" disabled={isPending}>Join</button>\n      {done && <p>joined</p>}\n    </form>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-068",
+  "annotated_scope": [
+   "R-003"
+  ],
+  "claim": "WebSocket 订阅带关闭（变体 A）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "correctness-url-construction",
+   "input-validation",
+   "security-url-encoding",
+   "state-consistency",
+   "type-safety",
+   "websocket-lifecycle"
+  ],
+  "flag_messages": [
+   "The room identifier is interpolated into the WebSocket path without URL-encoding it.",
+   "WebSocket payloads are converted to a count without validating the payload.",
+   "The component does not track connection failure or closure, so it can display stale or misleading presence counts."
+  ],
+  "files": [
+   {
+    "file": "code/Presence.tsx",
+    "code": "import { useEffect, useState } from \"react\";\n\nexport function Presence({ room }: { room: string }) {\n  const [online, setOnline] = useState(0);\n\n  useEffect(() => {\n    const ws = new WebSocket(`wss://presence/${room}`);\n    ws.onmessage = (event) => setOnline(Number(event.data));\n    return () => ws.close();\n  }, [room]);\n\n  return <p>{online} online</p>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-070",
+  "annotated_scope": [
+   "R-005"
+  ],
+  "claim": "useOptimistic 点赞（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "async/no-detached-promise",
+   "react-useoptimistic-outside-transition",
+   "react-useoptimistic-reducer-required",
+   "react-useoptimistic-updater-misuse",
+   "react/use-optimistic"
+  ],
+  "flag_messages": [
+   "useOptimistic requires a reducer function as its second argument; passing only the initial state is invalid.",
+   "The optimistic update function is being called with a state-updater callback instead of an action value.",
+   "The optimistic update is not tied to an async action/transition that resolves the real state; the fetch is fire-and-forget inside the transition.",
+   "The optimistic increment is reverted immediately because the fetch promise is detached from the transition, and no confirmed count is committed. The UI will not reliably retain the incremented value after a successful re"
+  ],
+  "files": [
+   {
+    "file": "code/ReactionPill.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\nexport function ReactionPill({ count }: { count: number }) {\n  const [optimistic, bump] = useOptimistic(count);\n\n  function like() {\n    startTransition(() => {\n      bump((n) => n + 1);\n      void fetch(\"/api/like\", { method: \"POST\" });\n    });\n  }\n\n  return <button onClick={like}>{optimistic}</button>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-074",
+  "annotated_scope": [
+   "R-007"
+  ],
+  "claim": "键控缓存 + use()（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "fetch-response-ok-check",
+   "performance/unbounded-cache",
+   "react-suspense-cache-invalidation",
+   "react-use-hook-requires-suspense-boundary",
+   "react/suspense-cache-invalidation",
+   "security/url-path-segment-encoding",
+   "typescript/runtime-type-validation",
+   "web/cache-rejection-eviction",
+   "web/fetch-response-validation"
+  ],
+  "flag_messages": [
+   "The module-level cache stores promises forever and never invalidates them, so a quote is fetched once per pair and never refreshed; the Ticker will display a stale price indefinitely. Also, a rejected promise stays cache",
+   "The fetch response status is not checked before calling r.json(); a 404/500 HTML or error body will be parsed and quote.last will be undefined or throw.",
+   "use() on a promise requires the component to be rendered under a Suspense boundary and an error boundary; the component provides neither, so a pending or rejected quote will throw to the nearest boundary (or crash).",
+   "The fetch pipeline accepts HTTP errors and unvalidated JSON as a valid quote.",
+   "A failed request permanently poisons the cache for that pair.",
+   "The module-level quote cache has neither a size bound nor an expiry.",
+   "The pair is interpolated into the URL without encoding it as a path segment."
+  ],
+  "files": [
+   {
+    "file": "code/Ticker.tsx",
+    "code": "import { use } from \"react\";\n\nconst cache = new Map<string, Promise<{ last: number }>>();\n\nfunction getQuote(pair: string): Promise<{ last: number }> {\n  if (!cache.has(pair)) cache.set(pair, fetch(`/api/quote/${pair}`).then((r) => r.json()));\n  return cache.get(pair)!;\n}\n\nexport function Ticker({ pair }: { pair: string }) {\n  const quote = use(getQuote(pair));\n  return <span>{quote.last}</span>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-078",
+  "annotated_scope": [
+   "R-010"
+  ],
+  "claim": "乐观 setter 在 Action 内（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "no-floating-promises",
+   "react-transition-await-async-action",
+   "react-use-optimistic-reducer",
+   "react-useoptimistic-outside-transition",
+   "react-useoptimistic-reducer-required",
+   "useOptimistic:set-next-state"
+  ],
+  "flag_messages": [
+   "useOptimistic is called with only one argument; it requires a reducer function as the second argument. The signature is useOptimistic(state, updateFn). Calling it with a single argument will throw at runtime / fail type ",
+   "The optimistic update is not tied to an async action/transition that resolves. The fetch is fired with `void` and never awaited, so the transition completes immediately and the optimistic value is reverted before the ser",
+   "The fetch promise is discarded with `void` and its result/errors are ignored. There is no error handling, and the optimistic state cannot be reconciled with the actual server result.",
+   "`addVote(1)` replaces the optimistic vote count with `1` rather than incrementing the current total.",
+   "The vote request is fire-and-forget, so the optimistic transition ends before the request completes.",
+   "`addVote(1)` sets the optimistic vote count to the literal `1` rather than adding one to `total`; for example, an initial total of 42 renders `1 votes` during the Action. Use an updater such as `addVote(current => curren"
+  ],
+  "files": [
+   {
+    "file": "code/Votes.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\nexport function Votes({ total }: { total: number }) {\n  const [votes, addVote] = useOptimistic(total);\n\n  function vote() {\n    startTransition(() => {\n      addVote(1);\n      void fetch(\"/api/vote\", { method: \"POST\" });\n    });\n  }\n\n  return <button onClick={vote}>{votes} votes</button>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-080",
+  "annotated_scope": [
+   "R-011"
+  ],
+  "claim": "dispatch 在 Action 内（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "jsx-a11y/button-has-type",
+   "react/button-has-type"
+  ],
+  "flag_messages": [
+   "The Rename button has no explicit type and therefore defaults to type=\"submit\". Because this button invokes a manual action, it should use type=\"button\"; otherwise, rendering Renamer inside a form can cause the form to b"
+  ],
+  "files": [
+   {
+    "file": "code/Renamer.tsx",
+    "code": "import { useActionState, startTransition } from \"react\";\n\nasync function rename(prev: string | null, name: string): Promise<string | null> {\n  const res = await fetch(\"/api/rename\", { method: \"POST\", body: name });\n  return res.ok ? name : prev;\n}\n\nexport function Renamer() {\n  const [renamed, dispatchAction, isPending] = useActionState(rename, null);\n\n  function commit() {\n    startTransition(() => {\n      dispatchAction(\"new-name\");\n    });\n  }\n\n  return (\n    <div>\n      <button onClick={commit} disabled={isPending}>Rename</button>\n      {renamed && <p>renamed: {renamed}</p>}\n    </div>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-082",
+  "annotated_scope": [
+   "R-012"
+  ],
+  "claim": "纯乐观 reducer（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "react-hooks/use-optimistic-async-transition",
+   "react-hooks/use-optimistic-outside-action",
+   "react/state-consistency",
+   "react/use-optimistic"
+  ],
+  "flag_messages": [
+   "useOptimistic updates must be applied inside a transition, but the async work after addLine is not awaited within the transition scope in a way that guarantees the optimistic state reverts correctly. The optimistic updat",
+   "addLine (the optimistic updater) should be called within an action/transition; here it is inside startTransition which is acceptable, but the pattern of calling it then performing side effects in the same async callback ",
+   "The optimistic entry is never committed to the canonical state."
+  ],
+  "files": [
+   {
+    "file": "code/Logger.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\nexport function Logger({ lines }: { lines: string[] }) {\n  const [optimistic, addLine] = useOptimistic(lines, (current, next: string) => [\n    ...current,\n    next,\n  ]);\n\n  function log() {\n    startTransition(async () => {\n      addLine(\"entry\");\n      await fetch(\"/api/log\", { method: \"POST\" });\n    });\n  }\n\n  return <button onClick={log}>{optimistic.length} lines</button>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-086",
+  "annotated_scope": [
+   "R-004"
+  ],
+  "claim": "Hook 在条件分支外（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "@typescript-eslint/no-unused-vars",
+   "TS6133"
+  ],
+  "flag_messages": [
+   "The `setAttempts` state setter is never used, which triggers TypeScript's `noUnusedLocals` check and the ESLint unused-variable rule."
+  ],
+  "files": [
+   {
+    "file": "code/Gate.tsx",
+    "code": "import { useState } from \"react\";\n\nexport function Gate({ locked }: { locked: boolean }) {\n  const [attempts, setAttempts] = useState(0);\n\n  if (locked) {\n    return <p>locked ({attempts})</p>;\n  }\n  return <p>open</p>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-088",
+  "annotated_scope": [
+   "R-002"
+  ],
+  "claim": "action prop（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "HTTP-RESPONSE-VALIDATION",
+   "REACT-ACTION-ERROR-HANDLING",
+   "a11y-label",
+   "a11y-live-region",
+   "content-type-mismatch",
+   "fetch-error-handling",
+   "no-unused-vars",
+   "no-unvalidated-input"
+  ],
+  "flag_messages": [
+   "The `_prev` parameter is unused, and the action ignores the previous state. More importantly, the action returns the raw user input as the new state without any validation or error handling, so a failed fetch (non-2xx or",
+   "The form input `choice` is read and sent to the API without any validation (e.g., allowed values, length, type). Any string is accepted and posted.",
+   "The `fetch` call has no error handling and its response status is not checked. Network failures will reject and surface as an unhandled action error, while HTTP error responses are treated as success.",
+   "A raw string is sent as the request body without setting a Content-Type header, so the server cannot reliably parse it (it will likely be interpreted as text/plain).",
+   "The `choice` input has no associated `<label>` or `aria-label`, so assistive technologies cannot determine its purpose.",
+   "The result paragraph updates dynamically but is not announced to screen readers; consider `aria-live=\"polite\"` or `role=\"status\"`.",
+   "The action treats every HTTP response as a successful vote and does not expose request failures through the form state."
+  ],
+  "files": [
+   {
+    "file": "code/VoteForm.tsx",
+    "code": "import { useActionState } from \"react\";\n\nasync function vote(_prev: string, formData: FormData): Promise<string> {\n  const choice = String(formData.get(\"choice\") ?? \"\");\n  await fetch(\"/api/vote\", { method: \"POST\", body: choice });\n  return choice;\n}\n\nexport function VoteForm() {\n  const [choice, formAction, isPending] = useActionState(vote, \"\");\n\n  return (\n    <form action={formAction}>\n      <input name=\"choice\" disabled={isPending} />\n      <button type=\"submit\" disabled={isPending}>Vote</button>\n      <p>{choice}</p>\n    </form>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-090",
+  "annotated_scope": [
+   "R-008"
+  ],
+  "claim": "SSR use(browser()) 有边界（变体 B）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "react-hooks/use-promise-in-render",
+   "react/no-promise-creation-in-render",
+   "use-promise-cached",
+   "use.promise.must-be-cached"
+  ],
+  "flag_messages": [
+   "browserRegion() is called during render, creating a new Promise on every render. React's `use` requires a stable, cached promise (or a resource created outside render); a fresh promise each render causes the component to",
+   "The Promise passed to `use` is created during render (`browserRegion()` is called inline), so a new Promise instance is created on every render. Promises passed to `use` must be cached so the same instance is reused acro",
+   "Do not create the promise passed to `use` directly during render. Every render, including the retry after the promise resolves, calls `browserRegion()` again and obtains a new pending promise, so the component can remain",
+   "The Promise passed to `use` is not cached across renders."
+  ],
+  "files": [
+   {
+    "file": "code/GeoHint.tsx",
+    "code": "import { use, Suspense } from \"react\";\n\ndeclare function browserRegion(): Promise<string>;\n\nfunction Region() {\n  const region = use(browserRegion());\n  return <span>{region}</span>;\n}\n\nexport function GeoHint() {\n  return (\n    <Suspense fallback=\"...\">\n      <Region />\n    </Suspense>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-092",
+  "annotated_scope": [
+   "R-001"
+  ],
+  "claim": "use() + 缓存（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "correctness/query-string-construction",
+   "http/check-response-status",
+   "performance/unbounded-cache",
+   "react-key-index",
+   "react-use-promise-cache",
+   "react/no-array-index-key",
+   "react/suspense-cache-error-cleanup",
+   "react/suspense-cache-lifecycle",
+   "reliability/retry-failed-request",
+   "security/encode-url-parameter",
+   "typescript/no-unchecked-external-data",
+   "typescript/validate-runtime-shape"
+  ],
+  "flag_messages": [
+   "The promise cache is keyed only by cursor and never invalidated, so a failed fetch (rejected promise) is cached forever and will re-throw on every render; also stale data is never refreshed. Additionally, the fetch respo",
+   "Using the array index as the React key is an anti-pattern; if the feed items reorder or change, React may reuse the wrong DOM nodes. Use a stable identifier from the item when available.",
+   "Encode the cursor before inserting it into the query string.",
+   "The module-level cursor cache has no eviction or invalidation policy.",
+   "A rejected request promise remains cached permanently, preventing recovery from transient failures.",
+   "Check the HTTP response status before treating the body as feed data.",
+   "Validate the decoded JSON instead of relying on `Response.json()` returning `any`.",
+   "Use a stable item identifier instead of the array index as the React key."
+  ],
+  "files": [
+   {
+    "file": "code/Feed.tsx",
+    "code": "import { use, Suspense } from \"react\";\n\nconst cache = new Map<string, Promise<{ items: unknown[] }>>();\n\nfunction getFeed(cursor: string): Promise<{ items: unknown[] }> {\n  if (!cache.has(cursor)) cache.set(cursor, fetch(`/api/feed?cursor=${cursor}`).then((r) => r.json()));\n  return cache.get(cursor)!;\n}\n\nfunction List({ cursor }: { cursor: string }) {\n  const data = use(getFeed(cursor));\n  return <ul>{data.items.map((i, k) => <li key={k}>{String(i)}</li>)}</ul>;\n}\n\nexport function Feed({ cursor }: { cursor: string }) {\n  return (\n    <Suspense fallback=\"loading\">\n      <List cursor={cursor} />\n    </Suspense>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-094",
+  "annotated_scope": [
+   "R-005"
+  ],
+  "claim": "useOptimistic 收藏（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "no-floating-promises",
+   "react-useoptimistic-reducer-required",
+   "react-useoptimistic-transition-required",
+   "react.useOptimistic.action-duration",
+   "react.useOptimistic.temporary-state",
+   "react/no-unhandled-rejection",
+   "react/use-optimistic-transition"
+  ],
+  "flag_messages": [
+   "useOptimistic is called with only the initial state and no reducer function. The hook signature requires a reducer as the second argument; calling it with one argument is invalid and will not work as intended.",
+   "toggleMark is invoked with a value (!optimistic) rather than being passed to the reducer as an action. With the missing reducer, this call is invalid; the optimistic update should dispatch an action that the reducer uses",
+   "The optimistic update is wrapped in startTransition, but the async fetch is fired without awaiting it inside the transition, so the optimistic state will revert immediately when the transition completes rather than refle",
+   "The fetch promise is discarded with `void` and its result/errors are never handled, so failures are silently ignored and the optimistic state is never reconciled with the server response.",
+   "The optimistic bookmark state is reverted immediately because the POST request is not awaited.",
+   "The optimistic bookmark state is not preserved for the mutation. The transition callback discards the fetch Promise, so the Action finishes before the request settles, and nothing updates `marked` or the response state. "
+  ],
+  "files": [
+   {
+    "file": "code/Bookmark.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\nexport function Bookmark({ marked }: { marked: boolean }) {\n  const [optimistic, toggleMark] = useOptimistic(marked);\n\n  function toggle() {\n    startTransition(() => {\n      toggleMark(!optimistic);\n      void fetch(\"/api/bookmark\", { method: \"POST\" });\n    });\n  }\n\n  return <button onClick={toggle}>{optimistic ? \"Marked\" : \"Mark\"}</button>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-096",
+  "annotated_scope": [
+   "R-007"
+  ],
+  "claim": "键控缓存 use（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "no-missing-response-ok-check",
+   "no-non-null-assertion",
+   "no-permanent-failure-cache",
+   "no-unbounded-cache-growth",
+   "no-unchecked-promise-rejection",
+   "no-unhandled-fetch-error",
+   "no-unsafe-any-assignment",
+   "react-hooks/use-in-conditional-or-loop",
+   "react-hooks/use-no-cache-invalidation",
+   "react-hooks/use-promise-cache",
+   "react/no-side-effects-in-render",
+   "react/use-requires-external-promise",
+   "redundant-map-lookup"
+  ],
+  "flag_messages": [
+   "The promise cache is never invalidated and is keyed only by id, so a rejected fetch stays cached forever and stale data is never refreshed. React's `use` requires a stable, cached promise, but the cache must be cleared o",
+   "The fetch response status is not checked before calling r.json(), so a 404/500 HTML or error body will be parsed as a Profile and `profile.handle` may be undefined.",
+   "`use(getProfile(id))` is called unconditionally, which is correct, but the component has no Suspense/error boundary contract documented; callers must wrap it in <Suspense>. This is informational only.",
+   "The profile request is started during render: `getProfile(id)` is invoked inline in the component body and synchronously calls `fetch(...)` before `use` is even evaluated.",
+   "The module-level `Map` cache is never evicted, so it grows without bound and retains resolved `Profile` objects for the lifetime of the page/process.",
+   "The fetch response status is never checked and `r.json()` returns `any`, so the value is silently trusted to be a `Profile` even for error responses.",
+   "A rejected fetch promise is cached permanently and there is no rejection handling, so a transient network error makes the component fail forever with no retry path.",
+   "`cache.get(id)!` uses a non-null assertion and performs a second map lookup that can be avoided."
+  ],
+  "files": [
+   {
+    "file": "code/Profile.tsx",
+    "code": "import { use } from \"react\";\n\ntype Profile = { handle: string };\nconst cache = new Map<string, Promise<Profile>>();\n\nfunction getProfile(id: string): Promise<Profile> {\n  if (!cache.has(id)) cache.set(id, fetch(`/api/profile/${id}`).then((r) => r.json()));\n  return cache.get(id)!;\n}\n\nexport function Profile({ id }: { id: string }) {\n  const profile = use(getProfile(id));\n  return <p>@{profile.handle}</p>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-098",
+  "annotated_scope": [
+   "R-006"
+  ],
+  "claim": "use() 在 useCartTotal Hook（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "cart-total-calculation",
+   "functional-correctness",
+   "react-hooks/rules-of-hooks",
+   "typescript/no-implicit-any"
+  ],
+  "flag_messages": [
+   "The `use` API is being called inside a custom hook, which is not a valid usage. React's `use` can only be called inside a component or a hook, but more importantly it cannot be called conditionally or in loops; here it i",
+   "The `reduce` callback parameters `sum` and `i` have implicit `any` types, which can lead to type errors and loss of type safety.",
+   "useCartTotal ignores the quantity of each cart item and can understate the total."
+  ],
+  "files": [
+   {
+    "file": "code/cart.ts",
+    "code": "import { use } from \"react\";\nimport { CartContext } from \"./cart-context\";\n\nexport function useCartTotal() {\n  const cart = use(CartContext);\n  return cart.items.reduce((sum, i) => sum + i.price, 0);\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-100",
+  "annotated_scope": [
+   "R-010"
+  ],
+  "claim": "乐观 setter 在 Action（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "TS-100",
+   "no-floating-promises",
+   "react-optimistic-update-outside-transition",
+   "react-useoptimistic-reducer-required",
+   "useOptimistic.action-duration"
+  ],
+  "flag_messages": [
+   "useOptimistic is called with only the initial state and no reducer function. The hook signature is useOptimistic(state, updateFn); the second argument is required. Here `toggleFollow` is actually the returned setter, not",
+   "The optimistic update is not tied to an async action/transition that resolves. The fetch is fired with `void` and never awaited, so the transition completes immediately and the optimistic state is discarded/reverted befo",
+   "The fetch promise is discarded with `void` and has no error handling. A failed request will produce an unhandled rejection and the UI will not reflect the failure.",
+   "The follow request is not awaited, so the optimistic transition ends before the server responds and request failures are silently ignored.",
+   "The optimistic update is not retained for the duration of the asynchronous follow request. `fetch` is launched with `void` and is never awaited, so the Transition Action finishes immediately and the optimistic state can "
+  ],
+  "files": [
+   {
+    "file": "code/FollowChip.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\nexport function FollowChip({ following }: { following: boolean }) {\n  const [optimistic, toggleFollow] = useOptimistic(following);\n\n  function toggle() {\n    startTransition(() => {\n      toggleFollow(!optimistic);\n      void fetch(\"/api/follow\", { method: \"POST\" });\n    });\n  }\n\n  return <button onClick={toggle}>{optimistic ? \"Following\" : \"Follow\"}</button>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-102",
+  "annotated_scope": [
+   "R-011"
+  ],
+  "claim": "dispatch 在 Action（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "fetch-missing-error-handling",
+   "react-start-transition-in-event-handler",
+   "react-use-action-state-signature",
+   "typescript/no-unused-locals"
+  ],
+  "flag_messages": [
+   "addMember has the wrong signature for useActionState. The action receives the previous state as its first argument and the dispatched payload as the second, but here the first parameter is typed as the previous state (st",
+   "Wrapping dispatchAction in startTransition inside an onClick handler is unnecessary. useActionState's dispatch already integrates with transitions; calling startTransition manually around it is redundant and can obscure ",
+   "The fetch call has no error handling. A network failure will reject the promise, and the action will throw instead of returning a state, leaving the UI without feedback.",
+   "The `member` binding is never read."
+  ],
+  "files": [
+   {
+    "file": "code/Inviter.tsx",
+    "code": "import { useActionState, startTransition } from \"react\";\n\nasync function addMember(prev: string | null, email: string): Promise<string | null> {\n  const res = await fetch(\"/api/members\", { method: \"POST\", body: email });\n  return res.ok ? email : prev;\n}\n\nexport function Inviter() {\n  const [member, dispatchAction, isPending] = useActionState(addMember, null);\n\n  function invite() {\n    startTransition(() => {\n      dispatchAction(\"new-member@example.com\");\n    });\n  }\n\n  return (\n    <button onClick={invite} disabled={isPending}>Invite</button>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-104",
+  "annotated_scope": [
+   "R-012"
+  ],
+  "claim": "纯乐观 updater（变体 C）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "react-use-optimistic-source-of-truth"
+  ],
+  "flag_messages": [
+   "The optimistic addition is never committed to the source of truth, so React reverts it when the transition completes."
+  ],
+  "files": [
+   {
+    "file": "code/Undo.tsx",
+    "code": "import { useOptimistic, startTransition } from \"react\";\n\nexport function Undo({ entries }: { entries: string[] }) {\n  const [list, push] = useOptimistic(entries, (current, next: string) => [...current, next]);\n\n  function add() {\n    startTransition(() => push(\"item\"));\n  }\n\n  return <button onClick={add}>{list.length} entries</button>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-106",
+  "annotated_scope": [
+   "R-002"
+  ],
+  "claim": "action prop 订阅表单（新语境）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "accessibility",
+   "correctness",
+   "http-error-handling",
+   "input-missing-type",
+   "no-unchecked-fetch-response",
+   "wcag-4.1.2"
+  ],
+  "flag_messages": [
+   "The fetch response is not checked; the action returns true even when the request fails (non-2xx status or network error).",
+   "The email input has no type attribute; it defaults to text and lacks email validation/keyboard hints.",
+   "The action reports success even when the subscription endpoint returns an error. `fetch` resolves normally for HTTP 4xx and 5xx responses, so `done` becomes true and the UI displays \"subscribed\" after a rejected subscrip",
+   "The email input has no associated label or other accessible name. Add a visible `<label>` associated with the input, or provide an equivalent `aria-label`/`aria-labelledby`."
+  ],
+  "files": [
+   {
+    "file": "code/Newsletter.tsx",
+    "code": "import { useActionState } from \"react\";\n\nasync function subscribe(_prev: boolean, formData: FormData): Promise<boolean> {\n  await fetch(\"/api/subscribe\", { method: \"POST\", body: formData });\n  return true;\n}\n\nexport function Newsletter() {\n  const [done, formAction, isPending] = useActionState(subscribe, false);\n\n  return (\n    <form action={formAction}>\n      <input name=\"email\" disabled={isPending} />\n      <button type=\"submit\" disabled={isPending}>Subscribe</button>\n      {done && <p>subscribed</p>}\n    </form>\n  );\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-108",
+  "annotated_scope": [
+   "R-005"
+  ],
+  "claim": "useOptimistic 删除（新语境）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "error-handling/network-request",
+   "eslint/import-first",
+   "http/delete-requires-target",
+   "import-order",
+   "promise/lifecycle",
+   "react-hooks/use-optimistic-requires-transition",
+   "react/async-transition",
+   "react/use-optimistic-canonical-state",
+   "useOptimistic-set-must-be-in-action",
+   "useOptimistic.action-duration",
+   "useTransition.async-action-inclusion"
+  ],
+  "flag_messages": [
+   "useOptimistic is used without an accompanying startTransition import at the top; the import appears at the bottom of the file after usage, which is invalid/confusing module structure.",
+   "useOptimistic is called with a single argument (false) but the API requires a reducer function as the second argument: useOptimistic(state, updateFn).",
+   "startTransition is referenced but not imported at the point of use; the import is placed at the bottom of the file.",
+   "The optimistic update is not reverted on failure; the fetch promise is not awaited and errors are unhandled, so the optimistic state may persist incorrectly.",
+   "Duplicate/out-of-order import of startTransition at the bottom of the file instead of grouped with the top import.",
+   "`startTransition` is used on line 8 but is not imported at the top of the module; the import appears at the bottom of the file (line 17), after its use. The specification requires the set function to be called inside an ",
+   "The deleted state is only an optimistic overlay and is never committed.",
+   "The transition does not remain pending for the DELETE request.",
+   "The DELETE request does not identify which card should be deleted.",
+   "DELETE failures are silently ignored.",
+   "The React import is placed after an exported declaration.",
+   "The DELETE request is started inside the Transition but is not awaited, so it is not included in the Transition. The synchronous callback returns immediately, causing the optimistic `deleted` state to revert to `false` w"
+  ],
+  "files": [
+   {
+    "file": "code/DeleteCard.tsx",
+    "code": "import { useOptimistic } from \"react\";\n\nexport function DeleteCard({ title }: { title: string }) {\n  const [deleted, remove] = useOptimistic(false);\n\n  function removeCard() {\n    startTransition(() => {\n      remove(true);\n      void fetch(\"/api/cards\", { method: \"DELETE\" });\n    });\n  }\n\n  if (deleted) return null;\n  return <button onClick={removeCard}>Delete {title}</button>;\n}\n\nimport { startTransition } from \"react\";\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-110",
+  "annotated_scope": [
+   "R-007"
+  ],
+  "claim": "缓存 + use()（新语境）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "fetch/check-http-status",
+   "fetch/check-response-status",
+   "promise/evict-rejected-cache-entry",
+   "react-hooks/use-suspense-cache",
+   "react/use-hook-requires-suspense",
+   "typescript/validate-json-payload"
+  ],
+  "flag_messages": [
+   "The module-level cache is never invalidated and is keyed only by slug, so stats are fetched once per slug for the lifetime of the module and never refreshed. Additionally, a rejected promise is cached permanently, so a t",
+   "The fetch response status is not checked before calling r.json(). A 404 or 500 response will be parsed as JSON (or throw a parse error) and treated as valid stats data.",
+   "The component calls use() on a promise but does not document or guarantee a surrounding <Suspense> boundary or error boundary. Callers must wrap Stats in Suspense and an error boundary, otherwise the suspended/errored re",
+   "The response is treated as a valid stats object without checking the HTTP status or validating the JSON shape.",
+   "A rejected fetch permanently poisons the slug's cache entry."
+  ],
+  "files": [
+   {
+    "file": "code/Stats.tsx",
+    "code": "import { use } from \"react\";\n\nconst cache = new Map<string, Promise<{ views: number }>>();\n\nfunction getStats(slug: string): Promise<{ views: number }> {\n  if (!cache.has(slug)) cache.set(slug, fetch(`/api/stats/${slug}`).then((r) => r.json()));\n  return cache.get(slug)!;\n}\n\nexport function Stats({ slug }: { slug: string }) {\n  const stats = use(getStats(slug));\n  return <p>{stats.views} views</p>;\n}\n"
+   }
+  ]
+ },
+ {
+  "spec": "react19",
+  "case_id": "TS-112",
+  "annotated_scope": [
+   "R-011"
+  ],
+  "claim": "dispatch 在 Action + interval 正确清理（新语境）。（AI 起草，待人工复核后可升 handcrafted。）",
+  "flagged_raw": [
+   "fetch-error-handling",
+   "no-duplicate-side-effects",
+   "react-effect-missing-state-guard",
+   "react-hooks/exhaustive-deps",
+   "react-hooks/set-state-in-effect"
+  ],
+  "flag_messages": [
+   "The useEffect has an empty dependency array but references dispatchAction (from useActionState). The effect captures a stale dispatchAction and omits it from deps, violating exhaustive-deps. dispatchAction should be incl",
+   "Calling dispatchAction inside startTransition within a setInterval inside useEffect triggers state updates from an effect-driven timer. While the transition is intentional, dispatching an action on a fixed 10s interval f",
+   "The interval dispatches the forward action unconditionally, so successful requests are repeated and additional actions may be queued while a request is pending.",
+   "Transport failures from `fetch` escape the action instead of being handled consistently with HTTP error responses."
+  ],
+  "files": [
+   {
+    "file": "code/Forwarder.tsx",
+    "code": "import { useActionState, startTransition, useEffect } from \"react\";\n\nasync function forward(prev: string | null, payload: string): Promise<string | null> {\n  const res = await fetch(\"/api/forward\", { method: \"POST\", body: payload });\n  return res.ok ? payload : prev;\n}\n\nexport function Forwarder() {\n  const [sent, dispatchAction, isPending] = useActionState(forward, null);\n\n  useEffect(() => {\n    const id = setInterval(() => {\n      startTransition(() => {\n        dispatchAction(\"queued\");\n      });\n    }, 10000);\n    return () => clearInterval(id);\n  }, []);\n\n  return <p>{sent ?? \"idle\"} {isPending ? \"(pending)\" : \"\"}</p>;\n}\n"
+   }
+  ]
+ }
+]

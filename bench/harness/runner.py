@@ -40,6 +40,7 @@ _DIGEST_GLOBS = (
     "engine/*.py",
     "bench/specs/*/spec.yaml",
     "bench/specs/*/rules.yaml",
+    "bench/specs/*/rules-llm-synth.yaml",
     "bench/specs/*/snapshot/manifest.yaml",
     # 基准内容也是实验结果的一部分（I4 修复：TS-011 案例修订后同配置哈希不变，
     # 被防覆盖护栏误拦——案例元数据与代码必须进入摘要）
@@ -147,6 +148,7 @@ def run(config: dict, repo_root: Path) -> Path:
         for key in (
             "spec_max_chars",
             "rules_source",
+            "review_prompt",
             "litellm_num_retries",
             "litellm_timeout_s",
             "litellm_kwargs",

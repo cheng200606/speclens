@@ -87,3 +87,32 @@ def test_b1_predict_with_mock_expected():
     findings = baseline.predict_case(cases[0], adapter)
     assert findings and findings[0].case_id == "TS-001"
     assert findings[0].rule_ids == ["R-001"]
+
+
+# ---------------------------------------------------------------- I9① review_prompt 轴
+
+def test_review_prompt_variant_scoped_v2():
+    """scoped-v2 追加范围纪律段；v1 不变；非法变体报错。"""
+    from bench.harness.model_adapter import make_adapter
+    from bench.harness.schemas import RuleRecord, SourceSpan, Trigger
+    from engine.review import _prompt_variant, _rule_prompt
+
+    def adapter(cfg):
+        return make_adapter("mock-perfect", {}, temperature=0.0, run_config=cfg)
+
+    r = RuleRecord(
+        id="R-001", spec_id="react19", level="MUST", category="T2-api-usage",
+        assertion="x", source_span=SourceSpan(section="s", quote="q"),
+        trigger=Trigger(scenario="s", ast_cues=[]),
+    )
+    assert _prompt_variant(adapter({})) == "v1"
+    assert _prompt_variant(adapter({"review_prompt": "scoped-v2"})) == "scoped-v2"
+    v1, v2 = _rule_prompt(r, "code", "v1"), _rule_prompt(r, "code", "scoped-v2")
+    assert v2.startswith(v1)
+    assert "verbatim in every finding" in v2 and "speculative" in v2
+    assert "speculative" not in v1
+    try:
+        _prompt_variant(adapter({"review_prompt": "bogus"}))
+        raise AssertionError("bogus review_prompt 应报错")
+    except ValueError:
+        pass

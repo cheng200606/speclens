@@ -1,0 +1,15 @@
+# I9① 审查层范围纪律实验（scoped-v2 提示）：asvs × ds × mlite
+# 对照 i6-asvs-ds-mlite（v3 路由 + v1 提示）。路由不变——离线诊断已证
+# matched 全局 FP 在路由层不可削减，唯一变量是审查提示。
+run_name: i9-asvs-ds-mlite-p2
+baseline: m_lite
+cases_dir: bench/cases/asvs
+model: deepseek/deepseek-flash
+temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 180
+rules_source: aligned
+review_prompt: scoped-v2
+litellm_kwargs:
+  thinking: {"type": "disabled"}

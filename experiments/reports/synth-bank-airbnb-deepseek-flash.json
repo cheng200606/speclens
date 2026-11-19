@@ -1,0 +1,26 @@
+{
+ "spec_id": "airbnb",
+ "model": "deepseek/deepseek-flash",
+ "n_sections_prompted": 13,
+ "n_rules_raw": 51,
+ "n_quotes_verbatim": 48,
+ "n_quotes_invalid": 3,
+ "invalid_examples": [
+  "Semicolon before self-invoking function",
+  "If for whatever reason you are doing something wild and `parseInt` is your bottleneck and need to use Bitshift for [perf",
+  "Strings: eslint: [`no-new-wrappers`]"
+ ],
+ "llm_alignment": {
+  "n_canonical": 8,
+  "n_matched": 4,
+  "coverage": 0.5,
+  "unmatched_canonical_ids": [
+   "airbnb-002",
+   "airbnb-003",
+   "airbnb-004",
+   "airbnb-008"
+  ],
+  "n_content_words_llm": 357
+ },
+ "n_rules": 48
+}

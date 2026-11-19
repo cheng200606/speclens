@@ -36,7 +36,8 @@ from engine.verify import _content_words, _norm
 BANK_FILENAME = "rules.yaml"
 UNMATCHED_PREFIX = "X"
 MATCH_THRESHOLD = 0.5  # 内容词 Jaccard 下限
-RULES_SOURCES = ("canonical", "aligned", "synthesized")
+RULES_SOURCES = ("canonical", "aligned", "synthesized", "llm-aligned")
+LLM_SYNTH_FILENAME = "rules-llm-synth.yaml"  # I9②：LLM 合成规则库（synth_bank.py 落盘）
 DEFAULT_RULES_SOURCE = "synthesized"  # 兼容既有离线测试；litmus 配置显式指定 aligned
 
 
@@ -225,6 +226,50 @@ def build_rules(
             "n_rules": len(synthesized),
             "n_canonical_available": len(canonical),
             "note": "ID 与标注不同命名空间，rule_match_rate 不可解释（仅用于向后兼容）",
+        }
+    if rules_source == "llm-aligned":
+        # I9② M2 对比轴：规则来自 LLM 逐节合成（bench/tools/synth_bank.py 落盘，
+        # 引句逐字由构造保证），再走同一对齐器。run 时零 LLM 调用，确定性可复现。
+        synth_path = spec_dir / LLM_SYNTH_FILENAME
+        if not synth_path.exists():
+            raise FileNotFoundError(
+                f"rules_source=llm-aligned 需要 {synth_path}；先跑 "
+                f"uv run python -m bench.tools.synth_bank --spec {spec_dir.name} ..."
+            )
+        import yaml as _yaml
+
+        from bench.harness.schemas import RuleRecord, SourceSpan, Trigger
+
+        data = _yaml.safe_load(synth_path.read_text(encoding="utf-8")) or {}
+        llm_rules = [
+            RuleRecord(
+                id=r["id"],
+                spec_id=r["spec_id"],
+                level=r["level"],
+                category=r["category"],
+                assertion=r["assertion"],
+                source_span=SourceSpan(**r["source_span"]),
+                trigger=Trigger(**r["trigger"]),
+            )
+            for r in data.get("rules", [])
+        ]
+        if not canonical:
+            return list(llm_rules), {
+                "rules_source": rules_source,
+                "n_rules": len(llm_rules),
+                "warning": f"{spec_dir} 缺少 {BANK_FILENAME}，llm-aligned 退化为未对齐",
+            }
+        aligned_llm = align_rules(llm_rules, canonical)
+        return aligned_llm.rules, {
+            "rules_source": rules_source,
+            "n_rules": len(aligned_llm.rules),
+            "quote_check": validate_quotes(canonical, spec_dir),
+            "alignment": aligned_llm.report.model_dump(),
+            "synthesis_report": {
+                "bank_file": str(synth_path),
+                "n_llm_rules": len(llm_rules),
+            },
+            "oracle_leakage": False,
         }
     if not canonical:
         return list(synthesized), {

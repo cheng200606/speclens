@@ -660,6 +660,69 @@ def gen_rq3_per_spec() -> str:
 
 # ---------------------------------------------------------------- main
 
+def gen_adjudication_macros() -> list[str]:
+    """I9④：分类学全量判读宏（taxonomy-v1-adjudication-full.json）。"""
+    path = REPORTS / "taxonomy-v1-adjudication-full.json"
+    if not path.exists():
+        return ["% TODO adjudication report missing"]
+    data = json.loads(path.read_text(encoding="utf-8"))
+    s = data["summary"]
+    ps = s["per_spec"]
+
+    def pair(spec: str) -> str:
+        d = ps.get(spec, {})
+        return f"{d.get('TRUE', 0)}/{d.get('TRUE', 0) + d.get('HALLUCINATED', 0)}"
+
+    return [
+        f"\\newcommand{{\\taxFullN}}{{{s['n_cases']}}}",
+        f"\\newcommand{{\\taxFullTrue}}{{{s['n_true']}}}",
+        f"\\newcommand{{\\taxFullShare}}{{{100 * s['true_share']:.0f}\\%}}",
+        f"\\newcommand{{\\taxFullAirbnb}}{{{pair('airbnb')}}}",
+        f"\\newcommand{{\\taxFullAsvs}}{{{pair('asvs')}}}",
+        f"\\newcommand{{\\taxFullReact}}{{{pair('react19')}}}",
+        f"\\newcommand{{\\taxFullAgents}}{{{pair('agents-sdk')}}}",
+    ]
+
+
+def gen_i9_macros() -> list[str]:
+    """I9①②：路由定界 / scoped-v2 / llm-aligned 宏（零手抄）。
+
+    路由定界数字来自 bench/tools/route_v4_diag.py 的报告；
+    llm-aligned 数字来自 manifest 固定的 run + synth-bank 报告。
+    """
+    out: list[str] = []
+    diag_path = REPORTS / "route-v4-diagnosis.json"
+    if diag_path.exists():
+        diag = json.loads(diag_path.read_text(encoding="utf-8"))
+        p1 = diag["asvs"]["policies"]["P1"]
+        p0 = diag["asvs"]["policies"]["P0"]
+        p5_a = diag["airbnb"]["policies"]["P5"]
+        p0_a = diag["airbnb"]["policies"]["P0"]
+        if p0["target_rule_coverage"]:
+            out.append(
+                f"\\newcommand{{\\routAsvsPoneCov}}{{{100 * p1['target_rule_coverage']:.0f}\\%}}"
+            )
+        if p0_a["target_rule_coverage"]:
+            loss = 1 - p5_a["target_rule_coverage"] / p0_a["target_rule_coverage"]
+            out.append(f"\\newcommand{{\\routAirbnbGateLoss}}{{{100 * loss:.0f}\\%}}")
+    ls = manifest().get("i9", {}).get("llm-synth", {})
+    for spec, key in (("airbnb", "Airbnb"), ("agents-sdk", "Agents")):
+        rid = ls.get(spec, "")
+        r = load(rid) if rid else None
+        det = _frac(r, "detection_rate") if r else "\\textbf{TODO}"
+        out.append(f"\\newcommand{{\\llmDet{key}}}{{{det}}}")
+        bank = ROOT / "bench" / "specs" / spec / "rules-llm-synth.yaml"
+        rep = REPORTS / f"synth-bank-{spec}-deepseek-flash.json"
+        if rep.exists():
+            d = json.loads(rep.read_text(encoding="utf-8"))
+            v = d.get("synth", d)
+            nv = v.get("n_quotes_verbatim", 0)
+            ni = v.get("n_quotes_invalid", 0)
+            if nv + ni:
+                out.append(f"\\newcommand{{\\llmVerbatim{key}}}{{{100 * nv / (nv + ni):.0f}\\%}}")
+    return out
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     m = manifest()
@@ -673,7 +736,11 @@ def main() -> None:
         "rq3-taxonomy-per-spec.tex": gen_rq3_per_spec(),
         "rq3-pilot-classes.tex": gen_rq3_pilot_classes(),
         "rq2-failopen.tex": gen_rq2_failopen(m),
-        "macros.tex": gen_macros(m),
+        "macros.tex": (
+            gen_macros(m)
+            + "\n" + "\n".join(gen_adjudication_macros())
+            + "\n" + "\n".join(gen_i9_macros())
+        ),
     }
     for name, content in emitted.items():
         (OUT / name).write_text(content, encoding="utf-8", newline="\n")

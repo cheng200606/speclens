@@ -106,6 +106,17 @@ def validate_bench(repo_root: Path) -> dict:
         unknown = sorted(referenced - canonical_ids) if canonical_ids else []
 
         hard_ratio = round(difficulty.get("hard", 0) / len(cases), 4) if cases else None
+        # I9③ 签核一致性：origin=handcrafted 应有真人签核字段（reviewed_by）。
+        # 例外：I9 前的 17 条人写案例（TS-001…017）先于签核流程存在——降级为警告。
+        unsigned_hand = [
+            m.case_id for m in cases
+            if m.origin.value == "handcrafted" and not m.reviewed_by
+        ]
+        if unsigned_hand:
+            warnings.append(
+                f"{spec_id}: origin=handcrafted 缺 reviewed_by 签核 {len(unsigned_hand)} 条"
+                f"（{', '.join(unsigned_hand[:8])}{'…' if len(unsigned_hand) > 8 else ''}）"
+            )
         per_spec[spec_id] = {
             "n_cases": len(cases),
             "verdict": dict(verdicts),
@@ -120,6 +131,7 @@ def validate_bench(repo_root: Path) -> dict:
             "canonical_rule_ids": sorted(canonical_ids),
             "unknown_referenced_rule_ids": unknown,
             "quote_check": quote_check,
+            "unsigned_handcrafted": unsigned_hand,
         }
         if hard_ratio is not None and hard_ratio < HARD_RATIO_MIN:
             warnings.append(

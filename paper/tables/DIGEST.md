@@ -8,7 +8,7 @@
 - `rq3-taxonomy-per-spec.tex` (12 lines)
 - `rq3-pilot-classes.tex` (15 lines)
 - `rq2-failopen.tex` (11 lines)
-- `macros.tex` (48 lines)
+- `macros.tex` (62 lines)
 
 ## i6 runs used
 

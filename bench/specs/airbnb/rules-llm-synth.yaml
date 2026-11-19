@@ -1,0 +1,700 @@
+rules:
+- id: airbnb-llm-001
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Avoid single-letter names and use descriptive naming.
+  source_span:
+    section: Naming Conventions
+    quote: Avoid single letter names. Be descriptive with your naming.
+  trigger:
+    scenario: Naming Conventions
+    ast_cues:
+    - id-length
+    - eslint
+- id: airbnb-llm-002
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use camelCase when naming objects, functions, and instances.
+  source_span:
+    section: Naming Conventions
+    quote: Use camelCase when naming objects, functions, and instances.
+  trigger:
+    scenario: Naming Conventions
+    ast_cues:
+    - camelcase
+    - camelCase
+- id: airbnb-llm-003
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use PascalCase only when naming constructors or classes.
+  source_span:
+    section: Naming Conventions
+    quote: Use PascalCase only when naming constructors or classes.
+  trigger:
+    scenario: Naming Conventions
+    ast_cues:
+    - new-cap
+    - PascalCase
+    - class
+- id: airbnb-llm-004
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Do not use trailing or leading underscores in names.
+  source_span:
+    section: Naming Conventions
+    quote: Do not use trailing or leading underscores.
+  trigger:
+    scenario: Naming Conventions
+    ast_cues:
+    - no-underscore-dangle
+    - _private
+    - __proto__
+- id: airbnb-llm-005
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use named function expressions instead of function declarations.
+  source_span:
+    section: Functions
+    quote: Use named function expressions instead of function declarations.
+  trigger:
+    scenario: Functions
+    ast_cues:
+    - func-style
+    - func-names
+    - function declaration
+- id: airbnb-llm-006
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Wrap immediately invoked function expressions in parentheses.
+  source_span:
+    section: Functions
+    quote: Wrap immediately invoked function expressions in parentheses.
+  trigger:
+    scenario: Functions
+    ast_cues:
+    - wrap-iife
+    - IIFE
+    - (function () {})()
+- id: airbnb-llm-007
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Never declare a function in a non-function block such as if or while;
+    assign the function to a variable instead.
+  source_span:
+    section: Functions
+    quote: Never declare a function in a non-function block (`if`, `while`, etc).
+      Assign the function to a variable instead.
+  trigger:
+    scenario: Functions
+    ast_cues:
+    - no-loop-func
+    - if
+    - while
+- id: airbnb-llm-008
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Never use the arguments object; use rest syntax instead.
+  source_span:
+    section: Functions
+    quote: Never use `arguments`, opt to use rest syntax `...` instead.
+  trigger:
+    scenario: Functions
+    ast_cues:
+    - prefer-rest-params
+    - arguments
+    - '...rest'
+- id: airbnb-llm-009
+  spec_id: airbnb
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Tests must be written regardless of which testing framework is used.
+  source_span:
+    section: Testing
+    quote: Whichever testing framework you use, you should be writing tests!
+  trigger:
+    scenario: Testing
+    ast_cues:
+    - mocha
+    - jest
+    - tape
+- id: airbnb-llm-010
+  spec_id: airbnb
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Code should favor many small pure functions and minimize places where
+    mutations occur.
+  source_span:
+    section: Testing
+    quote: Strive to write many small pure functions, and minimize where mutations
+      occur.
+  trigger:
+    scenario: Testing
+    ast_cues:
+    - pure function
+    - mutation
+    - immutable
+- id: airbnb-llm-011
+  spec_id: airbnb
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Stubs and mocks should be used cautiously because they can make tests
+    more brittle.
+  source_span:
+    section: Testing
+    quote: Be cautious about stubs and mocks - they can make your tests more brittle.
+  trigger:
+    scenario: Testing
+    ast_cues:
+    - stub
+    - mock
+    - sinon
+- id: airbnb-llm-012
+  spec_id: airbnb
+  level: SHOULD
+  category: T2-api-usage
+  assertion: A regression test should be written whenever a bug is fixed.
+  source_span:
+    section: Testing
+    quote: Whenever you fix a bug, *write a regression test*. A bug fixed without
+      a regression test is almost certainly going to break again in the future.
+  trigger:
+    scenario: Testing
+    ast_cues:
+    - regression test
+    - bug fix
+    - test case
+- id: airbnb-llm-013
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Always define objects using class syntax rather than manipulating prototype
+    directly.
+  source_span:
+    section: Classes & Constructors
+    quote: Always use `class`. Avoid manipulating `prototype` directly.
+  trigger:
+    scenario: Classes & Constructors
+    ast_cues:
+    - class
+    - prototype
+    - Object.create
+- id: airbnb-llm-014
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use extends for inheritance instead of manual prototype chaining.
+  source_span:
+    section: Classes & Constructors
+    quote: Use `extends` for inheritance.
+  trigger:
+    scenario: Classes & Constructors
+    ast_cues:
+    - extends
+    - super
+    - instanceof
+- id: airbnb-llm-015
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Do not declare an empty constructor or one that only delegates to a parent
+    class.
+  source_span:
+    section: Classes & Constructors
+    quote: An empty constructor function or one that just delegates to a parent class
+      is unnecessary.
+  trigger:
+    scenario: Classes & Constructors
+    ast_cues:
+    - constructor
+    - super
+    - no-useless-constructor
+- id: airbnb-llm-016
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Avoid declaring duplicate class members.
+  source_span:
+    section: Classes & Constructors
+    quote: Avoid duplicate class members.
+  trigger:
+    scenario: Classes & Constructors
+    ast_cues:
+    - no-dupe-class-members
+    - method
+    - property
+- id: airbnb-llm-017
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use arrow function notation when an anonymous function is required, such
+    as an inline callback.
+  source_span:
+    section: Arrow Functions
+    quote: When you must use an anonymous function (as when passing an inline callback),
+      use arrow function notation.
+  trigger:
+    scenario: Arrow Functions
+    ast_cues:
+    - prefer-arrow-callback
+    - arrow-spacing
+    - callback
+- id: airbnb-llm-018
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Omit braces and use implicit return when the function body is a single
+    side-effect-free expression; otherwise keep braces and a return statement.
+  source_span:
+    section: Arrow Functions
+    quote: If the function body consists of a single statement returning an expression
+      without side effects, omit the braces and use the implicit return. Otherwise,
+      keep the braces and use a `return` statement.
+  trigger:
+    scenario: Arrow Functions
+    ast_cues:
+    - arrow-body-style
+    - arrow-parens
+    - return
+- id: airbnb-llm-019
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Wrap a multi-line arrow function expression in parentheses for readability.
+  source_span:
+    section: Arrow Functions
+    quote: In case the expression spans over multiple lines, wrap it in parentheses
+      for better readability.
+  trigger:
+    scenario: Arrow Functions
+    ast_cues:
+    - arrow-parens
+    - implicit-arrow-linebreak
+- id: airbnb-llm-020
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Always include parentheses around arrow function arguments for clarity
+    and consistency.
+  source_span:
+    section: Arrow Functions
+    quote: Always include parentheses around arguments for clarity and consistency.
+  trigger:
+    scenario: Arrow Functions
+    ast_cues:
+    - arrow-parens
+    - arrow-body-style
+- id: airbnb-llm-021
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use strict equality and inequality operators instead of loose ones.
+  source_span:
+    section: Comparison Operators & Equality
+    quote: Use `===` and `!==` over `==` and `!=`.
+  trigger:
+    scenario: Comparison Operators & Equality
+    ast_cues:
+    - ===
+    - '!=='
+    - ==
+- id: airbnb-llm-022
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use braces to create blocks in case and default clauses that contain
+    lexical declarations.
+  source_span:
+    section: Comparison Operators & Equality
+    quote: Use braces to create blocks in `case` and `default` clauses that contain
+      lexical declarations (e.g. `let`, `const`, `function`, and `class`).
+  trigger:
+    scenario: Comparison Operators & Equality
+    ast_cues:
+    - case
+    - default
+    - let
+- id: airbnb-llm-023
+  spec_id: airbnb
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Ternaries should not be nested and generally be single line expressions.
+  source_span:
+    section: Comparison Operators & Equality
+    quote: Ternaries should not be nested and generally be single line expressions.
+  trigger:
+    scenario: Comparison Operators & Equality
+    ast_cues:
+    - no-nested-ternary
+    - '?'
+    - ternary
+- id: airbnb-llm-024
+  spec_id: airbnb
+  level: SHOULD
+  category: T2-api-usage
+  assertion: When mixing operators, enclose them in parentheses except for standard
+    arithmetic operators.
+  source_span:
+    section: Comparison Operators & Equality
+    quote: 'When mixing operators, enclose them in parentheses. The only exception
+      is the standard arithmetic operators: `+`, `-`, and `**` since their precedence
+      is broadly understood.'
+  trigger:
+    scenario: Comparison Operators & Equality
+    ast_cues:
+    - no-mixed-operators
+    - '&&'
+    - '||'
+- id: airbnb-llm-025
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Always declare variables using const or let rather than leaving them
+    undeclared.
+  source_span:
+    section: Variables
+    quote: Always use `const` or `let` to declare variables. Not doing so will result
+      in global variables.
+  trigger:
+    scenario: Variables
+    ast_cues:
+    - const
+    - let
+    - no-undef
+- id: airbnb-llm-026
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use a separate const or let declaration for each variable or assignment.
+  source_span:
+    section: Variables
+    quote: Use one `const` or `let` declaration per variable or assignment.
+  trigger:
+    scenario: Variables
+    ast_cues:
+    - one-var
+    - const
+    - let
+- id: airbnb-llm-027
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Do not chain variable assignments together.
+  source_span:
+    section: Variables
+    quote: Don’t chain variable assignments.
+  trigger:
+    scenario: Variables
+    ast_cues:
+    - no-multi-assign
+    - a = b = c
+- id: airbnb-llm-028
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Avoid using unary increment and decrement operators.
+  source_span:
+    section: Variables
+    quote: Avoid using unary increments and decrements (`++`, `--`).
+  trigger:
+    scenario: Variables
+    ast_cues:
+    - no-plusplus
+    - ++
+    - --
+- id: airbnb-llm-029
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Always use ES module import/export syntax rather than non-standard module
+    systems.
+  source_span:
+    section: Modules
+    quote: Always use modules (`import`/`export`) over a non-standard module system.
+  trigger:
+    scenario: Modules
+    ast_cues:
+    - import
+    - export
+    - require
+- id: airbnb-llm-030
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Do not use wildcard imports.
+  source_span:
+    section: Modules
+    quote: Do not use wildcard imports.
+  trigger:
+    scenario: Modules
+    ast_cues:
+    - import * as
+    - wildcard
+- id: airbnb-llm-031
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Do not export directly from an import.
+  source_span:
+    section: Modules
+    quote: And do not export directly from an import.
+  trigger:
+    scenario: Modules
+    ast_cues:
+    - export { x } from
+    - export * from
+- id: airbnb-llm-032
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Only import from a given path in one place.
+  source_span:
+    section: Modules
+    quote: Only import from a path in one place.
+  trigger:
+    scenario: Modules
+    ast_cues:
+    - no-duplicate-imports
+    - import
+- id: airbnb-llm-033
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Statements must be explicitly terminated with semicolons.
+  source_span:
+    section: Semicolons
+    quote: Explicitly terminating your statements and configuring your linter to catch
+      missing semicolons will help prevent you from encountering issues.
+  trigger:
+    scenario: Semicolons
+    ast_cues:
+    - semi
+    - ;
+    - ASI
+- id: airbnb-llm-034
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: The linter must be configured with the eslint semi rule to catch missing
+    semicolons.
+  source_span:
+    section: Semicolons
+    quote: 'eslint: [`semi`](https://eslint.org/docs/rules/semi)'
+  trigger:
+    scenario: Semicolons
+    ast_cues:
+    - eslint
+    - semi
+    - rules
+- id: airbnb-llm-035
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use const for all references and avoid var.
+  source_span:
+    section: References
+    quote: Use `const` for all of your references; avoid using `var`.
+  trigger:
+    scenario: References
+    ast_cues:
+    - const
+    - var
+    - prefer-const
+- id: airbnb-llm-036
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use let instead of var when references must be reassigned.
+  source_span:
+    section: References
+    quote: If you must reassign references, use `let` instead of `var`.
+  trigger:
+    scenario: References
+    ast_cues:
+    - let
+    - var
+    - no-var
+- id: airbnb-llm-037
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Do not reassign const references.
+  source_span:
+    section: References
+    quote: This ensures that you can’t reassign your references, which can lead to
+      bugs and difficult to comprehend code.
+  trigger:
+    scenario: References
+    ast_cues:
+    - const
+    - no-const-assign
+    - reassign
+- id: airbnb-llm-038
+  spec_id: airbnb
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Rely on block scoping of let and const rather than function-scoped var.
+  source_span:
+    section: References
+    quote: Note that both `let` and `const` are block-scoped, whereas `var` is function-scoped.
+  trigger:
+    scenario: References
+    ast_cues:
+    - let
+    - const
+    - block-scope
+- id: airbnb-llm-039
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use single quotes for string literals.
+  source_span:
+    section: Strings
+    quote: 'Use single quotes `''''` for strings. eslint: [`quotes`](https://eslint.org/docs/rules/quotes)'
+  trigger:
+    scenario: Strings
+    ast_cues:
+    - quotes
+    - '''string'''
+    - eslint
+- id: airbnb-llm-040
+  spec_id: airbnb
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Do not split long strings across multiple lines using concatenation.
+  source_span:
+    section: Strings
+    quote: Strings that cause the line to go over 100 characters should not be written
+      across multiple lines using string concatenation.
+  trigger:
+    scenario: Strings
+    ast_cues:
+    - string concatenation
+    - +
+    - 100 characters
+- id: airbnb-llm-041
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use template strings instead of concatenation when building strings programmatically.
+  source_span:
+    section: Strings
+    quote: 'When programmatically building up strings, use template strings instead
+      of concatenation. eslint: [`prefer-template`](https://eslint.org/docs/rules/prefer-template)
+      [`template-curly-spacing`](https://eslint.org/docs/rules/template-curly-spacing)'
+  trigger:
+    scenario: Strings
+    ast_cues:
+    - prefer-template
+    - template-curly-spacing
+    - '`${}`'
+- id: airbnb-llm-042
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Never use eval() on a string.
+  source_span:
+    section: Strings
+    quote: 'Never use `eval()` on a string; it opens too many vulnerabilities. eslint:
+      [`no-eval`](https://eslint.org/docs/rules/no-eval)'
+  trigger:
+    scenario: Strings
+    ast_cues:
+    - eval
+    - no-eval
+- id: airbnb-llm-043
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Perform type coercion at the beginning of the statement.
+  source_span:
+    section: Type Casting & Coercion
+    quote: Perform type coercion at the beginning of the statement.
+  trigger:
+    scenario: Type Casting & Coercion
+    ast_cues:
+    - coercion
+    - statement
+    - const
+- id: airbnb-llm-044
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use Number for type casting and always pass a radix to parseInt when
+    parsing strings.
+  source_span:
+    section: Type Casting & Coercion
+    quote: Use `Number` for type casting and `parseInt` always with a radix for parsing
+      strings.
+  trigger:
+    scenario: Type Casting & Coercion
+    ast_cues:
+    - Number
+    - parseInt
+    - radix
+- id: airbnb-llm-045
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Use soft tabs consisting of 2 spaces for indentation.
+  source_span:
+    section: Whitespace
+    quote: Use soft tabs (space character) set to 2 spaces.
+  trigger:
+    scenario: Whitespace
+    ast_cues:
+    - indent
+    - '  '
+    - eslint
+- id: airbnb-llm-046
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Place exactly one space before the leading brace of a block.
+  source_span:
+    section: Whitespace
+    quote: Place 1 space before the leading brace.
+  trigger:
+    scenario: Whitespace
+    ast_cues:
+    - space-before-blocks
+    - '{'
+    - if
+- id: airbnb-llm-047
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Place one space before the opening parenthesis in control statements
+    and no space between function name and argument list in calls/declarations.
+  source_span:
+    section: Whitespace
+    quote: Place 1 space before the opening parenthesis in control statements (`if`,
+      `while` etc.). Place no space between the argument list and the function name
+      in function calls and declarations.
+  trigger:
+    scenario: Whitespace
+    ast_cues:
+    - keyword-spacing
+    - if
+    - while
+- id: airbnb-llm-048
+  spec_id: airbnb
+  level: MUST
+  category: T2-api-usage
+  assertion: Set off operators with spaces.
+  source_span:
+    section: Whitespace
+    quote: Set off operators with spaces.
+  trigger:
+    scenario: Whitespace
+    ast_cues:
+    - space-infix-ops
+    - +
+    - '='

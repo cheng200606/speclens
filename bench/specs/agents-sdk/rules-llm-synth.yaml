@@ -1,0 +1,746 @@
+rules:
+- id: agents-sdk-llm-001
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Output guardrails must run only on the final agent's output, so an agent's
+    guardrails execute only when that agent is the last agent.
+  source_span:
+    section: Output guardrails
+    quote: Output guardrails are intended to run on the final agent output, so an
+      agent's guardrails only run if the agent is the *last* agent.
+  trigger:
+    scenario: Output guardrails
+    ast_cues:
+    - OutputGuardrail
+    - last_agent
+    - Agent
+- id: agents-sdk-llm-002
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Output guardrails must not support the run_in_parallel parameter because
+    they always run after the agent completes.
+  source_span:
+    section: Output guardrails
+    quote: Output guardrails always run after the agent completes, so they don't support
+      the `run_in_parallel` parameter.
+  trigger:
+    scenario: Output guardrails
+    ast_cues:
+    - run_in_parallel
+    - OutputGuardrail
+- id: agents-sdk-llm-003
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: When a tripwire fires, the runner must persist completed tool call and
+    output items while excluding the rejected candidate final output.
+  source_span:
+    section: Output guardrails
+    quote: When a tripwire fires, the runner asks the configured session to persist
+      already-completed tool call and tool output items, together with any reasoning
+      context required to replay those calls, while excluding the rejected candidate
+      final output.
+  trigger:
+    scenario: Output guardrails
+    ast_cues:
+    - tripwire_triggered
+    - OutputGuardrailTripwireTriggered
+    - session
+- id: agents-sdk-llm-004
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: A custom output_guardrail_blocked_message must be a non-empty string
+    or synchronous formatter, and async formatters must be rejected at RunConfig construction.
+  source_span:
+    section: Output guardrails
+    quote: If the formatter raises, returns `None`, returns an empty or non-string
+      value, or produces an awaitable, the SDK uses the default placeholder. Async
+      formatter functions are rejected when `RunConfig` is constructed.
+  trigger:
+    scenario: Output guardrails
+    ast_cues:
+    - output_guardrail_blocked_message
+    - RunConfig
+    - OutputGuardrailBlockedMessageArgs
+- id: agents-sdk-llm-005
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Use RunConfig to override behavior for a single run without modifying
+    each agent definition.
+  source_span:
+    section: Common run config categories
+    quote: Use `RunConfig` to override behavior for a single run without changing
+      each agent definition.
+  trigger:
+    scenario: Common run config categories
+    ast_cues:
+    - RunConfig
+    - Runner
+    - run_config
+- id: agents-sdk-llm-006
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: A handoff_history_mapper callable must return the exact list of input
+    items to forward to the next agent.
+  source_span:
+    section: Common run config categories
+    quote: It must return the exact list of input items to forward to the next agent,
+      replacing the built-in ordered summary segments without writing a full handoff
+      filter.
+  trigger:
+    scenario: Common run config categories
+    ast_cues:
+    - handoff_history_mapper
+    - nest_handoff_history
+    - RunConfig
+- id: agents-sdk-llm-007
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: At least setting workflow_name for tracing is recommended.
+  source_span:
+    section: Common run config categories
+    quote: We recommend at least setting `workflow_name`.
+  trigger:
+    scenario: Common run config categories
+    ast_cues:
+    - workflow_name
+    - RunConfig
+    - tracing
+- id: agents-sdk-llm-008
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Nested handoff history is disabled by default and must be explicitly
+    enabled via nest_handoff_history.
+  source_span:
+    section: Common run config categories
+    quote: This is disabled by default while we stabilize nested handoffs; set to
+      `True` to enable or leave `False` to pass through the raw transcript.
+  trigger:
+    scenario: Common run config categories
+    ast_cues:
+    - nest_handoff_history
+    - RunConfig
+    - Handoff
+- id: agents-sdk-llm-009
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Input guardrails must support a parallel execution mode that runs concurrently
+    with the agent, enabled by default via run_in_parallel=True.
+  source_span:
+    section: Execution modes
+    quote: '**Parallel execution** (default, `run_in_parallel=True`): The guardrail
+      runs concurrently with the agent''s execution.'
+  trigger:
+    scenario: Execution modes
+    ast_cues:
+    - run_in_parallel
+    - Parallel execution
+    - tripwire
+- id: agents-sdk-llm-010
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Input guardrails must support a blocking execution mode where the guardrail
+    completes before the agent starts, enabled via run_in_parallel=False.
+  source_span:
+    section: Execution modes
+    quote: '**Blocking execution** (`run_in_parallel=False`): The guardrail runs and
+      completes *before* the agent starts.'
+  trigger:
+    scenario: Execution modes
+    ast_cues:
+    - run_in_parallel
+    - Blocking execution
+    - tripwire
+- id: agents-sdk-llm-011
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: When a guardrail tripwire is triggered in blocking mode, the agent must
+    never execute, preventing token consumption and tool execution.
+  source_span:
+    section: Execution modes
+    quote: If the guardrail tripwire is triggered, the agent never executes, preventing
+      token consumption and tool execution.
+  trigger:
+    scenario: Execution modes
+    ast_cues:
+    - tripwire
+    - run_parallel
+    - agent
+- id: agents-sdk-llm-012
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: In parallel mode, if the guardrail's tripwire is triggered, the agent
+    may have already consumed tokens and executed tools before being cancelled.
+  source_span:
+    section: Execution modes
+    quote: if the guardrail's tripwire is triggered, the agent may have already consumed
+      tokens and executed tools before being cancelled.
+  trigger:
+    scenario: Execution modes
+    ast_cues:
+    - tripwire
+    - run_in_parallel
+    - cancel
+- id: agents-sdk-llm-013
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Tool use can be forced by setting ModelSettings.tool_choice to one of
+    the valid values.
+  source_span:
+    section: Forcing tool use
+    quote: You can force tool use by setting [`ModelSettings.tool_choice`][agents.model_settings.ModelSettings.tool_choice].
+  trigger:
+    scenario: Forcing tool use
+    ast_cues:
+    - ModelSettings.tool_choice
+    - tool_choice
+    - ModelSettings
+- id: agents-sdk-llm-014
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Setting tool_choice to 'required' requires the LLM to use a tool while
+    letting it choose which one.
+  source_span:
+    section: Forcing tool use
+    quote: '`required`, which requires the LLM to use a tool (but it can intelligently
+      decide which tool).'
+  trigger:
+    scenario: Forcing tool use
+    ast_cues:
+    - tool_choice
+    - required
+- id: agents-sdk-llm-015
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Setting tool_choice to 'none' requires the LLM not to use a tool.
+  source_span:
+    section: Forcing tool use
+    quote: '`none`, which requires the LLM to _not_ use a tool.'
+  trigger:
+    scenario: Forcing tool use
+    ast_cues:
+    - tool_choice
+    - none
+- id: agents-sdk-llm-016
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: When using OpenAI Responses tool search, prefer 'auto' or 'required'
+    because named tool choices cannot target bare namespace names, deferred-only tools,
+    or ToolSearchTool.
+  source_span:
+    section: Forcing tool use
+    quote: you cannot target bare namespace names or deferred-only tools with `tool_choice`,
+      and `tool_choice="tool_search"` does not target [`ToolSearchTool`][agents.tool.ToolSearchTool].
+      In those cases, prefer `auto` or `required`.
+  trigger:
+    scenario: Forcing tool use
+    ast_cues:
+    - tool_choice
+    - ToolSearchTool
+    - tool_search
+- id: agents-sdk-llm-017
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Any new data intended for the LLM must be made available through the
+    conversation history.
+  source_span:
+    section: Agent/LLM context
+    quote: if you want to make some new data available to the LLM, you must do it
+      in a way that makes it available in that history
+  trigger:
+    scenario: Agent/LLM context
+    ast_cues:
+    - conversation history
+    - instructions
+    - Runner.run
+- id: agents-sdk-llm-018
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Static or dynamic system prompts should be provided via the Agent instructions
+    for always-useful information.
+  source_span:
+    section: Agent/LLM context
+    quote: System prompts can be static strings, or they can be dynamic functions
+      that receive the context and output a string
+  trigger:
+    scenario: Agent/LLM context
+    ast_cues:
+    - instructions
+    - system prompt
+    - Agent
+- id: agents-sdk-llm-019
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Additional lower-priority messages should be added to the input when
+    calling Runner.run functions.
+  source_span:
+    section: Agent/LLM context
+    quote: Add it to the `input` when calling the `Runner.run` functions
+  trigger:
+    scenario: Agent/LLM context
+    ast_cues:
+    - input
+    - Runner.run
+- id: agents-sdk-llm-020
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: On-demand context should be exposed through FunctionTool instances so
+    the LLM can fetch data when needed.
+  source_span:
+    section: Agent/LLM context
+    quote: Expose it through `FunctionTool` instances. This is useful for _on-demand_
+      context
+  trigger:
+    scenario: Agent/LLM context
+    ast_cues:
+    - FunctionTool
+    - on-demand context
+- id: agents-sdk-llm-021
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: The call_model_input_filter hook must return a ModelInputData object
+    whose input field is a required list of input items.
+  source_span:
+    section: Call model input filter
+    quote: The return value must be a [`ModelInputData`][agents.run.ModelInputData]
+      object. Its `input` field is required and must be a list of input items.
+  trigger:
+    scenario: Call model input filter
+    ast_cues:
+    - ModelInputData
+    - call_model_input_filter
+    - input
+- id: agents-sdk-llm-022
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Returning any shape other than a ModelInputData object must raise a UserError.
+  source_span:
+    section: Call model input filter
+    quote: Returning any other shape raises a `UserError`.
+  trigger:
+    scenario: Call model input filter
+    ast_cues:
+    - UserError
+    - ModelInputData
+- id: agents-sdk-llm-023
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: The hook should not mutate the caller's original input list in place
+    since the runner passes a copy.
+  source_span:
+    section: Call model input filter
+    quote: The runner passes a copy of the prepared input list to the hook, so you
+      can trim, replace, or reorder it without mutating the caller's original list
+      in place.
+  trigger:
+    scenario: Call model input filter
+    ast_cues:
+    - call_model_input_filter
+    - input
+- id: agents-sdk-llm-024
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: The hook should be set per run via run_config to redact sensitive data,
+    trim histories, or inject system guidance.
+  source_span:
+    section: Call model input filter
+    quote: Set the hook per run via `run_config` to redact sensitive data, trim long
+      histories, or inject additional system guidance.
+  trigger:
+    scenario: Call model input filter
+    ast_cues:
+    - run_config
+    - call_model_input_filter
+- id: agents-sdk-llm-025
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Agent tools can be conditionally enabled or disabled at runtime via the
+    is_enabled parameter.
+  source_span:
+    section: Conditional tool enabling
+    quote: You can conditionally enable or disable agent tools at runtime using the
+      `is_enabled` parameter.
+  trigger:
+    scenario: Conditional tool enabling
+    ast_cues:
+    - is_enabled
+    - agent
+    - tools
+- id: agents-sdk-llm-026
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: The is_enabled parameter must accept boolean values, callable functions
+    taking (context, agent), or async functions.
+  source_span:
+    section: Conditional tool enabling
+    quote: 'The `is_enabled` parameter accepts:'
+  trigger:
+    scenario: Conditional tool enabling
+    ast_cues:
+    - is_enabled
+    - context
+    - agent
+- id: agents-sdk-llm-027
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Authorization checks depending on tool arguments or accessed resources
+    must be enforced inside the tool implementation, not via is_enabled.
+  source_span:
+    section: Conditional tool enabling
+    quote: it does not replace authorization that depends on the tool arguments or
+      the resource being accessed. Enforce those checks inside the tool implementation
+  trigger:
+    scenario: Conditional tool enabling
+    ast_cues:
+    - is_enabled
+    - authorization
+    - tool implementation
+- id: agents-sdk-llm-028
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: MCP servers must authorize their own protected operations.
+  source_span:
+    section: Conditional tool enabling
+    quote: MCP servers must authorize their own protected operations.
+  trigger:
+    scenario: Conditional tool enabling
+    ast_cues:
+    - MCP
+    - authorize
+    - protected operations
+- id: agents-sdk-llm-029
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: The handoff() helper must always transfer control to the specific agent
+    passed in, so multiple destinations require one handoff per destination.
+  source_span:
+    section: Customizing handoffs via the `handoff()` function
+    quote: The [`handoff()`][agents.handoffs.handoff] helper always transfers control
+      to the specific `agent` you passed in. If you have multiple possible destinations,
+      register one handoff per destination and let the model choose among them.
+  trigger:
+    scenario: Customizing handoffs via the `handoff()` function
+    ast_cues:
+    - handoff()
+    - agent
+    - Handoff
+- id: agents-sdk-llm-030
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: A custom Handoff should only be used when custom handoff code must decide
+    which agent to return at invocation time.
+  source_span:
+    section: Customizing handoffs via the `handoff()` function
+    quote: Use a custom [`Handoff`][agents.handoffs.Handoff] only when your own handoff
+      code must decide which agent to return at invocation time.
+  trigger:
+    scenario: Customizing handoffs via the `handoff()` function
+    ast_cues:
+    - Handoff
+    - handoff()
+- id: agents-sdk-llm-031
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: When input_type is set, the parsed payload must be passed to on_handoff.
+  source_span:
+    section: Customizing handoffs via the `handoff()` function
+    quote: '`input_type`: The schema for the handoff tool-call arguments. When set,
+      the parsed payload is passed to `on_handoff`.'
+  trigger:
+    scenario: Customizing handoffs via the `handoff()` function
+    ast_cues:
+    - input_type
+    - on_handoff
+- id: agents-sdk-llm-032
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: If nest_handoff_history is None, the value defined in the active run
+    configuration must be used instead.
+  source_span:
+    section: Customizing handoffs via the `handoff()` function
+    quote: If `None`, the value defined in the active run configuration is used instead.
+  trigger:
+    scenario: Customizing handoffs via the `handoff()` function
+    ast_cues:
+    - nest_handoff_history
+    - RunConfig
+- id: agents-sdk-llm-033
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Every agent must define a human-readable name.
+  source_span:
+    section: Basic configuration
+    quote: '| `name` | yes | Human-readable agent name. |'
+  trigger:
+    scenario: Basic configuration
+    ast_cues:
+    - name
+    - Agent
+- id: agents-sdk-llm-034
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Agents should include instructions as a system prompt or dynamic instructions
+    callback.
+  source_span:
+    section: Basic configuration
+    quote: '| `instructions` | no | System prompt or dynamic instructions callback.
+      Strongly recommended.'
+  trigger:
+    scenario: Basic configuration
+    ast_cues:
+    - instructions
+    - Agent
+- id: agents-sdk-llm-035
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: The reset_tool_choice property defaults to True to avoid tool-use loops.
+  source_span:
+    section: Basic configuration
+    quote: '| `reset_tool_choice` | no | Reset `tool_choice` after a tool call (default:
+      `True`) to avoid tool-use loops.'
+  trigger:
+    scenario: Basic configuration
+    ast_cues:
+    - reset_tool_choice
+    - tool_choice
+- id: agents-sdk-llm-036
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: SandboxAgent adds default_manifest, base_instructions, capabilities,
+    and run_as for workspace-scoped runs.
+  source_span:
+    section: Basic configuration
+    quote: '`SandboxAgent` builds on the same ideas, then adds `default_manifest`,
+      `base_instructions`, `capabilities`, and `run_as` for workspace-scoped runs.'
+  trigger:
+    scenario: Basic configuration
+    ast_cues:
+    - SandboxAgent
+    - default_manifest
+    - run_as
+- id: agents-sdk-llm-037
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Applications that pass their own model provider via RunConfig or a dict
+    must eventually close it with aclose().
+  source_span:
+    section: Responses WebSocket transport (optional helper)
+    quote: If you pass a `RunConfig` instance or a `dict` that contains `model_provider`,
+      your application owns that provider; the Runner leaves it open so you can reuse
+      it, and your application must eventually call its `aclose()` method.
+  trigger:
+    scenario: Responses WebSocket transport (optional helper)
+    ast_cues:
+    - RunConfig
+    - model_provider
+    - aclose
+- id: agents-sdk-llm-038
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Streamed results must be fully consumed before exiting the responses_websocket_session
+    context.
+  source_span:
+    section: Responses WebSocket transport (optional helper)
+    quote: Finish consuming streamed results before the context exits. Exiting the
+      context while a websocket request is still in flight may force-close the shared
+      connection.
+  trigger:
+    scenario: Responses WebSocket transport (optional helper)
+    ast_cues:
+    - responses_websocket_session
+    - run_streamed
+- id: agents-sdk-llm-039
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: After a reconnect, uncached previous_response_id cannot be recovered
+    for store=False or ZDR flows, so a new chain with full input context must be started.
+  source_span:
+    section: Responses WebSocket transport (optional helper)
+    quote: After a reconnect, `store=False` and ZDR flows cannot recover an uncached
+      `previous_response_id`; start a new chain with full input context or rebuild
+      it from locally managed session state.
+  trigger:
+    scenario: Responses WebSocket transport (optional helper)
+    ast_cues:
+    - previous_response_id
+    - store
+    - ZDR
+- id: agents-sdk-llm-040
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: The websocket session helper is recommended for connection reuse but
+    is not required.
+  source_span:
+    section: Responses WebSocket transport (optional helper)
+    quote: The websocket session helper is recommended for connection reuse, but it
+      is not required.
+  trigger:
+    scenario: Responses WebSocket transport (optional helper)
+    ast_cues:
+    - responses_websocket_session
+    - Runner
+- id: agents-sdk-llm-041
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Hosted tool search may only be used with OpenAI Responses models.
+  source_span:
+    section: Hosted tool search
+    quote: Hosted tool search is available only with OpenAI Responses models.
+  trigger:
+    scenario: Hosted tool search
+    ast_cues:
+    - OpenAIResponsesModel
+    - Responses
+    - hosted_tool_search
+- id: agents-sdk-llm-042
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Configure exactly one ToolSearchTool when setting up deferred-loading
+    surfaces on an agent.
+  source_span:
+    section: Hosted tool search
+    quote: Add exactly one `ToolSearchTool()` when you configure deferred-loading
+      surfaces on an agent.
+  trigger:
+    scenario: Hosted tool search
+    ast_cues:
+    - ToolSearchTool
+    - defer_loading
+    - Agent
+- id: agents-sdk-llm-043
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Deferred-loading function tools must be paired with a ToolSearchTool.
+  source_span:
+    section: Hosted tool search
+    quote: Deferred-loading function tools must be paired with `ToolSearchTool()`.
+  trigger:
+    scenario: Hosted tool search
+    ast_cues:
+    - function_tool
+    - defer_loading
+    - ToolSearchTool
+- id: agents-sdk-llm-044
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Keep each namespace fairly small, ideally fewer than 10 functions.
+  source_span:
+    section: Hosted tool search
+    quote: As a rule of thumb, keep each namespace fairly small, ideally fewer than
+      10 functions.
+  trigger:
+    scenario: Hosted tool search
+    ast_cues:
+    - tool_namespace
+    - tools
+    - namespace
+- id: agents-sdk-llm-045
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Use tool_execution to configure SDK-side behavior for local function
+    tools, such as limiting local function-tool concurrency for a run.
+  source_span:
+    section: Run config details
+    quote: Use `tool_execution` when you want to configure SDK-side behavior for local
+      function tools, such as limiting local function-tool concurrency for a run.
+  trigger:
+    scenario: Run config details
+    ast_cues:
+    - tool_execution
+    - max_function_tool_concurrency
+    - RunConfig
+- id: agents-sdk-llm-046
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Set max_function_tool_concurrency to an integer to cap how many local
+    function tool calls run at once, while None preserves default behavior.
+  source_span:
+    section: Run config details
+    quote: '`max_function_tool_concurrency=None` preserves the default behavior: when
+      a model emits multiple function tool calls in a turn, the SDK starts all emitted
+      local function tool calls. Set an integer value to cap how many of those local
+      function tool calls run at once.'
+  trigger:
+    scenario: Run config details
+    ast_cues:
+    - max_function_tool_concurrency
+    - parallel_tool_calls
+    - ModelSettings
+- id: agents-sdk-llm-047
+  spec_id: agents-sdk
+  level: MUST
+  category: T2-api-usage
+  assertion: Set tool_not_found_behavior to "return_error_to_model" to keep the run
+    recoverable when a function tool call does not match any available tool.
+  source_span:
+    section: Run config details
+    quote: Set `tool_not_found_behavior="return_error_to_model"` when you want the
+      run to remain recoverable.
+  trigger:
+    scenario: Run config details
+    ast_cues:
+    - tool_not_found_behavior
+    - return_error_to_model
+    - ModelBehaviorError
+- id: agents-sdk-llm-048
+  spec_id: agents-sdk
+  level: SHOULD
+  category: T2-api-usage
+  assertion: Use reasoning_item_id_policy="omit" to strip reasoning item IDs from
+    generated next-turn input as an opt-in mitigation for Responses API 400 errors.
+  source_span:
+    section: Run config details
+    quote: Use `"omit"` primarily as an opt-in mitigation for a class of Responses
+      API 400 errors where a reasoning item is sent with an `id` but without the required
+      following item
+  trigger:
+    scenario: Run config details
+    ast_cues:
+    - reasoning_item_id_policy
+    - to_input_list
+    - call_model_input_filter

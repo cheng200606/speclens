@@ -1,0 +1,13 @@
+# I9② M2 合成入管线：LLM 合成规则库（rules-llm-synth.yaml，DS 逐节合成）× DS × mlite
+# 对照 i6-agents-sdk-ds-mlite（确定性提取器 v2，aligned）。唯一变量 = 规则来源。
+run_name: i9-agents-sdk-ds-mlite-llm
+baseline: m_lite
+cases_dir: bench/cases/agents-sdk
+model: deepseek/deepseek-flash
+temperature: 0.0
+run_index: 0
+litellm_num_retries: 3
+litellm_timeout_s: 180
+rules_source: llm-aligned
+litellm_kwargs:
+  thinking: {"type": "disabled"}
