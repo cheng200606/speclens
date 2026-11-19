@@ -2,7 +2,7 @@ case_id: TS-018
 verdict: compliant
 difficulty: medium
 rule_ids: [R-001]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/StatusPanel.tsx"]
 annotations:
   - annotator: A

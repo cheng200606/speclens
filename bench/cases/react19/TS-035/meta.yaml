@@ -2,7 +2,7 @@ case_id: TS-035
 verdict: borderline
 difficulty: medium
 rule_ids: [R-007]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/UserBadge.tsx"]
 annotations:
   - annotator: A

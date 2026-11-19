@@ -2,7 +2,7 @@ case_id: TS-020
 verdict: compliant
 difficulty: easy
 rule_ids: [R-003]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/Heartbeat.tsx"]
 annotations:
   - annotator: A

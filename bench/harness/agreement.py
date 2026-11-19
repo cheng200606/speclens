@@ -145,6 +145,25 @@ def validate_bench(repo_root: Path) -> dict:
     if total < FULL_CASES_MIN:
         warnings.append(f"样本总数 {total} < 全量集最低线 {FULL_CASES_MIN}")
 
+    # I9：来源分档统计——「人工撰写且人工复核」（handcrafted）才是论文级可信子集；
+    # ai-reviewed / synthetic / mined 均缺真人签核，如实报出占比。
+    origin_total: Counter[str] = Counter()
+    for s in per_spec.values():
+        origin_total.update(s["origin"])
+    n_human_signed = origin_total.get("handcrafted", 0)
+    n_awaiting_signoff = total - n_human_signed
+    if n_awaiting_signoff:
+        warnings.append(
+            f"仅 {n_human_signed}/{total} 条案例取得真人签核"
+            f"（待签核 {n_awaiting_signoff} 条："
+            + "、".join(
+                f"{k} {v}"
+                for k, v in sorted(origin_total.items())
+                if k != "handcrafted" and v
+            )
+            + "）"
+        )
+
     specs_with_cases = sum(1 for s in per_spec.values() if s["n_cases"] > 0)
     n_specs = len(list(p for p in specs_root.iterdir() if p.is_dir()))
     if specs_with_cases < n_specs:
@@ -159,6 +178,9 @@ def validate_bench(repo_root: Path) -> dict:
         "kappa_verdict_overall": kappa,
         "kappa_available": bool(all_pairs),
         "rule_set_jaccard_overall": mean_jaccard(all_rule_pairs),
+        "origin_total": dict(origin_total),
+        "n_human_signed": n_human_signed,
+        "n_awaiting_human_signoff": n_awaiting_signoff,
         "thresholds": {
             "kappa_min": KAPPA_MIN,
             "hard_ratio_min": HARD_RATIO_MIN,
@@ -179,6 +201,9 @@ def format_text(report: dict) -> str:
         f"- 样本：{report['n_cases_total']} 条",
         f"- Cohen's κ（verdict）：{report['kappa_verdict_overall'] if report['kappa_available'] else 'N/A（无双标样本）'}",
         f"- 规则集合平均 Jaccard：{report['rule_set_jaccard_overall']}",
+        f"- 真人签核案例：{report['n_human_signed']}/{report['n_cases_total']}"
+        f"（待签核 {report['n_awaiting_human_signoff']}）",
+        f"- 来源分布：{report['origin_total']}",
         "",
         "## 逐规范",
         "",

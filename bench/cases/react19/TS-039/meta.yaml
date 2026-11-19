@@ -2,7 +2,7 @@ case_id: TS-039
 verdict: violation
 difficulty: medium
 rule_ids: [R-010]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/CartCount.tsx"]
 annotations:
   - annotator: A

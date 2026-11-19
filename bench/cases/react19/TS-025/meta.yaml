@@ -2,7 +2,7 @@ case_id: TS-025
 verdict: compliant
 difficulty: medium
 rule_ids: [R-011]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/DraftBox.tsx"]
 annotations:
   - annotator: A

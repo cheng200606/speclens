@@ -2,7 +2,7 @@ case_id: TS-040
 verdict: violation
 difficulty: hard
 rule_ids: [R-002, R-011]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/InviteForm.tsx"]
 annotations:
   - annotator: A

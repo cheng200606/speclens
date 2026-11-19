@@ -14,3 +14,5 @@ build/
 # 实验结果只留目录占位，内容按 run 归档、不进 git（plan.md §3.4）
 experiments/runs/*
 !experiments/runs/.gitkeep
+arx_meta.json
+arx_tmp.xml

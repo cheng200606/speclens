@@ -70,6 +70,9 @@ def test_canonical_runs_manifest_pins_existing_dirs():
     ids.append(manifest["b2"])
     for group in manifest["litmus40"].values():
         ids.extend(group.values())
+    # I9：mlite-v1 / mlite-v3 / mverified-v3 的固定 ID 也必须真实存在
+    for section in ("mlite-v1", "mlite-v3", "mverified-v3"):
+        ids.extend(v for k, v in manifest.get(section, {}).items() if not k.startswith("_"))
     for rid in ids:
         assert (run_root / rid / "summary.json").exists(), rid
 
@@ -77,8 +80,12 @@ def test_canonical_runs_manifest_pins_existing_dirs():
 # ---------------------------------------------------------------- gen_review_checklist
 
 def test_review_checklist_matches_origin_counts():
-    """清单待复核数 = 库内 synthetic/mined 案例数（两边口径一致）。"""
-    from bench.tools.gen_review_checklist import CASES
+    """清单待复核数 = 库内待真人签核案例数（两边口径一致）。
+
+    I9：待复核来源为 synthetic / mined / ai-reviewed 三档（ai-reviewed =
+    AI 起草 + AI 代复核，尚缺真人签核）。
+    """
+    from bench.tools.gen_review_checklist import CASES, PENDING_ORIGINS
 
     n_origin = 0
     for spec in ("react19", "airbnb", "agents-sdk", "asvs"):
@@ -86,7 +93,7 @@ def test_review_checklist_matches_origin_counts():
             meta = case_dir / "meta.yaml"
             if meta.exists():
                 text = meta.read_text(encoding="utf-8")
-                if "origin: synthetic" in text or "origin: mined" in text:
+                if any(f"origin: {o}" in text for o in PENDING_ORIGINS):
                     n_origin += 1
     checklist = REPO / "docs" / "review-I6-origins.md"
     if not checklist.exists():
@@ -95,3 +102,36 @@ def test_review_checklist_matches_origin_counts():
         pytest.skip("checklist not generated yet")
     body = checklist.read_text(encoding="utf-8")
     assert body.count("- [ ]") == n_origin
+
+
+def test_origin_four_tiers_no_ai_reviewed_claim_as_handcrafted():
+    """origin 四档口径：AI 代复核的案例不得标为 handcrafted。
+
+    I9 前 TS-018…TS-040（AI 起草 + AI 代人工复核）被标为 handcrafted，
+    使论文的「人工标注」计数虚高 23 条。此处锁死迁移后的状态。
+    """
+    from bench.harness.schemas import CaseMeta
+
+    ai_reviewed = []
+    for spec in ("react19", "airbnb", "agents-sdk", "asvs", "react19-repo"):
+        for case_dir in sorted((REPO / "bench" / "cases" / spec).iterdir()):
+            meta = case_dir / "meta.yaml"
+            if not meta.exists():
+                continue
+            text = meta.read_text(encoding="utf-8")
+            m = CaseMeta.model_validate(yaml.safe_load(text))
+            if "AI 代人工复核" in text:
+                ai_reviewed.append((spec, case_dir.name, m.origin.value))
+    assert len(ai_reviewed) == 23
+    for spec, cid, origin in ai_reviewed:
+        assert origin == "ai-reviewed", f"{spec}/{cid} 应为 ai-reviewed，实为 {origin}"
+
+
+def test_case_meta_accepts_reviewed_by():
+    """reviewed_by 可写回 meta.yaml（I9 前 schema extra=forbid 使复核流程不可执行）。"""
+    from bench.harness.schemas import CaseMeta
+
+    d = yaml.safe_load((REPO / "bench" / "cases" / "react19" / "TS-018" / "meta.yaml").read_text(encoding="utf-8"))
+    d["reviewed_by"] = "advisor-signoff"
+    m = CaseMeta.model_validate(d)
+    assert m.reviewed_by == "advisor-signoff"

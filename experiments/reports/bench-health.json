@@ -1,10 +1,18 @@
 {
   "n_specs_total": 4,
   "n_specs_with_cases": 5,
-  "n_cases_total": 240,
+  "n_cases_total": 258,
   "kappa_verdict_overall": null,
   "kappa_available": false,
   "rule_set_jaccard_overall": null,
+  "origin_total": {
+    "synthetic": 198,
+    "handcrafted": 17,
+    "ai-reviewed": 23,
+    "mined": 20
+  },
+  "n_human_signed": 17,
+  "n_awaiting_human_signoff": 241,
   "thresholds": {
     "kappa_min": 0.6,
     "hard_ratio_min": 0.2,
@@ -129,23 +137,24 @@
       }
     },
     "react19": {
-      "n_cases": 112,
+      "n_cases": 130,
       "verdict": {
-        "violation": 59,
+        "violation": 77,
         "compliant": 49,
         "borderline": 4
       },
       "difficulty": {
-        "medium": 76,
+        "medium": 94,
         "easy": 22,
         "hard": 14
       },
       "origin": {
-        "handcrafted": 40,
+        "handcrafted": 17,
+        "ai-reviewed": 23,
         "synthetic": 70,
-        "mined": 2
+        "mined": 20
       },
-      "hard_ratio": 0.125,
+      "hard_ratio": 0.1077,
       "n_dual_annotated": 0,
       "dual_coverage": 0.0,
       "kappa_verdict": null,
@@ -218,9 +227,10 @@
     "agents-sdk: hard 样本占比 12.5% < 20%",
     "airbnb: hard 样本占比 0.0% < 20%",
     "asvs: hard 样本占比 10.0% < 20%",
-    "react19: hard 样本占比 12.5% < 20%",
+    "react19: hard 样本占比 10.8% < 20%",
     "react19-repo: hard 样本占比 0.0% < 20%",
-    "Cohen's κ 无法计算：全量集双标样本为 0（plan.md §2.3.3 降级预案尚未执行）"
+    "Cohen's κ 无法计算：全量集双标样本为 0（plan.md §2.3.3 降级预案尚未执行）",
+    "仅 17/258 条案例取得真人签核（待签核 241 条：ai-reviewed 23、mined 20、synthetic 198）"
   ],
   "schema_errors": []
 }

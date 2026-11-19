@@ -1,5 +1,5 @@
 {
-  "_comment": "论文表格的 canonical run 固定清单（gen_tables.py 消费）。历史 run 以 ID 固定保证再生成确定性；i6-* run 自动发现（见 gen_tables.find_i6）。",
+  "_comment": "论文表格的 canonical run 固定清单（gen_tables.py 消费）。历史 run 以 ID 固定保证再生成确定性；i6-* 的 B0/B1 按命名自动发现（见 gen_tables.find_i6）。I9 起：M-lite / M-verified 的「最终版」run 一律按 ID 固定（mlite-v3 / mverified-v3 段），不再依赖 mtime「取最新」——mtime 排序会随重跑漂移，论文数字必须可复现。",
   "litmus40": {
     "ds": {
       "b0": "litmus-b0-5f5dfcc1e01e",
@@ -27,11 +27,27 @@
   },
   "b2": "litmus-b2-bd4dfc99b0ae",
   "mlite-v1": {
-    "_comment": "I6 提取器 v1（React 形）的 M-lite run，供 RQ2 两版本对比；v2 走 find_i6 最新",
+    "_comment": "I6 提取器 v1（React 形）的 M-lite run，供 RQ2 两版本对比；v2/v3 见 mlite-v3",
     "react19": "i6-react19-ds-mlite-48c8673c88a1",
     "agents-sdk": "i6-agents-sdk-ds-mlite-d84620b01010",
     "airbnb": "i6-airbnb-ds-mlite-1b416ddc3153",
     "asvs": "i6-asvs-ds-mlite-19afc8e29b32"
+  },
+  "mlite-v3": {
+    "_comment": "I8 routing v3 终版 M-lite run（按 ID 固定）。react19-mx 无 v3 run：M-lite 的 mx 侧仅 asvs/agents/airbnb 跑了终版。",
+    "react19": "i6-react19-ds-mlite-8c5fd2e77f87",
+    "agents-sdk": "i6-agents-sdk-ds-mlite-e3f096039b37",
+    "airbnb": "i6-airbnb-ds-mlite-7b321106e455",
+    "asvs": "i6-asvs-ds-mlite-f8c666a7fba9",
+    "asvs-mx": "i6-asvs-mx-mlite-e1e420597a6b",
+    "agents-sdk-mx": "i6-agents-sdk-mx-mlite-2ff9533dbc1b",
+    "airbnb-mx": "i6-airbnb-mx-mlite-42baec8a80bb"
+  },
+  "mverified-v3": {
+    "_comment": "I8 fail-open 复现的 M-verified run（按 ID 固定）。asvs-mx / agents-sdk-mx 按 D8-4 未补跑（基建成本伪影）。",
+    "agents-sdk": "i6-agents-sdk-ds-mverified-b8f55d0d7485",
+    "airbnb": "i6-airbnb-ds-mverified-a744bc35aa02",
+    "asvs": "i6-asvs-ds-mverified-aaa34c885ec9"
   },
   "i6": {
     "discover": true

@@ -1,9 +1,14 @@
-% SpecLens · SANER 2028 投稿骨架（I5 起步，2026-11-15）
+% SpecLens · SANER 2028 投稿骨架（I5 起步，2026-11-15；I9 口径统一，2026-11-19）
 % 格式：正式投稿时换 IEEEtran 双栏（SANER 用 IEEE CNF 模板）；当前以 article 便于内容迭代。
-% 数据来源：experiments/runs/litmus-*（deepseek/deepseek-flash, temperature 0, run_index 0）
-%   与 litmus-minimax-*（第二模型）；所有表格数字须由 runner 产物重新生成后再入稿（勿手抄）。
+% 数据来源：experiments/runs/ 下的归档 run（deepseek/deepseek-flash 与 minimax/MiniMax-M3.1-Flash，
+%   temperature 0，run_index 0）；i6-* 全量重跑（240 案例 × 4 规范 × 2 模型）与 litmus-*/rq4-* 历史 run。
+%   所有表格数字由 paper/tools/gen_tables.py 从 run 产物重新生成后再入稿（勿手抄）；
+%   论文引用的 run 由 paper/canonical-runs.json 按 ID 固定（不再按 mtime 取最新）。
+%   引用元数据由 paper/tools/verify_refs.py 对 arXiv API 逐条核验。
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
@@ -24,17 +29,21 @@ cases spanning four real, open-licensed specifications (React 19, OpenAI Agents
 SDK, OWASP ASVS 5.0, Airbnb JavaScript Style Guide), with violation/compliant
 pairs anchored to verbatim specification quotes and a frozen rule-ID namespace
 shared between annotation and engine. Across two production models and six
-configurations we find: (1) review without the specification hallucinates
-plausible-but-wrong standards on over half of compliant code (FP 0.539 and
-0.615), which in-context specification largely suppresses (McNemar $p=0.031$);
-(2) in-context effectiveness collapses as the context budget shrinks (detection
+configurations we find: (1) review without the specification invents
+plausible-but-wrong standards, and putting the specification in context
+suppresses those false positives in \xsFpDown{} of \xsFpCells{}
+specification--model cells---but \emph{raises} them in the other \xsFpUp{}
+(e.g.\ Airbnb JS under the second model, $+$\xsFpWorstUpVal{} points), so
+specification presence is not uniformly beneficial; (2) in-context effectiveness
+collapses as the context budget shrinks (detection
 0.870 $\rightarrow$ 0.217 over a 236K$\rightarrow$30K character budget), while
 rule-routed review stays bounded---62$\times$ cheaper at identical detection on
 repository-scale inputs; (3) LLM self-review of extracted rules is run-unstable
 and silently removed a MUST-level rule in one run, motivating fail-open
 verification with human review queues; and (4) a compiled static checker matches
-the full-context LLM at zero marginal cost. Benchmark, engine, harness, and all
-raw model outputs are released.
+the full-context LLM at zero marginal cost. Benchmark, engine, and harness are
+released, together with the archived per-run products behind every reported
+number.
 \end{abstract}
 
 \section{Introduction}
@@ -56,32 +65,66 @@ to the specification.
 SpecLens makes this measurable. We contribute: (1) SpecLens-Bench, \benchN{} cases
 across four specifications with verbatim-quote rule provenance and a frozen
 rule-ID namespace shared by annotation and engine; (2) a measurement study
-across two production models and six configurations; (3) a six-class error
-taxonomy grounded in per-case analysis; and (4) a cost-effectiveness analysis
+across two production models and six configurations; (3) an error taxonomy
+grounded in per-case analysis---seven semantic classes on the pilot and a
+structural view over the full rerun; and (4) a cost-effectiveness analysis
 showing that context stuffing collapses as budget shrinks while rule-routed
 review stays bounded---and that a compiled static checker matches the LLM
 baseline at zero marginal cost when the rule set is known.
 
 \section{Related Work}
 \textbf{Rule extraction from standards.} LintCFG~\cite{lintcfg2026} compiles
-natural-language coding standards into linter configurations; RulePilot~\cite{rulepilot2025}
-and GPTAid~\cite{gptaid2024} generate security rules with LLM agents. These works
-treat extracted rules as the artifact; we measure the end-to-end adherence outcome,
-including a failure mode they do not study: verification gates that remove the
-wrong rules.
+natural-language coding standards into linter configurations via a DSL;
+RulePilot~\cite{rulepilot2025} and GPTAid~\cite{gptaid2025} generate security
+rules with LLM agents and validate them by execution; MetaLint~\cite{metalint2025}
+evaluates code against a provided natural-language specification, and work on
+quality compliance~\cite{qualitycompliance2025} and MISRA~\cite{misra2025}
+targets standard conformance in generated code. These works treat extracted
+rules (or the generated code) as the artifact; we measure the end-to-end
+adherence outcome, including a failure mode they do not study: verification
+gates that remove the wrong rules.
 
-\textbf{LLM code review at scale.} AutoCommenter~\cite{autocommenter2024} reports
-Google's industrial deployment; recent benchmarks evaluate review agents on
-general quality~\cite{crabenchmark2026}. None measure adherence to a specific
-unseen specification on balanced violation/compliant code---our unit of measurement.
+\textbf{Specification-grounded review.} SGCR~\cite{sgcr2025} grounds LLM review
+in human-authored specifications with a dual-pathway design, and
+design-constraint compliance has been benchmarked for issue
+resolution~\cite{designconstraint2026}. SGCR is the closest work to ours and
+shares the premise that a specification should anchor the review; it is
+evaluated in one industrial setting with acceptance-rate metrics, whereas we
+ask whether adherence holds on \emph{unseen} specifications and on balanced
+violation/compliant code, and we measure the compliant half explicitly.
 
-\textbf{Grounded review.} Grounded Agentic Review~\cite{groundedreview2026} studies
-conclusion faithfulness via adversarial protocols. Our evidence-chain requirement
-(each finding carries the verbatim specification quote) is a lighter-weight,
-benchmark-compatible form of grounding, and our taxonomy is the first to quantify
-where grounding fails.
+\textbf{LLM code review at scale.} Industrial deployments report review
+automation at Atlassian~\cite{rovodev2026}, Ericsson~\cite{ericsson2025}, and
+in practice~\cite{reviewinpractice2025}; benchmarks evaluate review
+agents~\cite{crabenchmark2026,crbench2026} and fine-grained review
+quality~\cite{enrichedcontext2025}, and reviews of the field chart where the
+practice is heading~\cite{quovadis2026}. None measure adherence to a specific
+unseen specification on balanced violation/compliant code---our unit of
+measurement.
+
+\textbf{Grounding and determinism.} Adversarial Review~\cite{groundedreview2026}
+studies conclusion faithfulness via structured disagreement, and
+HalluJudge~\cite{hallujudge2026} detects ungrounded review comments without a
+reference; SecureReviewer~\cite{securereviewer2025} and
+LLaMA-Reviewer~\cite{llamareviewer2023} adapt models to review and secure
+review respectively. The reliability of review output at temperature zero is
+itself contested~\cite{determinism2025}, which motivates our fail-open
+verification policy. Our evidence-chain requirement (each finding carries the
+verbatim specification quote) is a lighter-weight, benchmark-compatible form of
+grounding.
+
+\textbf{Benchmark validity.} Recent studies show that test-based benchmarks
+can pass for the wrong reasons~\cite{swesolved2025} and that contamination
+inflates leaderboard scores~\cite{sweillusion2025}; a systematic audit of
+LLM-safety benchmarks finds quality and runnability problems
+routinely~\cite{benchofbench2026}. LLM-as-a-judge reliability is
+documented~\cite{llmjudgesurvey2024,sejury2025,codejudgebench2025}. We apply
+the same scrutiny to our own benchmark: annotation provenance is tracked per
+case, the annotation guidelines are published, and the limitations of our
+current annotation state are reported rather than hidden.
 
 \section{The SpecLens-Bench Benchmark}
+\label{sec:benchmark}
 \textbf{Specifications.} Four real, open-licensed documents, snapshotted with
 commit pins and licenses: React 19 documentation~\cite{reactdocs} (CC-BY-4.0),
 OpenAI Agents SDK documentation~\cite{openaisdk}, OWASP ASVS 5.0~\cite{asvs}
@@ -95,9 +138,16 @@ difficulty tiers: \nReact{} React/TSX (including \reactNMined{} mined from real
 GitHub fix commits), \nAsvs{} ASVS/Python, \nAgents{} Agents SDK/Python,
 \nAirbnb{} Airbnb/JS, plus a
 repository-gradient auxiliary set for cost experiments. Every case records
-\texttt{origin} (handcrafted \benchNHand / synthetic \benchNSyn / mined
-\benchNMined); synthetic and mined cases await independent
-human review before paper-grade inclusion.
+\texttt{origin}, which distinguishes provenance by \emph{who validated it}:
+handcrafted \benchNHand (written and checked by a human), ai-reviewed
+\benchNAiRev (AI-drafted, checked by an AI reviewer acting in a human's stead),
+synthetic \benchNSyn (AI-drafted, unchecked), and mined \benchNMined
+(extracted from real fix commits, unchecked). Only the \benchNHand{} cases
+carry a human sign-off; the remaining \benchN{} cases are reported with their
+provenance rather than presented as human-annotated, and a per-case review
+checklist is published so that the remaining annotation can be completed
+independently. The annotation guidelines~\cite{annotationguide} are released
+alongside the cases.
 
 \textbf{Freshness probes.} Each specification ships a 20-question probe.
 DeepSeek-Flash scores 0.90--1.00 on all four (specifications familiar);
@@ -124,6 +174,7 @@ separately. All raw outputs and token accounting are archived per run under
 content-hashed, append-only directories.
 
 \section{Results}
+\label{sec:results}
 
 \subsection{RQ1: Specification Adherence (Measurement)}
 Without the specification (B0), the model detects \dsBzeroDet{} of violations but flags
@@ -188,7 +239,8 @@ React's prose: English-modal sentences, a React-identifier cue whitelist,
 heading-only sectioning) aligned \mlAlignReactVone{} / \mlAlignAgentsVone{} /
 \mlAlignAirbnbVone{} / \mlAlignAsvsVone{} of the canonical rules---ASVS's CSV
 requirements were silently unreachable---collapsing rule-routed detection to
-\mliteDetAgentsVone, \mliteDetAirbnbVone, and \mliteDetAsvsVone. (2) Generalizing
+rule-routed detection to \mliteDetAgentsVone, \mliteDetAirbnbVone, and
+\mliteDetAsvsVone. (2) Generalizing
 the harvester (requirement-level sectioning for CSV sources, imperative rules,
 generalized identifier cues, a code-block sentinel keeping quotes verbatim) and
 matching on assertion+quote content words restored alignment coverage to
@@ -206,28 +258,63 @@ the model but three layers of porting debt---extraction vocabulary, alignment
 signal, and routing morphology---each fixed deterministically and re-measured
 offline before any model call.
 
+\begin{table}[t]
+\centering
+\caption{Verification gates under fail-open at full scale (paired M-lite vs.\
+M-verified runs after the routing rework; $p$ = exact binomial McNemar on the
+violation subset). Detection is preserved in every paired cell. React 19's
+M-verified run was not rerun after the routing rework; its pilot comparison
+appears in Table~\ref{tab:rq2}.}
+\label{tab:rq2-failopen}
+\input{tables/rq2-failopen}
+\end{table}
+
+The verification gates under the fail-open policy preserve detection at full
+scale as well (Table~\ref{tab:rq2-failopen}): detection is identical to M-lite
+on Agents SDK and Airbnb and within one case on ASVS, with $p=1.000$ in every
+paired cell, at 1.5--4$\times$ the token cost. Two cells (ASVS and Agents SDK
+under the second model) were stopped mid-run for infrastructure-cost
+reasons---351-rule and 95-rule verification at that model's latency projected
+to multi-hour runs---so the fail-open conclusion there rests on the DeepSeek
+cells and the second model's pilot cell.
+
 \subsection{RQ3: Error Taxonomy}
-We classify every false positive and false negative of five configurations into
-six classes (Table~\ref{tab:rq3}). Beyond hallucinated standards, the notable classes are
-\emph{rule inversion} (a second model inverts a prohibition into a requirement),
-\emph{rule over-generalization} (per-rule review lacking document context flags
-mandated caching as a risk), and \emph{soft-wording misses} (SHOULD-level
-descriptive rules are systematically under-detected). One benchmark artifact---a
-compliant case containing an out-of-scope real violation pattern, flagged
-consistently by all five configurations---was resolved by revising the case,
-illustrating how consistent cross-configuration disagreement localizes annotation
-granularity problems. The full-benchmark rerun surfaces the mirror image at
-scale: on Airbnb, B1's residual ``false positives'' are mostly \emph{true}
-style violations outside each compliant case's annotated rule scope (e.g.,
-double-quoted strings in a file scoped to the references rule)---with the whole
-guide in context, a reviewer reviews everything it can, so single-rule case
-scoping systematically converts true findings into benchmark FPs. A
-structural taxonomy over the full B0/B1 rerun (16 runs) adds a class the pilot
+On the react19 pilot we classify every false positive and false negative of five
+configurations into seven semantic classes (Table~\ref{tab:rq3-pilot}). Beyond
+hallucinated standards, the notable classes are
+\emph{rule inversion} (the second model inverts a prohibition into a requirement;
+it occurred only in that model's run, which was not archived per case, so its
+pilot column is empty), \emph{rule over-generalization} (per-rule review lacking
+document context flags mandated caching as a risk), \emph{soft-wording misses}
+(SHOULD-level descriptive rules are systematically under-detected), and
+\emph{statically indistinguishable} misses (the static checker cannot see what
+has no static signature). One benchmark artifact---a compliant case containing
+an out-of-scope real violation pattern, flagged consistently by all five
+configurations---was resolved by revising the case, illustrating how consistent
+cross-configuration disagreement localizes annotation granularity problems.
+
+\begin{table}[t]
+\centering
+\caption{Semantic error taxonomy on the react19 40-case pilot: per-configuration
+FP/FN case counts (seven classes; \emph{rule inversion} occurred only in the
+second model's M-verified run, reported in the text).}
+\label{tab:rq3-pilot}
+\input{tables/rq3-pilot-classes}
+\end{table}
+
+A structural taxonomy over the full B0/B1 rerun (16 runs,
+Tables~\ref{tab:rq3} and~\ref{tab:rq3-perspec}) adds a class the pilot
 could not see: \emph{conservative empty review}---100 false negatives where the
 model returns zero findings on a violation, concentrated in DeepSeek B1
 (React 20, ASVS 14, Agents SDK 11) and rare in MiniMax B1, which over-flags
 instead. Over-suppression and over-flagging are two models' answers to the
-same question. Manual adjudication of a 14-case sample of the
+same question. The rerun also surfaces the scope-granularity mirror image: on
+Airbnb, B1's residual ``false positives'' are mostly \emph{true}
+style violations outside each compliant case's annotated rule scope (e.g.,
+double-quoted strings in a file scoped to the references rule)---with the whole
+guide in context, a reviewer reviews everything it can, so single-rule case
+scoping systematically converts true findings into benchmark FPs. Manual
+adjudication of a 14-case sample of the
 \emph{flagged-non-annotated} class shows its composition is split: eight of
 fourteen flags are \emph{true} findings outside each case's annotated rule
 scope---including an unsanitized file path built from a user-controlled header
@@ -239,10 +326,19 @@ metrics should be read with this scope granularity in mind.
 
 \begin{table}[t]
 \centering
-\caption{Six-class error taxonomy: per-run counts of FP/FN cases in each class
-(react19 40-case suite, five configurations).}
+\caption{Structural taxonomy over the full B0/B1 rerun (16 runs): per-class
+FP/FN case counts aggregated by model and configuration. Only the two classes
+that occur in B0/B1 runs are shown.}
 \label{tab:rq3}
 \input{tables/rq3-taxonomy}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Conservative empty review (the structural FN class) by specification
+and model: over-suppression concentrates in DeepSeek B1.}
+\label{tab:rq3-perspec}
+\input{tables/rq3-taxonomy-per-spec}
 \end{table}
 
 
@@ -280,12 +376,28 @@ the static checker covers 9 of 12 rules without any LLM call.}
 \section{Threats to Validity}
 \textbf{Construct.} Probe scores show both models are familiar with three of the
 four specifications; our claims therefore concern adherence behavior given
-familiarity, not knowledge injection. \textbf{Internal.} All AI-drafted cases
-are marked \texttt{origin=synthetic} pending independent human review; central
-comparisons at temperature 0 are backed by duplicated runs. \textbf{External.}
-Four specifications and two models; the repository gradient uses generated
-benign code whose file-level routing behavior may differ from organically grown
-repositories.
+familiarity, not knowledge injection.
+\textbf{Internal.} Annotation is explicitly tiered by who validated it: only
+\benchNHand{} of \benchN{} cases are human-written and human-checked;
+\benchNAiRev{} AI-drafted cases were checked by an AI reviewer acting in a
+human's stead and await human sign-off, and the remaining \benchNSyn{} synthetic
+and \benchNMined{} mined cases are unchecked
+(Section~\ref{sec:benchmark}); a per-case review checklist is published so the
+remaining annotation can be completed independently. Inter-annotator agreement
+could not be computed---no case is dual-annotated, so the $\kappa\geq 0.6$
+design target is unmet---and the hard-case share (8.5\%) falls short of the
+20\% design target. The react19 B0/B1 runs cover 120 of the current \nReact{}
+cases because ten mined cases were added after the rerun;
+Table~\ref{tab:rq1-crossspec} reports the covered counts. The routing-layer
+fixes (Section~\ref{sec:results}) were developed against the frozen rule banks
+of the benchmark's own specifications; engine inputs never include annotation
+content (rule text derives from the specification snapshot only, and
+``aligned'' mode returns only rules synthesized from that snapshot), but the
+optimization loop necessarily observed detection outcomes on these banks---a
+leave-one-specification-out validation is future work.
+\textbf{External.} Four specifications and two models; the repository gradient
+uses generated benign code whose file-level routing behavior may differ from
+organically grown repositories.
 
 \section{Conclusion}
 Spec-adherence is measurable, its failure modes are structured, and its cost

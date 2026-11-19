@@ -2,7 +2,7 @@ case_id: TS-037
 verdict: violation
 difficulty: medium
 rule_ids: [R-004]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/Collapsible.tsx"]
 annotations:
   - annotator: A

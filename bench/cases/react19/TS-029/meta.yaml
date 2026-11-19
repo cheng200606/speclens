@@ -2,7 +2,7 @@ case_id: TS-029
 verdict: violation
 difficulty: medium
 rule_ids: [R-005]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/FollowCount.tsx"]
 annotations:
   - annotator: A

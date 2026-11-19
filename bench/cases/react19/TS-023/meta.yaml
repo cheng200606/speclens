@@ -2,7 +2,7 @@ case_id: TS-023
 verdict: compliant
 difficulty: easy
 rule_ids: [R-006]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/useTheme.tsx"]
 annotations:
   - annotator: A

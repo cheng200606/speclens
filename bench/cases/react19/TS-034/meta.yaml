@@ -2,7 +2,7 @@ case_id: TS-034
 verdict: violation
 difficulty: hard
 rule_ids: [R-001, R-003]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/Dashboard.tsx"]
 annotations:
   - annotator: A

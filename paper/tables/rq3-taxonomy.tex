@@ -1,11 +1,12 @@
 \begin{tabular}{lrrrr}
 \toprule
-Class & B0 & B1 & M-lite & M-verified \\
+Class & \multicolumn{2}{c}{DeepSeek-Flash} & \multicolumn{2}{c}{MiniMax-M3.1-Flash} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ & B0 & B1 & B0 & B1 \\
 \midrule
-FP: hallucinated standard & 6 & -- & -- & -- \\
-FP: out-of-scope real pattern & 1 & 1 & 1 & -- \\
-FP: rule over-generalization & -- & -- & 1 & -- \\
-FN: SHOULD soft wording & 2 & 3 & 1 & -- \\
-FN: route/review miss & -- & -- & 1 & -- \\
+FN: conservative empty review & 31 & 45 & 9 & 15 \\
+FP: flagged, rule not annotated & 42 & 10 & 67 & 48 \\
+\midrule
+Classified FP/FN cases (per run) & 73 & 55 & 76 & 63 \\
 \bottomrule
 \end{tabular}

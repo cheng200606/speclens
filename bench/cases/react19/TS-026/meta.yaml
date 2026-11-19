@@ -2,7 +2,7 @@ case_id: TS-026
 verdict: compliant
 difficulty: easy
 rule_ids: [R-012]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/TodoList.tsx"]
 annotations:
   - annotator: A

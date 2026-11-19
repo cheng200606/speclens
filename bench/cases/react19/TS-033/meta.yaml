@@ -2,7 +2,7 @@ case_id: TS-033
 verdict: violation
 difficulty: hard
 rule_ids: [R-007]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/UserCard.tsx"]
 annotations:
   - annotator: A

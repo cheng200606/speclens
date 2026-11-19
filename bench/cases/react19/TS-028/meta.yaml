@@ -2,7 +2,7 @@ case_id: TS-028
 verdict: violation
 difficulty: medium
 rule_ids: [R-003]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/Poller.tsx"]
 annotations:
   - annotator: A

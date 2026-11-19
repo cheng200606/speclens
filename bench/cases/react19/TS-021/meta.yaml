@@ -2,7 +2,7 @@ case_id: TS-021
 verdict: compliant
 difficulty: medium
 rule_ids: [R-004]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/Toolbar.tsx"]
 annotations:
   - annotator: A

@@ -2,7 +2,7 @@ case_id: TS-036
 verdict: borderline
 difficulty: hard
 rule_ids: [R-010]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/VoteBar.tsx"]
 annotations:
   - annotator: A

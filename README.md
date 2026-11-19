@@ -4,10 +4,12 @@
 
 三个组成部分：
 
-1. **`bench/` — SpecLens-Bench**：规范遵循（spec-adherence）代码审查基准。4 份真实开放许可规范
-   （React 19、OpenAI Agents SDK/LangGraph、OWASP ASVS 5.0、Airbnb JS Style Guide）
-   已存快照；**目前仅 react19 有 40 条标注样本**。规范快照附带来源、许可与「新鲜度探测」题库。
-   `bench/specs/react19/rules.yaml` 是 12 条冻结规则（逐字原文溯源），也是标注与引擎共享的 ID 命名空间。
+1. **`bench/` — SpecLens-Bench**：规范遵循（spec-adherence）代码审查基准。
+   4 份真实开放许可规范（React 19、OpenAI Agents SDK/LangGraph、OWASP ASVS 5.0、
+   Airbnb JS Style Guide）已存快照（来源 + 许可 + commit pin + 「新鲜度探测」题库）；
+   **240 条主套件案例**（react19 130 / asvs 40 / airbnb 38 / agents-sdk 32，含 20 条
+   从真实 GitHub 修复提交挖掘的案例）+ 18 条仓库梯度案例（RQ4 成本实验辅助口径）。
+   4 份规范共 40 条冻结规则（逐字原文溯源），是标注与引擎共享的 ID 命名空间。
 2. **`baselines/` — 基线与变体**：B0 zero-shot、B1 规范全文 in-context、
    B2 BM25 检索 + 局部上下文、B3 纯静态检查（零 LLM）、M-lite、M-verified。
    B4（消融）由 M-lite/M-verified 配对承担（plan §2.4 消融定义），见 `docs/STATUS-I1.md`。
@@ -15,22 +17,25 @@
    （verify：grounding / 正反例可执行性 / 冲突）→ 规则路由（route）→ 分层审查（review）
    → 证据链与聚合（trace）。
 
-## 当前状态（2026-11-15，I4 迭代后）
+## 当前状态（2026-11-20，I9 进行中）
 
-> **B0–B3 基线全部实现并完成真实/确定性运行；RQ4 预算阶梯实证全文基线失效模式
-> （120K 预算检出即跌 30pp）；B3 静态基线零成本追平 B1（0.870/0.077）。**
-> I2 判读维持 **Go（RQ4 规模/成本场景）**。详见 `docs/STATUS-I4.md`。
+> **全基准双模型重跑完成**（2 模型 × 4 规范 × B0/B1/M-lite/M-verified，240 案例）；
+> M 管线跨规范转移鸿沟已关闭（routing v3：asvs 检出 0.90 = B1 的 3 倍、airbnb 1.0
+> 持平 B1 而误报减半、agents 双超基线）；fail-open 验证关 8 次复现「不损检出」。
+> 论文全文见 `paper/main.pdf`（数字全部由 run 产物自动生成）。**已知限制如实清单：
+> `docs/LIMITATIONS.md`。**
 
-- ✅ M0 / M1 / M2 代码落地；I1 评测有效性加固；I2 扩样 40 + 真实生死实验（SCIENTIFIC）；
-  I3 复核入库 + M-verified 退化归因修复（fail-open）。
-- ✅ I4：门 1 归一化修复（句中列表符拼接致 4 规则 quote_in_spec 恒 False，44/44 grounding=1.0）；
-  B3 静态基线（检出 0.870 / 误报 0.077 / 零 token）；B2 BM25 检索基线（0.478 / 1.3% 成本）；
-  RQ4 预算阶梯（B1: 0.870 → 0.565 → 0.435 → 0.217）；错误分类学 v0
-  （`experiments/reports/error-taxonomy-v0.json`，含 TS-011 基准标注粒度问题）。
-- ✅ 第二模型对照：MiniMax-M3.1-Flash 四配置 + 4 规范探测完成（检出更强、误报高度异质、
-  fp-rule-inversion 新类；asvs 对其部分未见 0.70）。报告 `experiments/reports/litmus-minimax-2026-11-15.md`。
-- ⏳ I5：240 条扩样（TS-011 已修，扩样可启动）、真实多仓库 RQ4、arXiv 报告正文、论文。
-- 测试：`uv run pytest` 全绿（89 passed）。
+- ✅ I2–I4：扩样 40 + 生死实验 Go（RQ4 规模/成本）、fail-open 修复、B2/B3 基线、
+  预算阶梯（B1 检出 0.870→0.217 @236K→30K chars）、仓库梯度 62× 成本差。
+- ✅ I5–I6：4 规范扩样至 240 + GitHub 挖掘管线 + 全基准双模型重跑 + 论文表格自动化
+  （`paper/tools/gen_tables.py`：论文数字零手抄，重跑脚本即刷新）。
+- ✅ I7：M 管线跨规范重构（确定性提取器 v2、CSV 逐字章节化、mverified fail-open 跨格复现）。
+- ✅ I8：routing v3 关闭转移鸿沟（需求 ID 词元过滤 / 复数折叠 / snake_case 词元集 /
+  不对称全局配对）；M2 LLM 规则合成原型（引句逐字率 95.7%）；分类学人工抽检。
+- 🔄 I9（进行中）：标注来源分档（`origin: ai-reviewed` 新增，真人签核口径收紧）——
+  见 `docs/LIMITATIONS.md` §2；参考文献逐条 arXiv API 核验（`paper/tools/verify_refs.py`）；
+  实验产物打包（`bench/tools/pack_runs.py`）；matched 全局 FP 削减与 M2 入管线在队列。
+- 测试：`uv run pytest` 全绿（98 passed）。
 
 ## 快速开始
 
@@ -53,18 +58,25 @@ uv run python -m experiments.make_report --runs experiments/runs --prefix valida
     --output experiments/reports/validate-<date>.md
 ```
 
-真实 LLM 运行：**已完成配置**——`cp .env.example .env` 填 `DEEPSEEK_API_KEY`，
-四份 `litmus-*.yaml` 已统一设为 `deepseek/deepseek-flash`（temperature 0、
-thinking disabled、`litellm_num_retries: 3`）。直接跑：
+真实 LLM 运行：`cp .env.example .env` 填 `DEEPSEEK_API_KEY`（及 MiniMax 对照时
+`MINIMAX_API_KEY`）。32 份 `i6-*.yaml` 覆盖 4 规范 × 2 模型 × 4 基线：
 
 ```bash
-uv run python -m bench.harness.runner --config experiments/configs/litmus-b0.yaml
+uv run python -m bench.harness.runner --config experiments/configs/i6-react19-ds-b0.yaml
 uv run python -m experiments.make_report --runs experiments/runs \
     --prefix litmus --model deepseek/deepseek-flash
 ```
 
 密钥**只放 `.env`**（已被 git 忽略），不要写进 `configs/*.yaml`。
-切换模型时四份配置必须同步修改（控制变量）；详见 `docs/reproduce.md` §1 / §3。
+切换模型时全部配置必须同步修改（控制变量）；详见 `docs/reproduce.md` §1 / §3。
+
+论文复现（数字不手抄）：
+
+```bash
+uv run python -m paper.tools.gen_tables     # 从 experiments/runs/ 重新生成全部表格与宏
+uv run python -m paper.tools.verify_refs    # 参考文献对 arXiv API 逐条核验
+cd paper && latexmk -pdf main.tex
+```
 
 每个 run 的产物在 `experiments/runs/<name>-<hash>/`：
 
@@ -76,10 +88,27 @@ config.resolved.yaml     # 实际配置（含 temperature / run_index / code_dig
 usage.json               # n_calls / tokens / latency / by_phase（支撑成本指标与 RQ4）
 spec_selection.json      # B1 纳入/省略的快照文件（对照公平性审计）
 rules_diagnostic.json    # 规则来源 / 引句逐字校验 / 对齐覆盖率（仅引擎类基线）
-verify_report.json       # M-verified 验证关逐规则 gate 结果与排除理由（可审计归因）
+verify_report.json       # M-verified 验证关逐规则 gate 结果与排除理由（可审计归档）
 ```
 
 归档哈希包含配置**与代码摘要 `code_digest`**：改代码后同配置会得到新目录，不覆盖历史结果。
+`experiments/runs/` 不入 git；论文引用的 run 打包：`uv run python -m bench.tools.pack_runs --output dist`。
+
+## 标注来源口径（重要）
+
+`bench/cases/*/*/meta.yaml` 的 `origin` 字段按「谁验证过」分四档（I9 起）：
+
+| origin | 含义 | 数量 |
+|---|---|---|
+| `handcrafted` | 人工撰写**且**人工复核（唯一论文级可信档） | 17 |
+| `ai-reviewed` | AI 起草、AI 代人工复核——**尚缺真人签核** | 23 |
+| `synthetic` | AI 起草、无复核 | 198（主套件 180） |
+| `mined` | 真实仓库修复提交挖掘、无复核 | 20 |
+
+真人签核流程：`docs/review-I6-origins.md`（自动生成的复核清单，223 条待签核）；
+通过后把 `origin` 改 `handcrafted` 并写 `reviewed_by` 字段。**历史教训**：I9 前
+23 条「AI 代人工复核」案例曾被标为 `handcrafted`，使论文的人工标注计数虚高——
+`tests/test_i6_tools.py` 现已锁死该迁移不回退。完整讨论见 `docs/LIMITATIONS.md` §2。
 
 ## 目录结构
 
@@ -88,13 +117,14 @@ speclens/
 ├── bench/
 │   ├── specs/<spec>/spec.yaml, rules.yaml, freshness_probe.yaml, snapshot/
 │   ├── cases/<spec>/<CASE-ID>/{meta.yaml, code/*}
-│   └── harness/           # schema、loader、adapter、metrics、stats、runner、spec_text、probe、agreement
-├── baselines/             # b0_zero_shot / b1_full_spec / m_lite / m_verified
-├── engine/                # ingest / extract / rule_bank / verify / route / review / trace
-├── experiments/           # configs/、reports/、runs/（内容 git 忽略）
-├── docs/                  # annotation-guide.md、STATUS-I1.md、reproduce.md
+│   ├── harness/           # schema、loader、adapter、metrics、stats、runner、spec_text、probe、agreement
+│   └── tools/             # 案例生成、GitHub 挖掘、复核清单、产物打包
+├── baselines/             # b0_zero_shot / b1_full_spec / b2_rag / b3_static / m_lite / m_verified
+├── engine/                # ingest / extract / rule_bank / verify / route / review / trace / synth
+├── experiments/           # configs/、reports/、runs/（runs 内容 git 忽略）
+├── docs/                  # annotation-guide.md、STATUS-I*.md、reproduce.md、LIMITATIONS.md
 ├── tests/
-└── paper/                 # 论文（后置）
+└── paper/                 # main.tex + tables/（自动生成）+ tools/（gen_tables / verify_refs）
 ```
 
 ## 数据约定
@@ -107,7 +137,7 @@ speclens/
   不注入人工规则）/ `canonical`（oracle 上界诊断，**有标注泄漏，不进主对比**）/
   `synthesized`（原始自动规则，ID 与标注不同命名空间，`rule_match_rate` 不可解释）。
 - 控制变量：同一模型、同一温度、同一 `rules_source` 下比较 B0/B1/M-lite/M-verified；
-  温度 0，报告多次运行均值±标准差（配置 `run_index`）。
+  温度 0。多轮方差（`run_index` ≥ 2）尚未全量执行——见 `docs/LIMITATIONS.md` §7。
 - 规范全文默认**不截断**；如需模拟长上下文受限，显式设置 `spec_max_chars` 并核查 `spec_selection.json`。
 
 ## 许可

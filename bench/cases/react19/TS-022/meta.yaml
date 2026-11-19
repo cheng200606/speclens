@@ -2,7 +2,7 @@ case_id: TS-022
 verdict: compliant
 difficulty: easy
 rule_ids: [R-005]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/LikeButton.tsx"]
 annotations:
   - annotator: A

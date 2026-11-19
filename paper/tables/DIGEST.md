@@ -1,11 +1,14 @@
 # paper/tables 生成摘要（gen_tables.py）
 
-- `rq1-crossspec.tex` (19 lines)
+- `rq1-crossspec.tex` (20 lines)
 - `rq2-verification.tex` (11 lines)
 - `rq4-ladder.tex` (10 lines)
 - `rq4-repo.tex` (9 lines)
-- `rq3-taxonomy.tex` (11 lines)
-- `macros.tex` (40 lines)
+- `rq3-taxonomy.tex` (12 lines)
+- `rq3-taxonomy-per-spec.tex` (12 lines)
+- `rq3-pilot-classes.tex` (15 lines)
+- `rq2-failopen.tex` (11 lines)
+- `macros.tex` (48 lines)
 
 ## i6 runs used
 

@@ -2,7 +2,7 @@ case_id: TS-027
 verdict: violation
 difficulty: medium
 rule_ids: [R-002]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/SignupForm.tsx"]
 annotations:
   - annotator: A

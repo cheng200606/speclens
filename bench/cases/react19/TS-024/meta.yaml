@@ -2,7 +2,7 @@ case_id: TS-024
 verdict: compliant
 difficulty: medium
 rule_ids: [R-009]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/ProfilePage.tsx"]
 annotations:
   - annotator: A

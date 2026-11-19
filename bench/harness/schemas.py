@@ -36,7 +36,17 @@ class Difficulty(str, Enum):
 
 
 class Origin(str, Enum):
+    """案例来源（I9 起细分为四档，见 docs/LIMITATIONS.md §2）。
+
+    - ``handcrafted``：人工撰写**且**经人工复核（可信度最高）。
+    - ``ai_reviewed``：AI 起草、经**AI 代人工**复核——尚未取得真人签核，
+      不能与 handcrafted 同列（I9 前这批案例被误标为 handcrafted）。
+    - ``synthetic``：AI 起草、尚无任何复核。
+    - ``mined``：从真实仓库修复提交挖掘，尚未人工复核。
+    """
+
     HANDCRAFTED = "handcrafted"
+    AI_REVIEWED = "ai-reviewed"
     MINED = "mined"
     SYNTHETIC = "synthetic"
 
@@ -68,6 +78,10 @@ class CaseMeta(BaseModel):
     files: list[str]
     annotations: list[Annotation] = Field(default_factory=list)
     resolved: ResolvedVerdict
+    # 真人复核签核者（I9）：docs/review-I6-origins.md 要求的复核结论落库字段。
+    # 此前 schema extra="forbid" 且无此字段——按文档写回 reviewed_by 会直接
+    # 校验失败，复核流程实际不可执行（docs/LIMITATIONS.md §2）。
+    reviewed_by: str | None = None
 
     @field_validator("case_id")
     @classmethod

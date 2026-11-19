@@ -2,7 +2,7 @@ case_id: TS-019
 verdict: compliant
 difficulty: easy
 rule_ids: [R-002]
-origin: handcrafted
+origin: ai-reviewed
 files: ["code/NameForm.tsx"]
 annotations:
   - annotator: A
